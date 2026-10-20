@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="64"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="0"
+	timestamp="2026-10-20T16:41:43"
+	>
+	<testcase name="MonsterEntity methods work" classname="MonsterEntity methods work" time="0.00213377" status="run">
+		<properties/>
+		<system-out>Filters: "MonsterEntity methods work"
+Randomness seeded to: 2028710048
+===============================================================================
+All tests passed (259 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="get_type_matchup() works" classname="get_type_matchup() works" time="0.00166322" status="run">
+		<properties/>
+		<system-out>Filters: "get_type_matchup() works"
+Randomness seeded to: 3944710351
+===============================================================================
+All tests passed (15 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="flash_fire_should_activate() works" classname="flash_fire_should_activate() works" time="0.00171978" status="run">
+		<properties/>
+		<system-out>Filters: "flash_fire_should_activate() works"
+Randomness seeded to: 1155801067
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="genders_equal_not_genderless() works" classname="genders_equal_not_genderless() works" time="0.00175077" status="run">
+		<properties/>
+		<system-out>Filters: "genders_equal_not_genderless() works"
+Randomness seeded to: 122039787
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Damage calcs with simple scenarios" classname="Damage calcs with simple scenarios" time="0.00199439" status="run">
+		<properties/>
+		<system-out>Filters: "Damage calcs with simple scenarios"
+Randomness seeded to: 449205387
+===============================================================================
+All tests passed (96 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Damage calcs with empirically known scenarios (Charizard + Flygon)" classname="Damage calcs with empirically known scenarios (Charizard + Flygon)" time="0.00176842" status="run">
+		<properties/>
+		<system-out>Filters: "Damage calcs with empirically known scenarios (Charizard + Flygon)"
+Randomness seeded to: 3081982372
+===============================================================================
+All tests passed (477 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fixed-width integers are validated" classname="Fixed-width integers are validated" time="0.00285109" status="run">
+		<properties/>
+		<system-out>Filters: "Fixed-width integers are validated"
+Randomness seeded to: 2890907452
+===============================================================================
+All tests passed (5 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Doubles can be parsed as Fx32" classname="Doubles can be parsed as Fx32" time="0.00567696" status="run">
+		<properties/>
+		<system-out>Filters: "Doubles can be parsed as Fx32"
+Randomness seeded to: 1795089329
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Dungeon object is parsed correctly" classname="Dungeon object is parsed correctly" time="0.00299039" status="run">
+		<properties/>
+		<system-out>Filters: "Dungeon object is parsed correctly"
+Randomness seeded to: 3085636422
+===============================================================================
+All tests passed (17 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Monster object is parsed correctly" classname="Monster object is parsed correctly" time="0.00281029" status="run">
+		<properties/>
+		<system-out>Filters: "Monster object is parsed correctly"
+Randomness seeded to: 764742064
+===============================================================================
+All tests passed (48 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Monster object type and ability overrides work" classname="Monster object type and ability overrides work" time="0.00297798" status="run">
+		<properties/>
+		<system-out>Filters: "Monster object type and ability overrides work"
+Randomness seeded to: 854615892
+===============================================================================
+All tests passed (5 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Move object is parsed correctly" classname="Move object is parsed correctly" time="0.00282336" status="run">
+		<properties/>
+		<system-out>Filters: "Move object is parsed correctly"
+Randomness seeded to: 134650763
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Move object is parsed correctly with a thrown item" classname="Move object is parsed correctly with a thrown item" time="0.00248559" status="run">
+		<properties/>
+		<system-out>Filters: "Move object is parsed correctly with a thrown item"
+Randomness seeded to: 518228043
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Top-level config is parsed correctly" classname="Top-level config is parsed correctly" time="0.00295525" status="run">
+		<properties/>
+		<system-out>Filters: "Top-level config is parsed correctly"
+Randomness seeded to: 1339965363
+===============================================================================
+All tests passed (7 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Names can be mapped to IDs" classname="Names can be mapped to IDs" time="0.00273343" status="run">
+		<properties/>
+		<system-out>Filters: "Names can be mapped to IDs"
+Randomness seeded to: 2585804620
+===============================================================================
+All tests passed (13 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Name-to-ID mapping is case insensitive" classname="Name-to-ID mapping is case insensitive" time="0.00244725" status="run">
+		<properties/>
+		<system-out>Filters: "Name-to-ID mapping is case insensitive"
+Randomness seeded to: 752303053
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="IDs can be mapped to names" classname="IDs can be mapped to names" time="0.00271705" status="run">
+		<properties/>
+		<system-out>Filters: "IDs can be mapped to names"
+Randomness seeded to: 2160075696
+===============================================================================
+All tests passed (13 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Alternate names can be mapped to IDs" classname="Alternate names can be mapped to IDs" time="0.00282013" status="run">
+		<properties/>
+		<system-out>Filters: "Alternate names can be mapped to IDs"
+Randomness seeded to: 1556137573
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="IDs can be mapped to alternate names" classname="IDs can be mapped to alternate names" time="0.00243215" status="run">
+		<properties/>
+		<system-out>Filters: "IDs can be mapped to alternate names"
+Randomness seeded to: 3587929840
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="contains() works" classname="contains() works" time="0.00238342" status="run">
+		<properties/>
+		<system-out>Filters: "contains() works"
+Randomness seeded to: 4290682833
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="all_except() returns an ordered list of names" classname="all_except() returns an ordered list of names" time="0.00258625" status="run">
+		<properties/>
+		<system-out>Filters: "all_except() returns an ordered list of names"
+Randomness seeded to: 3864227678
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="all_except() excludes given entries" classname="all_except() excludes given entries" time="0.00262069" status="run">
+		<properties/>
+		<system-out>Filters: "all_except() excludes given entries"
+Randomness seeded to: 863653214
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="all_with_alts_except() returns an ordered list of names" classname="all_with_alts_except() returns an ordered list of names" time="0.00278071" status="run">
+		<properties/>
+		<system-out>Filters: "all_with_alts_except() returns an ordered list of names"
+Randomness seeded to: 840175333
+===============================================================================
+All tests passed (10 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="all_with_alts_except() excludes given entries" classname="all_with_alts_except() excludes given entries" time="0.00265875" status="run">
+		<properties/>
+		<system-out>Filters: "all_with_alts_except() excludes given entries"
+Randomness seeded to: 1075286518
+===============================================================================
+All tests passed (10 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx32 default constructor sets value to 0" classname="Fx32 default constructor sets value to 0" time="0.00206099" status="run">
+		<properties/>
+		<system-out>Filters: "Fx32 default constructor sets value to 0"
+Randomness seeded to: 1481942810
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx32 can be constructed from integer and fractional parts" classname="Fx32 can be constructed from integer and fractional parts" time="0.00174272" status="run">
+		<properties/>
+		<system-out>Filters: "Fx32 can be constructed from integer and fractional parts"
+Randomness seeded to: 4275677972
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx32 copy constructor works" classname="Fx32 copy constructor works" time="0.00157688" status="run">
+		<properties/>
+		<system-out>Filters: "Fx32 copy constructor works"
+Randomness seeded to: 2828868883
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx32 can be constructed from integer" classname="Fx32 can be constructed from integer" time="0.00178006" status="run">
+		<properties/>
+		<system-out>Filters: "Fx32 can be constructed from integer"
+Randomness seeded to: 3123183622
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx32 is_negative() works" classname="Fx32 is_negative() works" time="0.00218271" status="run">
+		<properties/>
+		<system-out>Filters: "Fx32 is_negative() works"
+Randomness seeded to: 3475423352
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx32 can be transformed into the represented value" classname="Fx32 can be transformed into the represented value" time="0.00174235" status="run">
+		<properties/>
+		<system-out>Filters: "Fx32 can be transformed into the represented value"
+Randomness seeded to: 3047798307
+===============================================================================
+All tests passed (18 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx32 binary operators work" classname="Fx32 binary operators work" time="0.00162685" status="run">
+		<properties/>
+		<system-out>Filters: "Fx32 binary operators work"
+Randomness seeded to: 3885141974
+===============================================================================
+All tests passed (30 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx32 predefined constants are correct" classname="Fx32 predefined constants are correct" time="0.00154537" status="run">
+		<properties/>
+		<system-out>Filters: "Fx32 predefined constants are correct"
+Randomness seeded to: 1393951490
+===============================================================================
+All tests passed (13 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx64 default constructor sets value to 0" classname="Fx64 default constructor sets value to 0" time="0.00170739" status="run">
+		<properties/>
+		<system-out>Filters: "Fx64 default constructor sets value to 0"
+Randomness seeded to: 2069756969
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx64 can be constructed from high and low parts" classname="Fx64 can be constructed from high and low parts" time="0.00177049" status="run">
+		<properties/>
+		<system-out>Filters: "Fx64 can be constructed from high and low parts"
+Randomness seeded to: 1788510067
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx64 copy constructor works" classname="Fx64 copy constructor works" time="0.00228628" status="run">
+		<properties/>
+		<system-out>Filters: "Fx64 copy constructor works"
+Randomness seeded to: 4183621998
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx64 can be constructed from Fx32" classname="Fx64 can be constructed from Fx32" time="0.00173402" status="run">
+		<properties/>
+		<system-out>Filters: "Fx64 can be constructed from Fx32"
+Randomness seeded to: 655177633
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx64 can be constructed from integer" classname="Fx64 can be constructed from integer" time="0.00184286" status="run">
+		<properties/>
+		<system-out>Filters: "Fx64 can be constructed from integer"
+Randomness seeded to: 1635692528
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx64 is_negative() works" classname="Fx64 is_negative() works" time="0.0018338" status="run">
+		<properties/>
+		<system-out>Filters: "Fx64 is_negative() works"
+Randomness seeded to: 1622416768
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx64 can be transformed into the represented value" classname="Fx64 can be transformed into the represented value" time="0.00197507" status="run">
+		<properties/>
+		<system-out>Filters: "Fx64 can be transformed into the represented value"
+Randomness seeded to: 1562806403
+===============================================================================
+All tests passed (16 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx64 binary operators work" classname="Fx64 binary operators work" time="0.00195503" status="run">
+		<properties/>
+		<system-out>Filters: "Fx64 binary operators work"
+Randomness seeded to: 3066944964
+===============================================================================
+All tests passed (35 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="Fx64 predefined constants are correct" classname="Fx64 predefined constants are correct" time="0.00169602" status="run">
+		<properties/>
+		<system-out>Filters: "Fx64 predefined constants are correct"
+Randomness seeded to: 1195420704
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="DecFx16_16 can be constructed from its raw parts" classname="DecFx16_16 can be constructed from its raw parts" time="0.00158024" status="run">
+		<properties/>
+		<system-out>Filters: "DecFx16_16 can be constructed from its raw parts"
+Randomness seeded to: 4080708617
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="DecFx16_16::ceil() works" classname="DecFx16_16::ceil() works" time="0.00164783" status="run">
+		<properties/>
+		<system-out>Filters: "DecFx16_16::ceil() works"
+Randomness seeded to: 2435697058
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="u32_to_i32() works" classname="u32_to_i32() works" time="0.00172079" status="run">
+		<properties/>
+		<system-out>Filters: "u32_to_i32() works"
+Randomness seeded to: 430350594
+===============================================================================
+All tests passed (5 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="asr() works" classname="asr() works" time="0.00156589" status="run">
+		<properties/>
+		<system-out>Filters: "asr() works"
+Randomness seeded to: 722787469
+===============================================================================
+All tests passed (8 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="div4_trunc() works" classname="div4_trunc() works" time="0.00183707" status="run">
+		<properties/>
+		<system-out>Filters: "div4_trunc() works"
+Randomness seeded to: 2132687960
+===============================================================================
+All tests passed (9 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="clamped_ln() works" classname="clamped_ln() works" time="0.00183013" status="run">
+		<properties/>
+		<system-out>Filters: "clamped_ln() works"
+Randomness seeded to: 10657802
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="get_move_type() works" classname="get_move_type() works" time="0.00162281" status="run">
+		<properties/>
+		<system-out>Filters: "get_move_type() works"
+Randomness seeded to: 1908334290
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="get_move_category() works" classname="get_move_category() works" time="0.00170464" status="run">
+		<properties/>
+		<system-out>Filters: "get_move_category() works"
+Randomness seeded to: 3185607044
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="get_move_base_power() works" classname="get_move_base_power() works" time="0.00255583" status="run">
+		<properties/>
+		<system-out>Filters: "get_move_base_power() works"
+Randomness seeded to: 3324885820
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="get_move_base_power() works in Time/Darkness mode" classname="get_move_base_power() works in Time/Darkness mode" time="0.00246607" status="run">
+		<properties/>
+		<system-out>Filters: "get_move_base_power() works in Time/Darkness mode"
+Randomness seeded to: 3391315514
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="get_move_accuracy() works" classname="get_move_accuracy() works" time="0.00190563" status="run">
+		<properties/>
+		<system-out>Filters: "get_move_accuracy() works"
+Randomness seeded to: 958012193
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="get_move_crit_chance() works" classname="get_move_crit_chance() works" time="0.00235584" status="run">
+		<properties/>
+		<system-out>Filters: "get_move_crit_chance() works"
+Randomness seeded to: 201396790
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="get_move_max_pp() works" classname="get_move_max_pp() works" time="0.00207506" status="run">
+		<properties/>
+		<system-out>Filters: "get_move_max_pp() works"
+Randomness seeded to: 2715424063
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="is_recoil_move() works" classname="is_recoil_move() works" time="0.00167564" status="run">
+		<properties/>
+		<system-out>Filters: "is_recoil_move() works"
+Randomness seeded to: 3188220139
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="is_punch_move() works" classname="is_punch_move() works" time="0.0018231" status="run">
+		<properties/>
+		<system-out>Filters: "is_punch_move() works"
+Randomness seeded to: 2540866464
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="is_sound_move() works" classname="is_sound_move() works" time="0.00189368" status="run">
+		<properties/>
+		<system-out>Filters: "is_sound_move() works"
+Randomness seeded to: 2436718393
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="move_not_physical() works" classname="move_not_physical() works" time="0.00173856" status="run">
+		<properties/>
+		<system-out>Filters: "move_not_physical() works"
+Randomness seeded to: 1530311868
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="is_regular_attack_or_projectile() works" classname="is_regular_attack_or_projectile() works" time="0.0016446" status="run">
+		<properties/>
+		<system-out>Filters: "is_regular_attack_or_projectile() works"
+Randomness seeded to: 3112074175
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="MoveSpec can be constructed from move ID" classname="MoveSpec can be constructed from move ID" time="0.00174498" status="run">
+		<properties/>
+		<system-out>Filters: "MoveSpec can be constructed from move ID"
+Randomness seeded to: 1883081138
+===============================================================================
+All tests passed (4 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="is_aura_bow() works" classname="is_aura_bow() works" time="0.00178186" status="run">
+		<properties/>
+		<system-out>Filters: "is_aura_bow() works"
+Randomness seeded to: 4108830118
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="get_monster_gender() works" classname="get_monster_gender() works" time="0.00184937" status="run">
+		<properties/>
+		<system-out>Filters: "get_monster_gender() works"
+Randomness seeded to: 2136839948
+===============================================================================
+All tests passed (6 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="get_monster_weight() works" classname="get_monster_weight() works" time="0.00166807" status="run">
+		<properties/>
+		<system-out>Filters: "get_monster_weight() works"
+Randomness seeded to: 2218883745
+===============================================================================
+All tests passed (3 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+	<testcase name="SpeciesSpec can be constructed from monster ID" classname="SpeciesSpec can be constructed from monster ID" time="0.00175513" status="run">
+		<properties/>
+		<system-out>Filters: "SpeciesSpec can be constructed from monster ID"
+Randomness seeded to: 497368298
+===============================================================================
+All tests passed (5 assertions in 1 test case)
+
+</system-out>
+	</testcase>
+</testsuite>

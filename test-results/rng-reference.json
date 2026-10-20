@@ -1,0 +1,6 @@
+{
+  "source": "https://github.com/pret/pmd-sky/blob/e3f02199ebe9e263ee67b07f36b3f240f83ef5d9/src/dg_random.c",
+  "sourceSha256": "c124ecc78bb1ecef2242f220b7d26593bb6ef8d2382029a921ab48150fad8336",
+  "vectorRows": 36000,
+  "scope": "RNG functions only; no ROM comparison, turn order or CalcStatusDuration"
+}

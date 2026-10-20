@@ -1,0 +1,134 @@
+Internal ctest changing into directory: /workspace/mystery-depths/build/damage-eos/src
+Test project /workspace/mystery-depths/build/damage-eos/src
+      Start  1: MonsterEntity methods work
+ 1/64 Test  #1: MonsterEntity methods work ...........................................   Passed    0.00 sec
+      Start  2: get_type_matchup() works
+ 2/64 Test  #2: get_type_matchup() works .............................................   Passed    0.00 sec
+      Start  3: flash_fire_should_activate() works
+ 3/64 Test  #3: flash_fire_should_activate() works ...................................   Passed    0.00 sec
+      Start  4: genders_equal_not_genderless() works
+ 4/64 Test  #4: genders_equal_not_genderless() works .................................   Passed    0.00 sec
+      Start  5: Damage calcs with simple scenarios
+ 5/64 Test  #5: Damage calcs with simple scenarios ...................................   Passed    0.00 sec
+      Start  6: Damage calcs with empirically known scenarios (Charizard + Flygon)
+ 6/64 Test  #6: Damage calcs with empirically known scenarios (Charizard + Flygon) ...   Passed    0.00 sec
+      Start  7: Fixed-width integers are validated
+ 7/64 Test  #7: Fixed-width integers are validated ...................................   Passed    0.00 sec
+      Start  8: Doubles can be parsed as Fx32
+ 8/64 Test  #8: Doubles can be parsed as Fx32 ........................................   Passed    0.00 sec
+      Start  9: Dungeon object is parsed correctly
+ 9/64 Test  #9: Dungeon object is parsed correctly ...................................   Passed    0.00 sec
+      Start 10: Monster object is parsed correctly
+10/64 Test #10: Monster object is parsed correctly ...................................   Passed    0.00 sec
+      Start 11: Monster object type and ability overrides work
+11/64 Test #11: Monster object type and ability overrides work .......................   Passed    0.00 sec
+      Start 12: Move object is parsed correctly
+12/64 Test #12: Move object is parsed correctly ......................................   Passed    0.00 sec
+      Start 13: Move object is parsed correctly with a thrown item
+13/64 Test #13: Move object is parsed correctly with a thrown item ...................   Passed    0.00 sec
+      Start 14: Top-level config is parsed correctly
+14/64 Test #14: Top-level config is parsed correctly .................................   Passed    0.00 sec
+      Start 15: Names can be mapped to IDs
+15/64 Test #15: Names can be mapped to IDs ...........................................   Passed    0.00 sec
+      Start 16: Name-to-ID mapping is case insensitive
+16/64 Test #16: Name-to-ID mapping is case insensitive ...............................   Passed    0.00 sec
+      Start 17: IDs can be mapped to names
+17/64 Test #17: IDs can be mapped to names ...........................................   Passed    0.00 sec
+      Start 18: Alternate names can be mapped to IDs
+18/64 Test #18: Alternate names can be mapped to IDs .................................   Passed    0.00 sec
+      Start 19: IDs can be mapped to alternate names
+19/64 Test #19: IDs can be mapped to alternate names .................................   Passed    0.00 sec
+      Start 20: contains() works
+20/64 Test #20: contains() works .....................................................   Passed    0.00 sec
+      Start 21: all_except() returns an ordered list of names
+21/64 Test #21: all_except() returns an ordered list of names ........................   Passed    0.00 sec
+      Start 22: all_except() excludes given entries
+22/64 Test #22: all_except() excludes given entries ..................................   Passed    0.00 sec
+      Start 23: all_with_alts_except() returns an ordered list of names
+23/64 Test #23: all_with_alts_except() returns an ordered list of names ..............   Passed    0.00 sec
+      Start 24: all_with_alts_except() excludes given entries
+24/64 Test #24: all_with_alts_except() excludes given entries ........................   Passed    0.00 sec
+      Start 25: Fx32 default constructor sets value to 0
+25/64 Test #25: Fx32 default constructor sets value to 0 .............................   Passed    0.00 sec
+      Start 26: Fx32 can be constructed from integer and fractional parts
+26/64 Test #26: Fx32 can be constructed from integer and fractional parts ............   Passed    0.00 sec
+      Start 27: Fx32 copy constructor works
+27/64 Test #27: Fx32 copy constructor works ..........................................   Passed    0.00 sec
+      Start 28: Fx32 can be constructed from integer
+28/64 Test #28: Fx32 can be constructed from integer .................................   Passed    0.00 sec
+      Start 29: Fx32 is_negative() works
+29/64 Test #29: Fx32 is_negative() works .............................................   Passed    0.00 sec
+      Start 30: Fx32 can be transformed into the represented value
+30/64 Test #30: Fx32 can be transformed into the represented value ...................   Passed    0.00 sec
+      Start 31: Fx32 binary operators work
+31/64 Test #31: Fx32 binary operators work ...........................................   Passed    0.00 sec
+      Start 32: Fx32 predefined constants are correct
+32/64 Test #32: Fx32 predefined constants are correct ................................   Passed    0.00 sec
+      Start 33: Fx64 default constructor sets value to 0
+33/64 Test #33: Fx64 default constructor sets value to 0 .............................   Passed    0.00 sec
+      Start 34: Fx64 can be constructed from high and low parts
+34/64 Test #34: Fx64 can be constructed from high and low parts ......................   Passed    0.00 sec
+      Start 35: Fx64 copy constructor works
+35/64 Test #35: Fx64 copy constructor works ..........................................   Passed    0.00 sec
+      Start 36: Fx64 can be constructed from Fx32
+36/64 Test #36: Fx64 can be constructed from Fx32 ....................................   Passed    0.00 sec
+      Start 37: Fx64 can be constructed from integer
+37/64 Test #37: Fx64 can be constructed from integer .................................   Passed    0.00 sec
+      Start 38: Fx64 is_negative() works
+38/64 Test #38: Fx64 is_negative() works .............................................   Passed    0.00 sec
+      Start 39: Fx64 can be transformed into the represented value
+39/64 Test #39: Fx64 can be transformed into the represented value ...................   Passed    0.00 sec
+      Start 40: Fx64 binary operators work
+40/64 Test #40: Fx64 binary operators work ...........................................   Passed    0.00 sec
+      Start 41: Fx64 predefined constants are correct
+41/64 Test #41: Fx64 predefined constants are correct ................................   Passed    0.00 sec
+      Start 42: DecFx16_16 can be constructed from its raw parts
+42/64 Test #42: DecFx16_16 can be constructed from its raw parts .....................   Passed    0.00 sec
+      Start 43: DecFx16_16::ceil() works
+43/64 Test #43: DecFx16_16::ceil() works .............................................   Passed    0.00 sec
+      Start 44: u32_to_i32() works
+44/64 Test #44: u32_to_i32() works ...................................................   Passed    0.00 sec
+      Start 45: asr() works
+45/64 Test #45: asr() works ..........................................................   Passed    0.00 sec
+      Start 46: div4_trunc() works
+46/64 Test #46: div4_trunc() works ...................................................   Passed    0.00 sec
+      Start 47: clamped_ln() works
+47/64 Test #47: clamped_ln() works ...................................................   Passed    0.00 sec
+      Start 48: get_move_type() works
+48/64 Test #48: get_move_type() works ................................................   Passed    0.00 sec
+      Start 49: get_move_category() works
+49/64 Test #49: get_move_category() works ............................................   Passed    0.00 sec
+      Start 50: get_move_base_power() works
+50/64 Test #50: get_move_base_power() works ..........................................   Passed    0.00 sec
+      Start 51: get_move_base_power() works in Time/Darkness mode
+51/64 Test #51: get_move_base_power() works in Time/Darkness mode ....................   Passed    0.00 sec
+      Start 52: get_move_accuracy() works
+52/64 Test #52: get_move_accuracy() works ............................................   Passed    0.00 sec
+      Start 53: get_move_crit_chance() works
+53/64 Test #53: get_move_crit_chance() works .........................................   Passed    0.00 sec
+      Start 54: get_move_max_pp() works
+54/64 Test #54: get_move_max_pp() works ..............................................   Passed    0.00 sec
+      Start 55: is_recoil_move() works
+55/64 Test #55: is_recoil_move() works ...............................................   Passed    0.00 sec
+      Start 56: is_punch_move() works
+56/64 Test #56: is_punch_move() works ................................................   Passed    0.00 sec
+      Start 57: is_sound_move() works
+57/64 Test #57: is_sound_move() works ................................................   Passed    0.00 sec
+      Start 58: move_not_physical() works
+58/64 Test #58: move_not_physical() works ............................................   Passed    0.00 sec
+      Start 59: is_regular_attack_or_projectile() works
+59/64 Test #59: is_regular_attack_or_projectile() works ..............................   Passed    0.00 sec
+      Start 60: MoveSpec can be constructed from move ID
+60/64 Test #60: MoveSpec can be constructed from move ID .............................   Passed    0.00 sec
+      Start 61: is_aura_bow() works
+61/64 Test #61: is_aura_bow() works ..................................................   Passed    0.00 sec
+      Start 62: get_monster_gender() works
+62/64 Test #62: get_monster_gender() works ...........................................   Passed    0.00 sec
+      Start 63: get_monster_weight() works
+63/64 Test #63: get_monster_weight() works ...........................................   Passed    0.00 sec
+      Start 64: SpeciesSpec can be constructed from monster ID
+64/64 Test #64: SpeciesSpec can be constructed from monster ID .......................   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 64
+
+Total Test time (real) =   0.16 sec

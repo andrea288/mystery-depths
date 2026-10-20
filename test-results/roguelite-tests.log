@@ -1,0 +1,33 @@
+
+> mystery-depths@0.0.0 test
+> node --test tests/*.test.mjs
+
+✔ 2000 seed/piano: ogni cella, scala e spawn è raggiungibile, bordo chiuso, spawn unici (464.502051ms)
+✔ stesso seed e piano riproducono esattamente la mappa; il piano cambia la mappa (1.272156ms)
+✔ piani oltre MAX_SAFE_INTEGER non traboccano; boss ogni quinto piano (0.284479ms)
+✔ input invalidi e limiti espliciti vengono rifiutati (0.327683ms)
+✔ fonte italiana originale fissata e hash del binario conservato (3.122896ms)
+✔ nomi originali e grafia dell'epoca sono preservati (0.255687ms)
+✔ nessun fallback inglese o traduzione inventata per voci assenti (0.353711ms)
+✔ apprendimento permanente per specie, idempotente, senza mutare lo stato precedente (2.027351ms)
+✔ massimo quattro mosse equipaggiate, tutte apprese, nessun duplicato (0.314103ms)
+✔ salvataggio e ripresa del profilo, export/import senza perdita (1.181042ms)
+✔ run e bonus temporanei non possono essere serializzati come progressione permanente (0.303588ms)
+✔ import corrotto, versione futura, proprietà ostili, specie e mosse ignote non cancellano i dati (1.076838ms)
+✔ errore quota storage propagato, senza fingere un salvataggio riuscito (0.283589ms)
+✔ 36000 risultati e transizioni confrontati con il sorgente C indipendente fissato (46.047089ms)
+✔ snapshot RNG mantiene la sequenza; init conserva modalità e indice (0.987626ms)
+✔ range uguale non consuma RNG; probabilità 0 e 100 consumano ciascuna un'estrazione (0.22334ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 529.42772
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

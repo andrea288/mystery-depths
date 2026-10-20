@@ -1,0 +1,11 @@
+{
+  "name": "mystery-depths",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Work in progress. No playable game is currently implemented.",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {"node": ">=22"}
+}

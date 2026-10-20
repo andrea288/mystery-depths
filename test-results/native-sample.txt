@@ -1,0 +1,67 @@
+damage: [21, 28]
+hit chance: 90%
+crit chance: 40%
+
+== input summary ==
+move: Ember
+attacker: Lv. 5 Charmander, team leader
+defender: Lv. 5 Bulbasaur, enemy
+dungeon weather: Clear
+
+== result details ==
+damage message: Move
+type matchup: Super effective (Super effective + Neutral)
+move type: Fire
+move category: Special
+critical hit: false
+full type immunity: false
+no damage: false
+
+== calculation details ==
+offensive stat stage: 12
+defensive stat stage: 10
+offensive stat: 4
+defensive stat: 3
+modified offense value: 5
+modified defense value: 3
+AT value (offense + power): 14
+DEF value (defense): 3
+FLV value (level + [offense - defense]/8): 5
+damage calc base value (153/256*AT - DEF/2 + 50*ln[10*(FLV + 50)] - 311): 12
+damage calc static multiplier: 1
+damage calc (base * static mult): 24
+damage calc random multiplier: [88%, 112%]
+
+== modifier details ==
+item attack modifier: 0
+item special attack modifier: 0
+item defense modifier: 0
+item special defense modifier: 0
+ability offense modifier: 0
+ability defense modifier: 0
+IQ skill offense modifier: 1
+IQ skill defense modifier: 0
+Scope Lens/Sharpshooter: false
+Patsy Band: false
+Half physical damage: false
+Half special damage: false
+Focus Energy: false
+Type-Advantage Master: true
+Cloudy: false
+Rain: false
+Sunny: false
+Thick Fat/Heatproof: false
+Flash Fire: false
+Levitate: false
+Overgrow: false
+Swarm: false
+Blaze/Dry Skin: false
+Scrappy: false
+Super Luck: false
+Sniper: false
+STAB: true
+Mud Sport/Fog: false
+Water Sport: false
+Charge: false
+Ghost immunity: false
+Skull Bash: false
