@@ -1,0 +1,183 @@
+{
+  "locale": "it-IT",
+  "source": "https://raw.githubusercontent.com/PokeAPI/pokeapi/2bf639e5572812a67d2b94903fdcb9d095f5aeb2/data/v2/csv/pokemon_species_names.csv",
+  "commit": "2bf639e5572812a67d2b94903fdcb9d095f5aeb2",
+  "usage": "Solo denominazioni, mai regole o statistiche Mystery Dungeon",
+  "sha256": "820cde17074cdb1c2b0595c997fb8f998e773bd5da3bb525dec85703c86c5fd9",
+  "starters": [
+    {
+      "dex": 1,
+      "name": "Bulbasaur",
+      "region": "Kanto",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 4,
+      "name": "Charmander",
+      "region": "Kanto",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 7,
+      "name": "Squirtle",
+      "region": "Kanto",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 25,
+      "name": "Pikachu",
+      "region": "Speciali",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 133,
+      "name": "Eevee",
+      "region": "Speciali",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 152,
+      "name": "Chikorita",
+      "region": "Johto",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 155,
+      "name": "Cyndaquil",
+      "region": "Johto",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 158,
+      "name": "Totodile",
+      "region": "Johto",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 252,
+      "name": "Treecko",
+      "region": "Hoenn",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 255,
+      "name": "Torchic",
+      "region": "Hoenn",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 258,
+      "name": "Mudkip",
+      "region": "Hoenn",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 387,
+      "name": "Turtwig",
+      "region": "Sinnoh",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 390,
+      "name": "Chimchar",
+      "region": "Sinnoh",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 393,
+      "name": "Piplup",
+      "region": "Sinnoh",
+      "rulesModule": "eos-na"
+    },
+    {
+      "dex": 495,
+      "name": "Snivy",
+      "region": "Unima",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 498,
+      "name": "Tepig",
+      "region": "Unima",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 501,
+      "name": "Oshawott",
+      "region": "Unima",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 650,
+      "name": "Chespin",
+      "region": "Kalos",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 653,
+      "name": "Fennekin",
+      "region": "Kalos",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 656,
+      "name": "Froakie",
+      "region": "Kalos",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 722,
+      "name": "Rowlet",
+      "region": "Alola",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 725,
+      "name": "Litten",
+      "region": "Alola",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 728,
+      "name": "Popplio",
+      "region": "Alola",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 810,
+      "name": "Grookey",
+      "region": "Galar",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 813,
+      "name": "Scorbunny",
+      "region": "Galar",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 816,
+      "name": "Sobble",
+      "region": "Galar",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 906,
+      "name": "Sprigatito",
+      "region": "Paldea",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 909,
+      "name": "Fuecoco",
+      "region": "Paldea",
+      "rulesModule": "post-eos"
+    },
+    {
+      "dex": 912,
+      "name": "Quaxly",
+      "region": "Paldea",
+      "rulesModule": "post-eos"
+    }
+  ]
+}

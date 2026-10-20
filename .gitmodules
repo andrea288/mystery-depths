@@ -1,0 +1,3 @@
+[submodule "third_party/damage-eos"]
+	path = third_party/damage-eos
+	url = https://github.com/UsernameFodder/damage-eos.git
