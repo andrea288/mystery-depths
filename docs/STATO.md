@@ -22,6 +22,9 @@
 6. Asset di 29 starter locali, 553 file verificati e 464 PNG decodificati.
 7. Italiano originale estratto: 18.482 stringhe roundtrip, 5.042 esportate.
 8. Bozza di rete salvata per api.github.com e storage.googleapis.com.
+9. Salvati anche `install_script` e `start_skill` nella bozza dell'ambiente,
+   per dipendenze, build nativa, test e istruzioni di ripresa. Nessuna
+   pubblicazione dell'ambiente o ripristino in un nuovo task verificati.
 
 ## Blocchi esterni effettivi
 
