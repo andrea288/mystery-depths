@@ -9,7 +9,7 @@ handlers='\n'.join(p.read_text() for p in source.glob('overlay_29*.s'))
 for fn in ['DoMoveDamageFreeze15','DoMoveDamageParalyze15','DoMoveDamageConfuse30','DoMoveDamageCringe30','DoMoveCrunch']:
  body=re.search(r'arm_func_start '+fn+r'\n(.*?)arm_func_end '+fn,handlers,re.S)[1]
  names+=re.findall(r'; =(\w+)',body)
-names+=['SLEEP_TURN_RANGE','FROZEN_TURN_RANGE','PARALYSIS_TURN_RANGE','CONFUSED_TURN_RANGE','CRINGE_TURN_RANGE']
+names+=['BURN_DAMAGE','BURN_DAMAGE_COOLDOWN','POISON_DAMAGE','POISON_DAMAGE_COOLDOWN','SLEEP_TURN_RANGE','FROZEN_TURN_RANGE','PARALYSIS_TURN_RANGE','CONFUSED_TURN_RANGE','CRINGE_TURN_RANGE']
 out={}
 for name in sorted(set(names)):
  match=re.search(r'^'+name+r':\n\s*\.byte ([^\n]+)',text,re.M)

@@ -1,6 +1,23 @@
 import "./engine.js";
 import { nextFloor, validateFloor } from "./roguelite/dungeon.mjs";
 import { DungeonRng } from "./core/dungeon-rng.mjs";
+// PRET include/enums.h: independent status classes, one condition per class.
+const STATUS_GROUP = {
+  sleep: "sleep",
+  burn: "burn",
+  poison: "burn",
+  paralysis: "burn",
+  freeze: "frozen",
+  confusion: "cringe",
+  flinch: "cringe",
+};
+const STATUS_RANGE = {
+  sleep: "SLEEP_TURN_RANGE",
+  freeze: "FROZEN_TURN_RANGE",
+  paralysis: "PARALYSIS_TURN_RANGE",
+  confusion: "CONFUSED_TURN_RANGE",
+  flinch: "CRINGE_TURN_RANGE",
+};
 const { Game: Base, DIRS, BIOMES, dist } = globalThis.MD;
 export { DIRS, BIOMES };
 export const ITEMS = {
@@ -84,9 +101,7 @@ export class Game extends Base {
       spa: stats.spa,
       spd: stats.spd,
       moves: moves.map((id) => ({ id, pp: this.D.moves[id].pp })),
-      status: null,
-      statusTurns: 0,
-      statusClock: 0,
+      statuses: {},
       stages: { atk: 0, def: 0, spa: 0, spd: 0 },
       facing: 0,
       boss,
@@ -108,7 +123,7 @@ export class Game extends Base {
       throw Error("Mosse equipaggiate non valide.");
     this.combat = new DungeonRng(seed >>> 0);
     const r = super.start(species, seed, loadout);
-    r.mechanicsVersion = 3;
+    r.mechanicsVersion = 4;
     r.combatRng = this.combat.snapshot();
     r.maxBelly = 100;
     r.pendingMoves = [];
@@ -245,13 +260,16 @@ export class Game extends Base {
     return true;
   }
   configMon(mon) {
-    const status = {
+    const names = {
       burn: "burn",
       poison: "poisoned",
       paralysis: "paralysis",
       sleep: "sleep",
       confusion: "confused",
-    }[mon.status];
+    };
+    const statuses = Object.values(mon.statuses)
+      .map((s) => names[s.id])
+      .filter(Boolean);
     return {
       species: this.D.pokemon[mon.species].eosSpecies,
       level: mon.level,
@@ -264,7 +282,7 @@ export class Game extends Base {
       is_team_member: mon === this.run.player,
       is_team_leader: mon === this.run.player,
       belly: mon === this.run.player ? Math.floor(this.run.belly) : 100,
-      statuses: status ? [status] : [],
+      statuses,
       stat_modifiers: {
         stages: {
           atk: 10 + mon.stages.atk,
@@ -291,13 +309,18 @@ export class Game extends Base {
       uid: a.uid,
     });
     if (
-      ["ember", "flamethrower", "fire-fang"].includes(m?.slug) &&
-      target.status === "freeze"
+      ["ember", "flamethrower", "fire-fang", "fire-spin"].includes(m?.slug) &&
+      this.hasStatus(target, "freeze")
     )
-      target.status = null;
+      delete target.statuses.frozen;
     // PRET ov29_02324514: zero means uniform DungeonRandRange(2,6).
     // Skill Link selects five; unlike main-series weighted 2–5 distributions.
-    const hits = m?.strikes === 0 ? (this.ability(a, 'Skill Link') ? 5 : this.combat.range(2, 6)) : (m?.strikes || 1);
+    const hits =
+      m?.strikes === 0
+        ? this.ability(a, "Skill Link")
+          ? 5
+          : this.combat.range(2, 6)
+        : m?.strikes || 1;
     for (let i = 0; i < hits && target.hp > 0; i++) {
       const cfg = {
         move: {
@@ -438,33 +461,36 @@ export class Game extends Base {
       );
     }
   }
-  // Status scheduling is isolated and explicitly not certified as full EoS parity.
+  hasStatus(e, id) {
+    return e.statuses[STATUS_GROUP[id]]?.id === id;
+  }
+  statusNames(e) {
+    return Object.values(e.statuses).map(
+      (s) => globalThis.MD.STATUS_NAMES[s.id],
+    );
+  }
+  // All independent timers advance, even when another class blocks the action.
+  // Fractional-turn scheduling remains separate work (see CONFORMITA.md).
   statusBlock(e) {
-    if (e.flinch) {
-      e.flinch = false;
-      this.log(e.name + " tentenna.");
-      return true;
+    let blocked = false;
+    for (const [group, state] of Object.entries(e.statuses)) {
+      if (
+        !["sleep", "freeze", "paralysis", "flinch", "confusion"].includes(
+          state.id,
+        )
+      )
+        continue;
+      if (--state.turns <= 0) delete e.statuses[group];
+      else if (state.id !== "confusion") blocked = true;
     }
-    if (["sleep", "freeze", "paralysis"].includes(e.status)) {
-      if (--e.statusTurns <= 0) {
-        e.status = null;
-        return false;
-      }
-      this.log(e.name + " non riesce ad agire.");
-      return true;
-    }
-    return false;
+    if (blocked) this.log(e.name + " non riesce ad agire.");
+    return blocked;
   }
   inflict(e, status, user = e) {
-    const ignores = this.ability(user, "Mold Breaker");
-    if (status === "flinch") {
-      if (!ignores && this.ability(e, "Inner Focus")) return;
-      e.flinch = true;
-      this.log(e.name + " tentenna.");
-      return;
-    }
+    const ignores = user !== e && this.ability(user, "Mold Breaker");
     const immune =
       {
+        flinch: ["Inner Focus"],
         burn: ["Water Veil"],
         freeze: ["Magma Armor"],
         sleep: ["Insomnia", "Vital Spirit"],
@@ -473,7 +499,8 @@ export class Game extends Base {
         confusion: ["Own Tempo"],
       }[status] || [];
     if (!ignores && immune.some((a) => this.ability(e, a))) return;
-    if (e.status) return;
+    const group = STATUS_GROUP[status];
+    if (!group || this.hasStatus(e, status)) return;
     const types = this.D.pokemon[e.species].types;
     if (
       (status === "burn" && types.includes("fire")) ||
@@ -482,27 +509,17 @@ export class Game extends Base {
       (status === "freeze" && types.includes("ice"))
     )
       return;
-    const ranges = {
-      sleep: [3, 7],
-      freeze: [3, 5],
-      paralysis: [1, 2],
-      confusion: [6, 12],
-      burn: [127, 127],
-      poison: [127, 127],
+    const range = STATUS_RANGE[status]
+      ? this.D.effects[STATUS_RANGE[status]]
+      : [127, 127];
+    let duration = this.combat.range(...range);
+    if (duration !== 127 && this.ability(e, "Natural Cure"))
+      duration = Math.min(duration, 5);
+    e.statuses[group] = {
+      id: status,
+      turns: Math.max(1, duration) + 1,
+      clock: 0,
     };
-    if (!ranges[status]) return;
-    e.status = status;
-    e.statusTurns =
-      Math.max(
-        1,
-        Math.min(
-          this.combat.range(...ranges[status]),
-          this.ability(e, "Natural Cure") && ranges[status][0] !== 127
-            ? 5
-            : 127,
-        ),
-      ) + 1;
-    e.statusClock = 0;
     this.log(
       e.name + ": " + globalThis.MD.STATUS_NAMES[status] + "!",
       "danger",
@@ -510,12 +527,22 @@ export class Game extends Base {
   }
   statusTick(e) {
     if (e.hp <= 0) return;
-    if (e.status === "burn" || e.status === "poison") {
-      e.statusClock = (e.statusClock || 0) + 1;
-      const limit = e.status === "burn" ? 50 : 20;
-      if (e.statusClock >= limit) {
-        e.statusClock = 0;
-        const damage = e.status === "burn" ? 6 : 2;
+    const state = e.statuses.burn;
+    if (!state || !["burn", "poison"].includes(state.id)) return;
+    // TickStatusAndHealthRegen: countdown starts at zero, then reloads.
+    if (state.clock > 0) state.clock--;
+    if (state.clock === 0) {
+      const poison = state.id === "poison";
+      state.clock =
+        this.D.effects[
+          poison ? "POISON_DAMAGE_COOLDOWN" : "BURN_DAMAGE_COOLDOWN"
+        ];
+      const damage = this.D.effects[poison ? "POISON_DAMAGE" : "BURN_DAMAGE"];
+      delete e.statuses.sleep;
+      if (poison && this.ability(e, "Poison Heal")) {
+        e.hp = Math.min(e.maxHp, e.hp + damage);
+        this.effect("heal", e, e, { amount: damage });
+      } else {
         e.hp -= damage;
         this.effect("hit", e, e, { amount: damage });
       }
@@ -528,7 +555,7 @@ export class Game extends Base {
       e !== this.run.player ||
       e.hp <= 0 ||
       this.run.belly <= 0 ||
-      e.status === "poison"
+      this.hasStatus(e, "poison")
     )
       return;
     const speed = Math.min(
@@ -697,7 +724,7 @@ export class Game extends Base {
     return true;
   }
   validateRun(r) {
-    if (!r || r.mechanicsVersion !== 3)
+    if (!r || ![3, 4].includes(r.mechanicsVersion))
       throw Error("Salvataggio di una versione incompatibile.");
     // The handoff validator assumes invented relics: validate our strict reward schema separately.
     const reward = r.reward;
@@ -755,14 +782,45 @@ export class Game extends Base {
       )
     )
       throw Error("Stanze non valide.");
-    if (!integer(r.biome, 0, BIOMES.length - 1) || !integer(r.exit.x, 0, r.w - 1) || !integer(r.exit.y, 0, r.h - 1)) throw Error('Piano non valido.');
-    for (const item of r.items) if (!integer(item.x, 0, r.w - 1) || !integer(item.y, 0, r.h - 1) || r.map[item.y][item.x] !== 0 || ![...Object.keys(ITEMS), 'chest'].includes(item.type)) throw Error('Strumento a terra non valido.');
-    for (const trap of r.traps) if (!integer(trap.x, 0, r.w - 1) || !integer(trap.y, 0, r.h - 1) || !['poison', 'damage'].includes(trap.type) || typeof trap.revealed !== 'boolean') throw Error('Trappola non valida.');
-    for (const line of r.log) if (!line || typeof line.text !== 'string' || line.text.length > 500 || !['', 'good', 'gold', 'danger'].includes(line.tone) || !integer(line.turn, 0, r.turn)) throw Error('Diario non valido.');
+    if (
+      !integer(r.biome, 0, BIOMES.length - 1) ||
+      !integer(r.exit.x, 0, r.w - 1) ||
+      !integer(r.exit.y, 0, r.h - 1)
+    )
+      throw Error("Piano non valido.");
+    for (const item of r.items)
+      if (
+        !integer(item.x, 0, r.w - 1) ||
+        !integer(item.y, 0, r.h - 1) ||
+        r.map[item.y][item.x] !== 0 ||
+        ![...Object.keys(ITEMS), "chest"].includes(item.type)
+      )
+        throw Error("Strumento a terra non valido.");
+    for (const trap of r.traps)
+      if (
+        !integer(trap.x, 0, r.w - 1) ||
+        !integer(trap.y, 0, r.h - 1) ||
+        !["poison", "damage"].includes(trap.type) ||
+        typeof trap.revealed !== "boolean"
+      )
+        throw Error("Trappola non valida.");
+    for (const line of r.log)
+      if (
+        !line ||
+        typeof line.text !== "string" ||
+        line.text.length > 500 ||
+        !["", "good", "gold", "danger"].includes(line.tone) ||
+        !integer(line.turn, 0, r.turn)
+      )
+        throw Error("Diario non valido.");
     const cells = new Set(),
       uids = new Set();
     for (const e of [r.player, ...r.enemies]) {
-      if (e.name !== this.D.pokemon[e.species].name || typeof e.boss !== 'boolean' || !integer(e.statusTurns, 0, 128) || !integer(e.statusClock || 0, 0, 1000)) throw Error('Dati Pokémon non validi.');
+      if (
+        e.name !== this.D.pokemon[e.species].name ||
+        typeof e.boss !== "boolean"
+      )
+        throw Error("Dati Pokémon non validi.");
       if (
         !integer(e.level, 1, 100) ||
         !integer(e.maxHp, 1, 999) ||
@@ -785,18 +843,33 @@ export class Game extends Base {
         throw Error("Mosse non valide.");
       if (!integer(e.regenCounter, 0, 999) || typeof e.hitByMove !== "boolean")
         throw Error("Recupero o esperienza non validi.");
-      if (
-        e.status !== null &&
-        ![
-          "sleep",
-          "freeze",
-          "paralysis",
-          "burn",
-          "poison",
-          "confusion",
-        ].includes(e.status)
-      )
-        throw Error("Stato non valido.");
+      if (r.mechanicsVersion === 3) {
+        if (
+          (e.status !== null && !Object.hasOwn(STATUS_GROUP, e.status)) ||
+          !integer(e.statusTurns, 0, 128) ||
+          !integer(e.statusClock || 0, 0, 1000) ||
+          (e.flinch !== undefined && typeof e.flinch !== "boolean")
+        )
+          throw Error("Stato precedente non valido.");
+      } else {
+        if (
+          !e.statuses ||
+          typeof e.statuses !== "object" ||
+          Array.isArray(e.statuses) ||
+          Object.keys(e.statuses).length > 4
+        )
+          throw Error("Gruppi di stato non validi.");
+        for (const [group, state] of Object.entries(e.statuses)) {
+          if (
+            !state ||
+            !Object.hasOwn(STATUS_GROUP, state.id) ||
+            STATUS_GROUP[state.id] !== group ||
+            !integer(state.turns, 1, 128) ||
+            !integer(state.clock, 0, 1000)
+          )
+            throw Error("Stato non valido.");
+        }
+      }
       const cell = e.x + "," + e.y;
       if (cells.has(cell) || uids.has(e.uid))
         throw Error("Pokémon sovrapposti.");
@@ -836,6 +909,33 @@ export class Game extends Base {
     this.meta = candidate.meta;
     this.run = data.run ? structuredClone(data.run) : null;
     if (this.run) {
+      if (this.run.mechanicsVersion === 3) {
+        for (const e of [this.run.player, ...this.run.enemies]) {
+          e.statuses = {};
+          if (e.status && e.statusTurns > 0) {
+            const cooldown =
+              e.status === "burn"
+                ? this.D.effects.BURN_DAMAGE_COOLDOWN
+                : e.status === "poison"
+                  ? this.D.effects.POISON_DAMAGE_COOLDOWN
+                  : 0;
+            e.statuses[STATUS_GROUP[e.status]] = {
+              id: e.status,
+              turns: e.statusTurns,
+              clock: cooldown
+                ? Math.max(0, cooldown - (e.statusClock || 0))
+                : 0,
+            };
+          }
+          if (e.flinch)
+            e.statuses.cringe = { id: "flinch", turns: 2, clock: 0 };
+          delete e.status;
+          delete e.statusTurns;
+          delete e.statusClock;
+          delete e.flinch;
+        }
+        this.run.mechanicsVersion = 4;
+      }
       this.rng = new globalThis.MD.RNG(this.run.rngState);
       this.rng.state = this.run.rngState;
       this.combat = DungeonRng.restore(this.run.combatRng);

@@ -13,7 +13,7 @@ WASM e asset sono già inclusi. Avvio Windows via `avvia-windows.bat`.
 
 La prova browser ha superato il boss del quinto piano in 831 turni/16 vittorie,
 ripreso un salvataggio e completato morte/nuova run senza errori JavaScript.
-Vedere `test-results/browser-journey.json` e `journey.log`.
+Vedere `test-results/browser-journey.json` e `browser-journey.log`.
 
 Il requisito di fedeltà completa EoS resta aperto: leggere CONFORMITA.md prima di
 qualunque affermazione. Non aggiungere probabilità o formule dalla serie principale.
@@ -52,7 +52,21 @@ al post consigli che non sono stati letti.
 ## Priorità residue
 
 Completare gli effetti specifici ancora mancanti, scheduler frazionario e
-modificatori di velocità; separare le classi di stato contemporanee; verificare
+modificatori di velocità; completare le interazioni fra classi di stato; verificare
 IA, movimento speciale, trappole e oggetti contro l'originale; aggiungere mosse
 di stato, collegamenti, QI, meteo, strumenti tenuti, effetti visivi originali.
 La matrice distingue prove dell'applicazione da equivalenza al gioco originale.
+
+## Aggiornamento gruppi di stato
+
+Meccaniche v4: stati separati per classi sleep/burn/frozen/cringe; timer
+indipendenti e sostituzione esclusiva all’interno della stessa classe.
+Costanti dei danni periodici estratte dalle ASM; countdown iniziale zero e
+risveglio; Poison Heal gestito nel tick del veleno. Turbofuoco scongela prima
+del danno. Nessuna nuova attivazione di confusione o rallentamento finché
+non viene implementato il comportamento completo.
+
+Import v3 validato prima di convertire, senza mutare l’input; durata e tempo
+restante al prossimo danno preservati. La chiave browser resta
+`mystery-depths-v3` per trovare i salvataggi esistenti. HUD mostra gli stati
+simultanei. 30 test JS e percorso browser fino al piano 6 superati.

@@ -172,5 +172,147 @@ test("Discesa oltre 2^53: contatore, bioma e guardiano conservano precisione", (
   assert.deepEqual(copy.export(), g.export());
   assert.equal(g.meta.best, "9007199254740995");
 });
-test('Crescita e recupero: soglie EoS e accumulatore, nessuna cura gratuita sulle scale',()=>{const g=make();g.start(1,1);g.run.enemies=[];const p=g.run.player;p.hp=10;for(let i=0;i<7;i++)g.wait();assert.equal(p.hp,11);assert.equal(p.regenCounter,24);const belly=g.run.belly;g.buildFloor();assert.equal(g.run.belly,belly);assert.equal(p.hp,11);assert.equal(g.xpNeeded(),105);});
-test('Multi-colpo EoS: estrazione uniforme da due a cinque colpi',()=>{const counts=new Set();for(let seed=1;seed<100;seed++){let calls=0;const fake={singleDamage:input=>{calls++;const c=JSON.parse(input);return JSON.stringify({damage:1,rngState:c.rngState,rngCalls:0});}};const g=new Game(D,fake);g.start(252,seed);const e=g.makeMon(19,100);e.hp=e.maxHp=999;e.x=g.run.player.x+1;e.y=g.run.player.y;g.attack(g.run.player,e,D.moves[154]);assert.ok(calls>=2&&calls<=5);counts.add(calls);}assert.deepEqual([...counts].sort(),[2,3,4,5]);});
+test("Crescita e recupero: soglie EoS e accumulatore, nessuna cura gratuita sulle scale", () => {
+  const g = make();
+  g.start(1, 1);
+  g.run.enemies = [];
+  const p = g.run.player;
+  p.hp = 10;
+  for (let i = 0; i < 7; i++) g.wait();
+  assert.equal(p.hp, 11);
+  assert.equal(p.regenCounter, 24);
+  const belly = g.run.belly;
+  g.buildFloor();
+  assert.equal(g.run.belly, belly);
+  assert.equal(p.hp, 11);
+  assert.equal(g.xpNeeded(), 105);
+});
+test("Multi-colpo EoS: estrazione uniforme da due a cinque colpi", () => {
+  const counts = new Set();
+  for (let seed = 1; seed < 100; seed++) {
+    let calls = 0;
+    const fake = {
+      singleDamage: (input) => {
+        calls++;
+        const c = JSON.parse(input);
+        return JSON.stringify({ damage: 1, rngState: c.rngState, rngCalls: 0 });
+      },
+    };
+    const g = new Game(D, fake);
+    g.start(252, seed);
+    const e = g.makeMon(19, 100);
+    e.hp = e.maxHp = 999;
+    e.x = g.run.player.x + 1;
+    e.y = g.run.player.y;
+    g.attack(g.run.player, e, D.moves[154]);
+    assert.ok(calls >= 2 && calls <= 5);
+    counts.add(calls);
+  }
+  assert.deepEqual([...counts].sort(), [2, 3, 4, 5]);
+});
+
+test("Gruppi EoS: sonno, scottatura e congelamento coesistono; la paralisi sostituisce la scottatura", () => {
+  const g = make();
+  g.start(1, 42);
+  const p = g.run.player;
+  g.inflict(p, "sleep");
+  g.inflict(p, "burn");
+  g.inflict(p, "freeze");
+  assert.deepEqual(Object.keys(p.statuses).sort(), ["burn", "frozen", "sleep"]);
+  assert.deepEqual(g.configMon(p).statuses.sort(), ["burn", "sleep"]);
+  const before = structuredClone(p.statuses);
+  assert.equal(g.statusBlock(p), true);
+  assert.equal(p.statuses.sleep.turns, before.sleep.turns - 1);
+  assert.equal(p.statuses.frozen.turns, before.frozen.turns - 1);
+  g.inflict(p, "paralysis");
+  assert.equal(g.hasStatus(p, "burn"), false);
+  assert.equal(g.hasStatus(p, "paralysis"), true);
+  assert.equal(g.hasStatus(p, "sleep"), true);
+  g.validateRun(g.run);
+  const b = make();
+  b.restore(g.export());
+  assert.deepEqual(b.export(), g.export());
+});
+
+test("Danno periodico EoS: primo tick immediato, intervallo 50, risveglio e nessun rinnovo duplicato", () => {
+  const g = make();
+  g.start(1, 42);
+  const p = g.run.player;
+  p.hp = p.maxHp;
+  g.inflict(p, "burn");
+  g.inflict(p, "sleep");
+  const rng = g.combat.snapshot();
+  g.inflict(p, "burn");
+  assert.deepEqual(g.combat.snapshot(), rng);
+  const hp = p.hp;
+  g.statusTick(p);
+  assert.equal(p.hp, hp - 6);
+  assert.equal(g.hasStatus(p, "sleep"), false);
+  for (let i = 0; i < 49; i++) g.statusTick(p);
+  assert.equal(p.hp, hp - 6);
+  g.statusTick(p);
+  assert.equal(p.hp, hp - 12);
+});
+
+test("Migrazione v3: conserva durata, prossima scadenza, progressi e input originale", () => {
+  const g = make();
+  g.start(1, 42);
+  const old = g.export();
+  old.run.mechanicsVersion = 3;
+  for (const e of [old.run.player, ...old.run.enemies]) {
+    delete e.statuses;
+    Object.assign(e, { status: null, statusTurns: 0, statusClock: 0 });
+  }
+  Object.assign(old.run.player, {
+    status: "burn",
+    statusTurns: 128,
+    statusClock: 17,
+    flinch: true,
+  });
+  const snapshot = structuredClone(old);
+  g.restore(old);
+  assert.deepEqual(old, snapshot);
+  assert.equal(g.run.mechanicsVersion, 4);
+  assert.deepEqual(g.run.player.statuses, {
+    burn: { id: "burn", turns: 128, clock: 33 },
+    cringe: { id: "flinch", turns: 2, clock: 0 },
+  });
+  assert.equal(g.run.floor, old.run.floor);
+  assert.deepEqual(g.run.bag, old.run.bag);
+  g.validateRun(g.run);
+  const saved = g.export();
+  for (const change of [
+    (s) => (s.burn.id = "sleep"),
+    (s) => (s.burn.turns = -1),
+    (s) => (s.burn.clock = NaN),
+    (s) => (s.extra = { id: "burn", turns: 1, clock: 0 }),
+  ]) {
+    const bad = structuredClone(saved);
+    change(bad.run.player.statuses);
+    assert.throws(() => g.restore(bad));
+    assert.deepEqual(g.export(), saved);
+  }
+  g.buildFloor();
+  assert.deepEqual(g.run.player.statuses, {});
+});
+
+test("Turbofuoco scongela prima del danno, anche a vuoto, e conserva il sonno", () => {
+  const fake = {
+    singleDamage: (input) => {
+      const c = JSON.parse(input);
+      return JSON.stringify({ damage: 0, rngState: c.rngState, rngCalls: 0 });
+    },
+  };
+  const g = new Game(D, fake);
+  g.start(1, 42);
+  const e = g.makeMon(19, 5);
+  e.x = g.run.player.x + 1;
+  e.y = g.run.player.y;
+  g.inflict(e, "freeze");
+  g.inflict(e, "sleep");
+  const fireSpin = Object.values(D.moves).find((m) => m.slug === "fire-spin");
+  assert.ok(fireSpin);
+  g.attack(g.run.player, e, fireSpin);
+  assert.equal(g.hasStatus(e, "freeze"), false);
+  assert.equal(g.hasStatus(e, "sleep"), true);
+});

@@ -131,6 +131,7 @@
     sleep: "Sonno",
     freeze: "Congelamento",
     confusion: "Confusione",
+    flinch: "Tentennamento",
   };
   class Game {
     constructor(D, meta) {
@@ -393,8 +394,7 @@
           }
         }
       }
-      r.player.status = null;
-      r.player.statusTurns = 0;
+      r.player.statuses = {};
       r.player.stages = { atk: 0, def: 0, spa: 0, spd: 0 };
       r.player.guard = 0;
       r.player.focus = 0;

@@ -202,7 +202,7 @@ function hud() {
   $("seed-label").textContent = `SEED ${r.seed}`;
   $("kills-label").textContent = `${r.kills} VITTORIE`;
   $("player-card").innerHTML =
-    `<div class="player-heading"><img src="assets/portraits/${p.species}.png" alt=""><div><h3>${p.name}</h3><span>Livello ${p.level}${p.status ? " · " + globalThis.MD.STATUS_NAMES[p.status] : ""}</span></div></div><p class="muted">Esperienza: ${p.level < 100 ? r.xp + "/" + game.xpNeeded() + " PE" : "Livello massimo"}</p><div class="meter-label"><span>PS</span><strong>${Math.max(0, p.hp)} / ${p.maxHp}</strong></div><div class="meter"><i style="width:${(Math.max(0, p.hp) / p.maxHp) * 100}%"></i></div><div class="meter-label"><span>Pancia</span><strong>${Math.floor(r.belly)} / ${r.maxBelly}</strong></div><div class="meter belly"><i style="width:${(r.belly / r.maxBelly) * 100}%"></i></div>`;
+    `<div class="player-heading"><img src="assets/portraits/${p.species}.png" alt=""><div><h3>${p.name}</h3><span>Livello ${p.level}${game.statusNames(p).length ? " · " + game.statusNames(p).join(" · ") : ""}</span></div></div><p class="muted">Esperienza: ${p.level < 100 ? r.xp + "/" + game.xpNeeded() + " PE" : "Livello massimo"}</p><div class="meter-label"><span>PS</span><strong>${Math.max(0, p.hp)} / ${p.maxHp}</strong></div><div class="meter"><i style="width:${(Math.max(0, p.hp) / p.maxHp) * 100}%"></i></div><div class="meter-label"><span>Pancia</span><strong>${Math.floor(r.belly)} / ${r.maxBelly}</strong></div><div class="meter belly"><i style="width:${(r.belly / r.maxBelly) * 100}%"></i></div>`;
   $("move-bar").innerHTML = Array.from({ length: 4 }, (_, i) => {
     const s = p.moves[i],
       m = s && D.moves[s.id];
@@ -469,13 +469,17 @@ async function init() {
       try {
         game.restore(JSON.parse(stored));
       } catch (e) {
+        let backupSaved = false;
         try {
           localStorage.setItem(KEY + "-backup-nonvalido", stored);
+          backupSaved = true;
         } catch {}
         toast(
           "Salvataggio non caricato: " +
             e.message +
-            " Conservata una copia di recupero nel browser.",
+            (backupSaved
+              ? " Conservata una copia di recupero nel browser."
+              : " Impossibile creare la copia di recupero."),
         );
       }
     }

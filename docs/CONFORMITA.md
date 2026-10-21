@@ -22,10 +22,10 @@ Pin: PRET `e3f02199ebe9e263ee67b07f36b3f240f83ef5d9`; DAMAGE
 | Attacco normale e PP | DAMAGE; PRET | Attacco e mosse, consumo PP e turno, prova a vuoto | non verificato | Pressure, collegamenti e scheduler completi mancanti |
 | Portata e bersagli | PRET waza_p.bin; DEBUG enum | Range originali, linee, angoli, stanza/adiacenti, anteprima | non verificato | Scenari limite e bersagli speciali non confrontati con ROM |
 | Numero colpi | PRET ov29_02324514 | 2..5 uniformi per strikes=0, Skill Link=5, Double Kick=2 | verificato | Interruzione e precheck fra colpi non certificati |
-| Scottatura/congelamento/paralisi/tentennamento | PRET handler e costanti ASM | Probabilità originali estratte; alcune immunità implementate | non verificato | Scheduling completo, stati contemporanei e tutte le interazioni mancanti |
+| Scottatura/congelamento/paralisi/tentennamento | PRET handler e costanti ASM | Probabilità originali estratte; gruppi indipendenti, timer, alcune immunità e risveglio da danno periodico | non verificato | Scheduling frazionario e tutte le interazioni ancora mancanti |
 | Modifiche statistiche e assorbimento | PRET handler | Metal Claw 20%, Crunch/Shadow Ball 20%, drain metà, Liquid Ooze | non verificato | Modificatori e tutte le abilità non esauriti |
 | Effetti specifici ancora mancanti | PRET | Non implementati completamente | differente | Confusione Water Pulse; rallentamento Bubble/Bubble Beam; costrizione Fire Spin |
-| Abilità | DAMAGE + handler PRET | Danno e alcune immunità/effetti | non verificato | Effetti globali, contatto, tutti i casi di Mold Breaker e gruppi di stato aperti |
+| Abilità | DAMAGE + handler PRET | Danno e alcune immunità/effetti | non verificato | Effetti globali, contatto, tutti i casi di Mold Breaker e stati non ancora disponibili aperti |
 | Strumenti usati/lanciati | PRET overlay_29_0231CBC8.c | Baccarancia 100 PS, Elisir Max, Mela 50/+5 Pancia, Semedormita direzionale | non verificato | Oggetti tenuti, bersagli/interazioni completi e altri strumenti mancanti |
 | Trappole | Handoff | Veleno e danno fisso 8 | differente | Trappole provvisorie, non certificate EoS; da sostituire con handler originali |
 | Fame | PRET BELLY_LOST_PER_TURN | 0x199A/65536 per azione, PS persi a Pancia vuota | non verificato | Scheduler e tutti i modificatori non riprodotti |
@@ -35,7 +35,7 @@ Pin: PRET `e3f02199ebe9e263ee67b07f36b3f240f83ef5d9`; DAMAGE
 | Mappe e seed | Estensione intenzionale | 2.000 mappe runtime con scale raggiungibili; snapshot RNG | verificato | Generatore volutamente roguelite, non quello originale |
 | Piani oltre 2^53 | Estensione intenzionale | BigInt per progressione, boss e biomi; test integrato | verificato | Limite tecnico 128 cifre; livelli saturano a 100 |
 | Mosse permanenti, quattro slot, reset run | Estensione intenzionale | Test simulazione e percorso browser reale dopo morte | verificato | Catalogo limitato alle 37 mosse presenti |
-| Salvataggi/import/export | Schema v1, meccaniche v3 | Roundtrip, replay, rifiuto corruzioni senza mutazioni, browser reload | verificato | Archivio locale al browser; nessun cloud sync |
+| Salvataggi/import/export | Schema v1, meccaniche v4; migrazione v3 | Roundtrip, replay, migrazione conservativa, rifiuto corruzioni senza mutazioni, browser reload | verificato | Archivio locale al browser; nessun cloud sync |
 | Asset locali | SPRITE | 50 specie, 922 file verificati, 770 PNG decodificati | verificato | Dieci specie prive di Faint nella fonte |
 | Direzioni/frame/tempi/ancoraggi | SPRITE; CODEC chara_wan/sheets.py | Renderer a 60 Hz, metadati XML, ancoraggi ombre; QA browser | non verificato | Nessun confronto frame per frame con originale; effetti temporali generici |
 | Effetti visivi delle mosse | Originale | Attack/Hurt e numeri, senza effetti originali completi | differente | Asset/effetti specifici da acquisire e integrare |

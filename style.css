@@ -1259,3 +1259,9 @@ a {
 .camp-layout {
   align-items: start;
 }
+@media (max-width: 480px) {
+  .sidebar { grid-template-columns: 1fr; }
+  #bag { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  #bag button { gap: 8px; padding: 10px; }
+  .panel-heading { gap: 12px; }
+}

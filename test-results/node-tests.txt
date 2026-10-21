@@ -1,0 +1,42 @@
+
+> mystery-depths@0.1.0 test
+> node --test tests/*.test.mjs
+
+✔ 2000 seed/piano: ogni cella, scala e spawn è raggiungibile, bordo chiuso, spawn unici (495.875913ms)
+✔ stesso seed e piano riproducono esattamente la mappa; il piano cambia la mappa (1.812393ms)
+✔ piani oltre MAX_SAFE_INTEGER non traboccano; boss ogni quinto piano (0.248226ms)
+✔ input invalidi e limiti espliciti vengono rifiutati (0.557372ms)
+✔ 29 starter: avvio, quattro mosse al massimo, esportazione e ripresa (53.639083ms)
+✔ Mappe runtime: 2000 seed/piani, scale raggiungibili e salvataggi validi (551.285933ms)
+✔ Ricompensa permanente, consumo, morte e reset provviste (1.627279ms)
+✔ Turni: orientamento e passi bloccati gratuiti, mossa a vuoto consuma PP (0.799048ms)
+✔ Importazione rifiutata senza modificare lo stato (2.660113ms)
+✔ Combattimento reale WASM riproducibile con salvataggio a metà (18.218824ms)
+✔ Parità WASM/native: 256 semi, statistiche e mosse originali (57.403105ms)
+✔ Discesa oltre 2^53: contatore, bioma e guardiano conservano precisione (2.498444ms)
+✔ Crescita e recupero: soglie EoS e accumulatore, nessuna cura gratuita sulle scale (0.92244ms)
+✔ Multi-colpo EoS: estrazione uniforme da due a cinque colpi (13.293182ms)
+✔ Gruppi EoS: sonno, scottatura e congelamento coesistono; la paralisi sostituisce la scottatura (2.117712ms)
+✔ Danno periodico EoS: primo tick immediato, intervallo 50, risveglio e nessun rinnovo duplicato (0.411186ms)
+✔ Migrazione v3: conserva durata, prossima scadenza, progressi e input originale (4.302074ms)
+✔ Turbofuoco scongela prima del danno, anche a vuoto, e conserva il sonno (0.778168ms)
+✔ fonte italiana originale fissata e hash del binario conservato (2.879296ms)
+✔ nomi originali e grafia dell'epoca sono preservati (0.179194ms)
+✔ nessun fallback inglese o traduzione inventata per voci assenti (0.250289ms)
+✔ apprendimento permanente per specie, idempotente, senza mutare lo stato precedente (2.424005ms)
+✔ massimo quattro mosse equipaggiate, tutte apprese, nessun duplicato (0.489272ms)
+✔ salvataggio e ripresa del profilo, export/import senza perdita (1.467574ms)
+✔ run e bonus temporanei non possono essere serializzati come progressione permanente (0.259213ms)
+✔ import corrotto, versione futura, proprietà ostili, specie e mosse ignote non cancellano i dati (1.525239ms)
+✔ errore quota storage propagato, senza fingere un salvataggio riuscito (0.498685ms)
+✔ 36000 risultati e transizioni confrontati con il sorgente C indipendente fissato (74.709574ms)
+✔ snapshot RNG mantiene la sequenza; init conserva modalità e indice (1.045331ms)
+✔ range uguale non consuma RNG; probabilità 0 e 100 consumano ciascuna un'estrazione (0.191222ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 826.874268

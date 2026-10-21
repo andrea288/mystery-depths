@@ -3,6 +3,10 @@
 Ambiente Linux, Node.js 24, Chromium di sistema 154, Playwright 1.56.1,
 Emscripten 3.1.29, GCC 14.2.0. I comandi sono in README.
 
+- 30 test JavaScript superati dopo la revisione dei gruppi di stato.
+- Stati: coesistenza sonno/scottatura/congelamento, sostituzione nel gruppo,
+  timer indipendenti, danni periodici e risveglio, scongelamento da Turbofuoco,
+  migrazione v3 → v4 e rifiuto atomico degli stati corrotti.
 - 64 casi upstream C++ damage-eos: superati; report `native-tests.xml`.
 - PRNG C/JS: 36.000 risultati/transizioni confrontati.
 - WASM/C++ con RNG attivo: 256 configurazioni identiche, incluse mosse,
