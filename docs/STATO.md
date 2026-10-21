@@ -1,64 +1,58 @@
-# Stato e ripresa
+# Stato di ripresa — 21 ottobre 2026
 
-## Vincoli da mantenere
+Cartella attiva: `/workspace/mystery-depths`. Repository originale
+`/workspace/andrea288` lasciato intatto. Non creare worktree o riclonare il lavoro.
 
-- Prodotto richiesto completo, non demo spacciata per prodotto.
-- Regole EoS NA; niente formule generiche della serie principale.
-- Interfaccia italiana e denominazioni ufficiali. Testi EoS da tabella EU.
-- Tutti i 29 starter; contenuti post-EoS isolati e dichiarati come conversioni.
-- Repository `mystery-depths` privato; nessun hosting pubblico.
-- Decisioni ordinarie delegate dall'utente; autorizzate modifiche al repository.
-- Nessuna dichiarazione “100% identico” senza prova.
-- Ogni task cloud è già isolato: usare il checkout esistente, non creare worktree.
+## Funzionante
 
-## Completato e verificato
+Interfaccia italiana, 29 starter con filtro regioni, selezione mosse, 50 specie,
+37 mosse di danno, cinque biomi, mappe con seed, boss ogni cinque piani,
+ricompense, livelli, fame, quattro strumenti, salvataggi e ripresa, import/export,
+morte e nuova spedizione con progressi conservati. `npm start` avvia su localhost.
+WASM e asset sono già inclusi. Avvio Windows via `avvia-windows.bat`.
 
-1. Fonti richieste esaminate e fissate; alternative PMDO/Origins non equiparate
-   a EoS.
-2. Calcolatore C++ nativo compilato; 64 test upstream passati; esempio CLI reale.
-3. PRNG dungeon portato in JS; 36.000 transizioni confrontate con C upstream.
-4. Generazione mappe roguelite testata su 2.000 seed/piani, connettività totale.
-5. Profilo permanente con validazione, quattro slot e import/export unit tested.
-6. Asset di 29 starter locali, 553 file verificati e 464 PNG decodificati.
-7. Italiano originale estratto: 18.482 stringhe roundtrip, 5.042 esportate.
-8. Bozza di rete salvata per api.github.com e storage.googleapis.com.
-9. Salvati anche `install_script` e `start_skill` nella bozza dell'ambiente,
-   per dipendenze, build nativa, test e istruzioni di ripresa. Nessuna
-   pubblicazione dell'ambiente o ripristino in un nuovo task verificati.
+La prova browser ha superato il boss del quinto piano in 831 turni/16 vittorie,
+ripreso un salvataggio e completato morte/nuova run senza errori JavaScript.
+Vedere `test-results/browser-journey.json` e `journey.log`.
 
-## Blocchi esterni effettivi
+Il requisito di fedeltà completa EoS resta aperto: leggere CONFORMITA.md prima di
+qualunque affermazione. Non aggiungere probabilità o formule dalla serie principale.
 
-- Proxy: `gh api user` e `gh api repos/andrea288/mystery-depths` restituiscono
-  Forbidden. Anche CONNECT senza credenziali verso api.github.com restituisce
-  403. GH_TOKEN presente, valore mai letto/stampato.
-- SDK: `emsdk install 3.1.29` fallisce sul download
-  `storage.googleapis.com/webassembly/emscripten-releases-builds/deps/node-v14.18.2-linux-x64.tar.xz`
-  con errore CONNECT 403.
-- La bozza è salvata, ma non prova aggiornamento runtime o pubblicazione.
-  Lo strumento restituisce `requires_publish: true`.
+## Blocchi di accesso reali
 
-## Lavoro residuo, non mascherato da blocchi
+`gh api user` ha verificato l'account **andrea288**. Il repository
+`andrea288/mystery-depths` ha risposto 404. La creazione privata ha fallito con
+`GraphQL: Resource not accessible by integration (createRepository)`.
+Anche POST user/repos via API REST ha restituito 403. Non esiste un remote
+configurato e non è stato eseguito un push. Non sostituire
+il repository con il profilo pubblico andrea288/andrea288.
 
-Il gioco resta da completare. La rete non è l'unica attività restante:
-turni, movimento originale, danni integrati, effetti delle mosse, strumenti,
-stati, abilità, IA, fame, meteo, ricompense, boss funzionanti, run salvabile,
-renderer, UI, animazioni, QA browser e confronto completo sono ancora aperti.
-La matrice dettaglia i limiti. Non affermare che basti abilitare due domini
-per ottenere automaticamente il prodotto.
+Il post Reddit richiesto dall'utente non è stato letto: inizialmente il proxy
+restituiva CONNECT 403; ora la pagina restituisce solo una challenge e il JSON
+risponde 403. Il dominio è stato aggiunto alla bozza di rete,
+che richiede pubblicazione dell'ambiente per diventare effettiva. Non attribuire
+al post consigli che non sono stati letti.
 
-## Prossimo passo operativo
+## Sorgenti, ambiente e riproduzione
 
-1. Dopo un aggiornamento effettivo delle impostazioni, riprovare `gh api user`
-   e l'installazione Emscripten; non aggiungere un secondo token alla cieca.
-2. Creare il repository privato nell'account verificato; se esiste, verificarne
-   pertinenza e visibilità. Solo allora aggiungere origin e fare push.
-3. Compilare il riferimento WebAssembly e verificare risultati contro la
-   build nativa. Non usare il calcolatore medio come simulazione del gioco.
-4. Portare scheduler e meccaniche originali da PRET/DEBUG con test differenziali;
-   completare mapping dati originali, effetti e conversioni post-EoS.
-5. Integrare moduli roguelite, renderer e italiano. Eseguire il percorso QA
-   completo richiesto, aggiornando la matrice con evidenze indipendenti.
+- Riferimenti fissati in `/workspace/references/`; toolchain emsdk 3.1.29 installata.
+- `scripts/test_native.py`: 64 test upstream; `build_live_wasm.py --native-only`:
+  adattatore per confronto C++/WASM. Senza flag ricompila gli asset WASM.
+- `scripts/prepare_game_data.py`: assembla dati EoS e conversioni moderne.
+- `extract_growth.py`: decodifica PKDPX con skytemple-rust 1.8.5; verifica tutte
+  le 5.000 righe di crescita contro una seconda rappresentazione (damage-eos).
+- `extract_effects.py`: costanti dalle ASM PRET; sorgente al percorso references.
+- `prepare_animation_data.py`: metadati e ancoraggi per i 50 Pokémon.
+- `src/engine.js`: supporto mappe/IA/progressi; le vecchie formule e reliquie sono
+  state rimosse dal runtime. Copia integrale originale in research/handoff.
+- Archivio utente originale preservato in `/workspace/preservation/`.
+- Chromium di sistema disponibile; il download del browser Playwright era
+  bloccato, quindi i test usano `/usr/bin/chromium`.
 
-I checkout esterni in `/workspace/references/` sono materiali di ricerca e
-toolchain, non repository dell'utente da pubblicare. Il progetto è
-`/workspace/mystery-depths`; `/workspace/andrea288` è rimasto invariato.
+## Priorità residue
+
+Completare gli effetti specifici ancora mancanti, scheduler frazionario e
+modificatori di velocità; separare le classi di stato contemporanee; verificare
+IA, movimento speciale, trappole e oggetti contro l'originale; aggiungere mosse
+di stato, collegamenti, QI, meteo, strumenti tenuti, effetti visivi originali.
+La matrice distingue prove dell'applicazione da equivalenza al gioco originale.

@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101e26" />
+    <title>Mystery Depths</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="loading" role="status">
+      <span class="crest">M<span>◆</span>D</span>
+      <h1>Mystery Depths</h1>
+      <p>Preparazione della spedizione…</p>
+    </div>
+    <header>
+      <a class="brand" href="#" id="home-link"
+        ><span class="brand-mark">◆</span> MYSTERY <b>DEPTHS</b></a
+      ><span class="header-tag">IL RICHIAMO DELLE PROFONDITÀ</span>
+      <div class="header-actions">
+        <span id="save-state" aria-live="polite"></span
+        ><button
+          id="help-button"
+          class="icon-button"
+          aria-label="Guida ai comandi"
+        >
+          ?</button
+        ><button
+          id="settings-button"
+          class="icon-button"
+          aria-label="Menu e salvataggi"
+        >
+          ☰
+        </button>
+      </div>
+    </header>
+    <main id="app" hidden>
+      <section id="camp">
+        <div class="camp-hero">
+          <div class="hero-text">
+            <span class="eyebrow">IL CAMPO BASE</span>
+            <h1>Ogni discesa,<br />una nuova storia.</h1>
+            <p>
+              Oltre la luce delle scale, il dungeon cambia.<br />Scegli il tuo
+              compagno e scopri quanto lontano puoi arrivare.
+            </p>
+            <div class="camp-stats" id="camp-stats"></div>
+          </div>
+          <div class="hero-art">
+            <canvas
+              id="camp-canvas"
+              width="540"
+              height="300"
+              aria-label="Panorama del dungeon con lo starter selezionato"
+            ></canvas
+            ><span class="art-caption">LE PROFONDITÀ TI ASPETTANO</span>
+          </div>
+        </div>
+        <div class="selection-heading">
+          <div>
+            <span class="eyebrow">01 / IL TUO COMPAGNO</span>
+            <h2>Chi partirà con te?</h2>
+          </div>
+          <p>29 starter · 9 regioni · una sola spedizione</p>
+        </div>
+        <nav id="regions" aria-label="Regioni"></nav>
+        <div class="camp-layout">
+          <div
+            id="starter-grid"
+            class="starter-grid"
+            role="group"
+            aria-label="Selezione dello starter"
+          ></div>
+          <aside id="starter-detail" class="panel"></aside>
+        </div>
+        <footer class="camp-footer">
+          <span
+            >Le mosse apprese restano. Le provviste appartengono alla
+            spedizione.</span
+          ><button class="text-button" id="credits-button">
+            Note e crediti
+          </button>
+        </footer>
+      </section>
+      <section id="expedition" hidden>
+        <div class="expedition-title">
+          <div>
+            <span class="eyebrow" id="biome-kicker">SPEDIZIONE</span>
+            <h2 id="floor-label"></h2>
+          </div>
+          <div class="floor-actions">
+            <button id="stairs-button">Scendi <kbd>Invio</kbd></button
+            ><button id="pause-button" class="quiet">
+              Pausa <kbd>Esc</kbd>
+            </button>
+          </div>
+        </div>
+        <div class="game-layout">
+          <div class="map-column">
+            <div class="map-frame">
+              <canvas
+                id="dungeon"
+                tabindex="0"
+                aria-label="Dungeon: frecce o WASD per muoverti, numeri da 1 a 4 per le mosse"
+              ></canvas>
+              <div class="map-topline">
+                <span id="map-location"></span><span id="turn-label"></span>
+              </div>
+              <canvas
+                id="minimap"
+                width="172"
+                height="124"
+                aria-label="Mappa delle zone esplorate"
+              ></canvas>
+              <div id="target-label" class="target-label" hidden></div>
+              <div class="map-bottomline">
+                <span>PASSO DOPO PASSO</span><span id="seed-label"></span>
+              </div>
+            </div>
+            <div class="move-heading">
+              <span class="eyebrow">LE TUE MOSSE</span
+              ><span
+                >Seleziona un nemico per mirare · <kbd>Spazio</kbd> attacco ·
+                <kbd>.</kbd> attendi</span
+              >
+            </div>
+            <div id="move-bar" class="move-bar"></div>
+            <div class="touch-controls" aria-label="Comandi rapidi">
+              <button data-direction="-1,-1" aria-label="Muovi in diagonale">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  style="transform: rotate(-45deg)"
+                >
+                  <path
+                    d="M12 20V4m-6 6 6-6 6 6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                  />
+                </svg></button
+              ><button data-direction="0,-1">↑</button
+              ><button data-direction="1,-1" aria-label="Muovi in diagonale">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  style="transform: rotate(45deg)"
+                >
+                  <path
+                    d="M12 20V4m-6 6 6-6 6 6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                  />
+                </svg></button
+              ><button id="attack-button">Attacca</button
+              ><button data-direction="-1,0">←</button
+              ><button id="wait-button">Attendi</button
+              ><button data-direction="1,0">→</button
+              ><button id="bag-shortcut">Zaino</button
+              ><button data-direction="-1,1" aria-label="Muovi in diagonale">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  style="transform: rotate(-135deg)"
+                >
+                  <path
+                    d="M12 20V4m-6 6 6-6 6 6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                  />
+                </svg></button
+              ><button data-direction="0,1">↓</button
+              ><button data-direction="1,1" aria-label="Muovi in diagonale">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  style="transform: rotate(135deg)"
+                >
+                  <path
+                    d="M12 20V4m-6 6 6-6 6 6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <aside class="sidebar">
+            <section id="player-card" class="panel"></section>
+            <section class="panel bag-panel">
+              <div class="panel-heading">
+                <h3>Zaino</h3>
+                <span>PROVVISTE DI SPEDIZIONE</span>
+              </div>
+              <div id="bag"></div>
+            </section>
+            <section class="panel log-panel">
+              <div class="panel-heading">
+                <h3>Diario</h3>
+                <span id="kills-label"></span>
+              </div>
+              <ol
+                id="combat-log"
+                aria-live="polite"
+                aria-relevant="additions"
+              ></ol>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <dialog id="modal"><div id="modal-content"></div></dialog>
+    <div id="toast" role="status" hidden></div>
+    <input
+      type="file"
+      id="import-file"
+      accept="application/json,.json"
+      hidden
+    />
+    <script type="module" src="src/app.mjs"></script>
+  </body>
+</html>

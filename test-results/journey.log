@@ -1,0 +1,18 @@
+Progress {"key":"e","floor":1,"turn":0,"kills":0}
+Progress {"key":"z","floor":2,"turn":455,"kills":6}
+Progress {"key":"e","floor":3,"turn":698,"kills":10}
+Progress {"key":"z","floor":4,"turn":785,"kills":13}
+Progress {"key":"q","floor":5,"turn":820,"kills":15}
+Boss completed
+{
+  floor: 1,
+  state: 'playing',
+  kills: 0,
+  turn: 0,
+  resumed: true,
+  permanent: true,
+  reachedBoss: true,
+  died: true,
+  newRun: true,
+  errors: []
+}

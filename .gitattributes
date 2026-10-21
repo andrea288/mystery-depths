@@ -1,0 +1,7 @@
+# Preserve upstream asset/source bytes: manifests verify their SHA-256 hashes.
+assets/** -text -whitespace
+data/source/** -text -whitespace
+research/** -text -whitespace
+src/** text eol=lf
+scripts/** text eol=lf
+*.bat text eol=crlf

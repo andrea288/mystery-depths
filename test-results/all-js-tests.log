@@ -1,0 +1,43 @@
+
+> mystery-depths@0.1.0 test
+> node --test tests/*.test.mjs
+
+✔ 2000 seed/piano: ogni cella, scala e spawn è raggiungibile, bordo chiuso, spawn unici (652.232119ms)
+✔ stesso seed e piano riproducono esattamente la mappa; il piano cambia la mappa (1.401213ms)
+✔ piani oltre MAX_SAFE_INTEGER non traboccano; boss ogni quinto piano (0.29797ms)
+✔ input invalidi e limiti espliciti vengono rifiutati (0.529294ms)
+✔ 29 starter: avvio, quattro mosse al massimo, esportazione e ripresa (92.821807ms)
+✔ Mappe runtime: 2000 seed/piani, scale raggiungibili e salvataggi validi (646.54914ms)
+✔ Ricompensa permanente, consumo, morte e reset provviste (1.477814ms)
+✔ Turni: orientamento e passi bloccati gratuiti, mossa a vuoto consuma PP (0.419966ms)
+✔ Importazione rifiutata senza modificare lo stato (3.462508ms)
+✔ Combattimento reale WASM riproducibile con salvataggio a metà (14.486843ms)
+✔ Parità WASM/native: 256 semi, statistiche e mosse originali (57.34354ms)
+✔ Discesa oltre 2^53: contatore, bioma e guardiano conservano precisione (2.358135ms)
+✔ Crescita e recupero: soglie EoS e accumulatore, nessuna cura gratuita sulle scale (0.74834ms)
+✔ Multi-colpo EoS: estrazione uniforme da due a cinque colpi (15.730028ms)
+✔ fonte italiana originale fissata e hash del binario conservato (5.916589ms)
+✔ nomi originali e grafia dell'epoca sono preservati (0.24348ms)
+✔ nessun fallback inglese o traduzione inventata per voci assenti (0.332391ms)
+✔ apprendimento permanente per specie, idempotente, senza mutare lo stato precedente (2.539666ms)
+✔ massimo quattro mosse equipaggiate, tutte apprese, nessun duplicato (0.350997ms)
+✔ salvataggio e ripresa del profilo, export/import senza perdita (1.339003ms)
+✔ run e bonus temporanei non possono essere serializzati come progressione permanente (0.196203ms)
+✔ import corrotto, versione futura, proprietà ostili, specie e mosse ignote non cancellano i dati (1.366492ms)
+✔ errore quota storage propagato, senza fingere un salvataggio riuscito (0.338899ms)
+✔ 36000 risultati e transizioni confrontati con il sorgente C indipendente fissato (68.638385ms)
+✔ snapshot RNG mantiene la sequenza; init conserva modalità e indice (1.32973ms)
+✔ range uguale non consuma RNG; probabilità 0 e 100 consumano ciascuna un'estrazione (0.602901ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 979.798664
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

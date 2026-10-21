@@ -9,8 +9,10 @@ manifest = json.loads((ROOT / "data/assets.json").read_text())
 assert not manifest["failures"], manifest["failures"]
 assert len(manifest["species"]) == 29
 assert len({s["dex"] for s in manifest["species"]}) == 29
+manifest["species"] += json.loads((ROOT / "data/assets-extra.json").read_text())
+assert len(manifest["species"]) == 50
 checked, png_count = 0, 0
-sheet = Image.new("RGB", (7 * 180, 5 * 140), "#101b24")
+sheet = Image.new("RGB", (7 * 180, 8 * 140), "#101b24")
 draw = ImageDraw.Draw(sheet)
 for index, species in enumerate(manifest["species"]):
     for entry in species["files"]:
@@ -43,9 +45,9 @@ for entry in manifest["commonFiles"]:
     assert hashlib.sha256((ROOT / entry["path"]).read_bytes()).hexdigest() == entry["sha256"]
     checked += 1
 sheet.save(ROOT / "test-results/assets-contact-sheet.png")
-report = {"species": 29, "filesVerified": checked, "pngDecoded": png_count,
-          "eightDirectionWalkSheets": 29,
+report = {"species": 50, "filesVerified": checked, "pngDecoded": png_count,
+          "eightDirectionWalkSheets": 50,
           "animationTimingComparedToOriginal": False,
-          "browserRenderingTested": False}
+          "browserRenderingScope": "separate tests/browser suite"}
 (ROOT / "test-results/assets-verification.json").write_text(json.dumps(report, indent=2) + "\n")
 print(json.dumps(report, indent=2))

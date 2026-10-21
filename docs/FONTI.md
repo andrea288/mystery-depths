@@ -15,7 +15,7 @@ Esame iniziale del 20 ottobre 2026. I README recuperati sono conservati in
 | Minemaker0430/ExplorersOfSkyOrigins | `0507c4a55b5841b1afe880c09f5c53afb77ca3f6` | README dichiara combattimento rielaborato, QI irrilevante, mosse collegate non supportate e storia incompleta. Non soddisfa il vincolo prioritario. |
 | PokeAPI/pokeapi | `2bf639e5572812a67d2b94903fdcb9d095f5aeb2` | Dati integrativi; recuperati solo CSV lingue e nomi delle specie. Nessuna statistica o regola usata come fonte PMD. |
 | SkyTemple/skytemple-files | `5ed359a2560a1f04666b9ea02b71649b89cb16d7` | Decoder stringhe e indice EU, usati per estrarre italiano senza traduzione manuale. |
-| emscripten-core/emsdk | `0b2084f40444818e4478a93009e2dd4426e14762` | Tag 3.1.29, versione della CI di damage-eos. SDK non installabile finché storage.googleapis.com è bloccato. |
+| emscripten-core/emsdk | `0b2084f40444818e4478a93009e2dd4426e14762` | Tag 3.1.29, versione della CI di damage-eos. SDK installato e usato per compilare il modulo WebAssembly locale. |
 
 I progetti alternativi sono stati esaminati per documentazione e requisiti:
 non sono stati compilati e non se ne dichiara verificato il comportamento.
@@ -49,3 +49,24 @@ Il codec SkyTemple e il file di configurazione provengono da skytemple-files;
 la licenza GPL-3.0 e gli avvisi originali sono conservati in
 `third_party/skytemple-codec/`. Nessuna licenza generale del progetto viene
 qui estesa automaticamente ad asset, testi o sorgenti di terzi.
+
+## Integrazione del handoff e dati aggiuntivi
+
+Il materiale dello ZIP è conservato in research/handoff. I dati principali
+del handoff non sono una fonte valida per le regole EoS: le loro statistiche,
+formule, reliquie e probabilità sono state sostituite o escluse dal runtime.
+
+`waza_p.bin`, `monster.md`, `m_level.bin` provengono dal pin PRET sopra
+indicato. Il decoder PKDPX è skytemple-rust 1.8.5. Il formato delle righe
+di crescita è documentato in CODEC data/level_bin_entry/model.py. Gli estratti
+ASM/C pertinenti sono conservati in research/pmd-sky. Le costanti degli effetti
+sono estratte da questi file da scripts/extract_effects.py.
+
+La conversione post-EoS usa specie donatrici dichiarate in
+data/post-eos-conversions.json, senza presentarle come dati originali dei
+Pokémon moderni. Il catalogo contiene 37 mosse offensive originali; non
+contiene tutte le mosse o le abilità richieste dal progetto finale.
+
+La guida Reddit richiesta non è stata acquisita: il primo accesso era bloccato
+dal proxy; il successivo ha restituito soltanto una pagina challenge Reddit,
+mentre l'endpoint JSON risponde 403. Nessun consiglio è attribuito al post.

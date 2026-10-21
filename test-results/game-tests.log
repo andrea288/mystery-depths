@@ -1,0 +1,18 @@
+✔ 29 starter: avvio, quattro mosse al massimo, esportazione e ripresa (60.684638ms)
+✔ Mappe runtime: 2000 seed/piani, scale raggiungibili e salvataggi validi (584.190728ms)
+✔ Ricompensa permanente, consumo, morte e reset provviste (1.645615ms)
+✔ Turni: orientamento e passi bloccati gratuiti, mossa a vuoto consuma PP (0.425387ms)
+✔ Importazione rifiutata senza modificare lo stato (3.418558ms)
+✔ Combattimento reale WASM riproducibile con salvataggio a metà (15.838401ms)
+✔ Parità WASM/native: 256 semi, statistiche e mosse originali (64.402957ms)
+✔ Discesa oltre 2^53: contatore, bioma e guardiano conservano precisione (2.97208ms)
+✔ Crescita e recupero: soglie EoS e accumulatore, nessuna cura gratuita sulle scale (1.061464ms)
+✔ Multi-colpo EoS: estrazione uniforme da due a cinque colpi (14.669469ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 915.843708

@@ -1,2 +1,5 @@
 cmake==3.31.6
 Pillow==12.3.0
+
+skytemple-rust==1.8.5
+range-typed-integers==1.0.1

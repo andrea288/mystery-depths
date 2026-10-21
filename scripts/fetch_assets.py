@@ -40,7 +40,7 @@ def download(remote, local):
             "source": BASE + remote, "bytes": len(data)}
 
 
-def fetch_species(entry):
+def fetch_species(entry, wanted=WANTED):
     region, dex, name = entry
     prefix = f"{dex:04}"
     folder = ROOT / "assets" / "pokemon" / prefix
@@ -56,7 +56,7 @@ def fetch_species(entry):
     animations = {a.findtext("Name"): a for a in tree.findall(".//Anim")}
     resolved = {}
     sheets = set()
-    for name_key in WANTED:
+    for name_key in wanted:
         target = name_key
         seen = set()
         while True:

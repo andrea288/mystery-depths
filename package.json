@@ -1,11 +1,17 @@
 {
   "name": "mystery-depths",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Work in progress. No playable game is currently implemented.",
+  "description": "Mystery Depths: roguelite locale in italiano",
   "scripts": {
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "start": "node scripts/serve.mjs"
   },
-  "engines": {"node": ">=22"}
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
 }

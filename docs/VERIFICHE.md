@@ -1,36 +1,41 @@
 # Verifiche eseguite
 
-Macchina Linux, 20 ottobre 2026. I log sono in `test-results/`.
+Ambiente Linux, Node.js 24, Chromium di sistema 154, Playwright 1.56.1,
+Emscripten 3.1.29, GCC 14.2.0. I comandi sono in README.
 
-| Verifica | Risultato | Limite della prova |
-| --- | --- | --- |
-| Build nativa damage-eos, commit fissato | Superata | Non è una build del gioco completo |
-| Suite upstream C++ | 64 test passati, 0 falliti, 0 saltati | Non è un confronto con l'originale indipendente dal port |
-| Esempio CLI upstream | Danno 21–28, precisione 90%, critico 40% per il sample fornito | Valori del sample con modificatori, non statistiche universali |
-| PRNG JS contro funzioni C PRET | 36.000 risultati e transizioni coincidenti | Nessuna verifica dell'ordine di chiamata nel motore o contro una ROM |
-| Generatore mappe | 2.000 seed/piani con tutte le celle raggiungibili | Non prova il movimento originale |
-| Profilo permanente | Test apprendimento, equipaggiamento, import/export, input invalido e quota superati | Nessuna run completa salvata/ripresa nel browser |
-| Italiano | 18.482 stringhe roundtrip; 5.042 esportate, 29 starter nominati | Tag da rendere e copertura UI ancora da implementare |
-| Asset | 553 file verificati, 464 PNG decodificati | Non prova animazione o effetti nel browser |
-| Ispezione visiva | Tavola dei 29 ritratti e frame esaminata | Non è QA del gioco |
-| API GitHub | Bloccata: CONNECT 403 Forbidden | Identità autenticata e visibilità repository non verificabili |
-| Toolchain Emscripten 3.1.29 | Bloccata: CONNECT 403 verso storage.googleapis.com | Nessuna build WASM o QA browser completati |
-| Windows | Non eseguito | Script fornito solo per verifiche di sviluppo, non avvio del gioco |
+- 64 casi upstream C++ damage-eos: superati; report `native-tests.xml`.
+- PRNG C/JS: 36.000 risultati/transizioni confrontati.
+- WASM/C++ con RNG attivo: 256 configurazioni identiche, incluse mosse,
+  statistiche e semi differenti. È parità fra build, non prova completa ROM.
+- Mappe: 2.000 configurazioni del generatore isolato e altre 2.000 del runtime;
+  raggiungibilità delle scale e validazione dei salvataggi.
+- 29 starter: avvio, mosse valide, roundtrip e replay dopo ripresa.
+- Ricompense, permanenza per specie, morte, reset provviste, importazioni
+  invalide senza mutazioni, contatori oltre 2^53, crescita/recupero, multicolpo.
+- Crescita: 5.000 righe da monster.md/m_level.bin contro levelup-stats DAMAGE.
+- Asset: 50 specie, 922 file con hash, 770 PNG decodificati, 50 Walk a otto righe.
+- Testi: 18.482 stringhe decodificate e ricodificate senza differenze; 5.042
+  testi selezionati estratti in italiano.
 
-La suite JavaScript comprende 16 test: 4 generatore, 6 profilo, 3 RNG,
-3 localizzazione. Le 36.000 righe di confronto RNG e le 2.000 mappe sono
-iterazioni interne a questi test, non 38.000 test case distinti.
+## Browser reale
 
-## Problema di build corretto
+`tests/browser/smoke.mjs`: avvio, 29 schede, input, autosave/reload,
+viewport desktop 1440×1100 e mobile 390×844. Nessun errore JavaScript.
 
-Catch2 3.2.1 dipendeva indirettamente dall'inclusione di `cstdint`.
-Con GCC 14 il build falliva su `uint8_t` e `std::uint64_t`. Il flag
-`-include cstdint` ripristina l'header standard mancante; codice, asserzioni
-e dipendenze upstream sono rimasti invariati.
+`tests/browser/journey.mjs`: Treecko, seed 314159; esplorazione con tastiera,
+combattimenti, ricompensa permanente, ripresa dopo reload, guardiano Onix al
+piano 5, accesso al piano 6 (831 turni, 16 vittorie), morte attraverso azioni
+normali, nuova spedizione. Mosse conservate; livello 5 e provviste iniziali
+ripristinati. Nessuna mutazione dello stato della partita per vincere.
+L'automazione legge una copia del salvataggio per scegliere i comandi.
 
-## Non eseguito
+Sono stati corretti difetti rilevati dalle prove: canvas che cambiava altezza
+continuamente, Invio che selezionava involontariamente una ricompensa,
+coordinate della mappa non aggiornate in tempo dopo un'azione e crescita/XP
+provvisori provenienti dal handoff.
 
-Il percorso starter → esplorazione → combattimento → boss → ricompensa →
-salvataggio/ripresa → morte → nuova run non è eseguibile nello stato attuale.
-Non è stata aperta un'app di gioco nel browser. La conformità dell'intero
-combattimento resta non verificata, come indicato nella matrice.
+I primi tentativi persi durante il bilanciamento non sono spacciati per prove
+superate. I log finali e screenshot riproducibili sono in `test-results/`.
+
+Non provati: esecuzione su Windows, confronto integrale con ROM/emulatore,
+interazioni di tutte le meccaniche elencate come aperte in CONFORMITA.md.
