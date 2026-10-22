@@ -1,8 +1,8 @@
 Progress {"key":"e","floor":1,"turn":0,"kills":0}
-Progress {"key":"z","floor":2,"turn":455,"kills":6}
-Progress {"key":"e","floor":3,"turn":698,"kills":10}
-Progress {"key":"z","floor":4,"turn":785,"kills":13}
-Progress {"key":"q","floor":5,"turn":820,"kills":15}
+Progress {"key":"z","floor":2,"turn":183,"kills":4}
+Progress {"key":"z","floor":3,"turn":395,"kills":7}
+Progress {"key":"ArrowRight","floor":4,"turn":410,"kills":8}
+Progress {"key":"q","floor":5,"turn":563,"kills":9}
 Boss completed
 {
   floor: 1,

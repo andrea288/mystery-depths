@@ -3,7 +3,7 @@
 Ambiente Linux, Node.js 24, Chromium di sistema 154, Playwright 1.56.1,
 Emscripten 3.1.29, GCC 14.2.0. I comandi sono in README.
 
-- 30 test JavaScript superati dopo la revisione dei gruppi di stato.
+- 31 test JavaScript superati dopo la revisione dei gruppi di stato.
 - Stati: coesistenza sonno/scottatura/congelamento, sostituzione nel gruppo,
   timer indipendenti, danni periodici e risveglio, scongelamento da Turbofuoco,
   migrazione v3 → v4 e rifiuto atomico degli stati corrotti.
@@ -28,7 +28,7 @@ viewport desktop 1440×1100 e mobile 390×844. Nessun errore JavaScript.
 
 `tests/browser/journey.mjs`: Treecko, seed 314159; esplorazione con tastiera,
 combattimenti, ricompensa permanente, ripresa dopo reload, guardiano Onix al
-piano 5, accesso al piano 6 (831 turni, 16 vittorie), morte attraverso azioni
+piano 5, accesso al piano 6 (574 turni, 10 vittorie), morte attraverso azioni
 normali, nuova spedizione. Mosse conservate; livello 5 e provviste iniziali
 ripristinati. Nessuna mutazione dello stato della partita per vincere.
 L'automazione legge una copia del salvataggio per scegliere i comandi.
@@ -43,3 +43,18 @@ superate. I log finali e screenshot riproducibili sono in `test-results/`.
 
 Non provati: esecuzione su Windows, confronto integrale con ROM/emulatore,
 interazioni di tutte le meccaniche elencate come aperte in CONFORMITA.md.
+
+## Revisione pixel e comandi
+
+Prova `tests/browser/pixel-controls.mjs`, desktop 1440×900 e touch 390×844:
+orientamento con pad, clic/tocco mappa e clic destro; turno, PS dei nemici,
+Pancia, PP e RNG invariati, orientamento conservato dopo reload; attesa
+consuma regolarmente un turno. Nessun errore JS o risorsa HTTP mancante,
+nessuno scorrimento orizzontale. Screenshot pixel-* in test-results.
+
+Bilanciamento: 100 seed con tre provviste garantite, assenza di trappole nei
+primi tre piani e livello del primo guardiano verificati. Il test di viaggio
+usa ancora Treecko e seed 314159; ora attende la fine del movimento prima
+di mirare, affronta eventuali nemici che bloccano i corridoi e ripristina
+i PP delle mosse esaurite quando è al sicuro. I tentativi falliti durante
+il bilanciamento non dimostrano una vittoria garantita per ogni partita.

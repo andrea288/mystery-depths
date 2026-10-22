@@ -7,7 +7,7 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
-await page.goto("http://127.0.0.1:4173");
+await page.goto(process.env.GAME_URL || "http://127.0.0.1:4173");
 await page.locator('[data-starter="252"]').click();
 await page.locator("#seed-input").fill("314159");
 await page.locator("#start-button").click();
@@ -41,7 +41,11 @@ for (let step = 0; step < 2500; step++) {
     if (danger && p.hp < p.maxHp * 0.65 && r.bag.berry)
       return { item: "berry" };
     if (r.belly < 25 && r.bag.apple) return { item: "apple" };
-    if (p.moves.every((m) => m.pp === 0) && r.bag.ether)
+    if (
+      (p.moves.every((m) => m.pp === 0) ||
+        (!danger && p.moves.some((m) => m.pp === 0))) &&
+      r.bag.ether
+    )
       return { item: "ether" };
     const enemies = r.enemies
       .filter((e) => g.visible(e.x, e.y))
@@ -90,7 +94,18 @@ for (let step = 0; step < 2500; step++) {
           )[0]
         : null) ||
       r.exit;
-    const next = g.pathStep(p, goal);
+    // A sleeping enemy can block the only corridor to the exit. Approach the
+    // obstruction instead of waiting until starvation (read-only planning copy).
+    const next =
+      g.pathStep(p, goal) ||
+      [...r.enemies]
+        .sort(
+          (a, b) =>
+            Math.max(Math.abs(a.x - p.x), Math.abs(a.y - p.y)) -
+            Math.max(Math.abs(b.x - p.x), Math.abs(b.y - p.y)),
+        )
+        .map((e) => g.pathStep(p, e))
+        .find(Boolean);
     if (!next) return { key: "." };
     return {
       key: {
@@ -145,6 +160,7 @@ for (let step = 0; step < 2500; step++) {
     continue;
   }
   if (plan.target) {
+    await page.waitForTimeout(180); // Let the 160ms movement animation settle before aiming.
     const box = await page.locator("#dungeon").boundingBox();
     await page.mouse.click(
       box.x + box.width / 2 + (plan.target.x - plan.player.x) * 40,

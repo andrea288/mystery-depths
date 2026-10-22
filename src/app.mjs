@@ -74,6 +74,7 @@ function modal(title, body, actions = []) {
 }
 function camp() {
   view = "camp";
+  document.body.dataset.screen = "camp";
   $("camp").hidden = false;
   $("expedition").hidden = true;
   renderCamp();
@@ -180,6 +181,7 @@ function renderCamp() {
 }
 async function expedition() {
   view = "expedition";
+  document.body.dataset.screen = "expedition";
   $("camp").hidden = true;
   $("expedition").hidden = false;
   await renderer.prepare([
@@ -220,7 +222,7 @@ function hud() {
   $("bag").innerHTML = Object.entries(ITEMS)
     .map(
       ([key, item]) =>
-        `<button data-item="${key}" title="${item.desc}" ${r.bag[key] ? "" : "disabled"}><span>${item.name}</span><b>×${r.bag[key]}</b></button>`,
+        `<button data-item="${key}" title="${item.desc}" ${r.bag[key] ? "" : "disabled"}><img class="item-sprite" src="assets/items/${key}.${key === "seed" ? "svg" : "png"}" alt=""><span>${item.name}</span><b>×${r.bag[key]}</b></button>`,
     )
     .join("");
   $("bag")
@@ -251,8 +253,9 @@ function act(fn) {
   )
     return;
   try {
+    const turn = game.run.turn;
     fn();
-    renderer.animate(game.events);
+    if (game.run.turn !== turn) renderer.animate(game.events);
     save();
     hud();
     stateDialog();
@@ -382,7 +385,7 @@ $("help-button").onclick = () =>
 $("credits-button").onclick = () =>
   modal(
     "Note e crediti",
-    "<p>Progetto personale non ufficiale. Pokémon appartiene ai rispettivi titolari. Sprite e ritratti: collaboratori di SpriteCollab; attribuzioni complete nei file assets/spritebot_credits.txt e assets/tracker.json.</p><p>Testi ufficiali italiani estratti da Esploratori del Cielo. Calcolo dei danni: damage-eos. Mappe e progressione roguelite sono originali di questo progetto.</p><p>La riproduzione completa delle regole EoS è ancora in lavorazione: effetti secondari, recupero naturale, esperienza e gestione dei turni richiedono ulteriori verifiche. Le specie successive a EoS usano adattamenti dichiarati.</p>",
+    "<p>Progetto personale non ufficiale. Pokémon appartiene ai rispettivi titolari. Sprite e ritratti: collaboratori di SpriteCollab; attribuzioni complete nei file assets/spritebot_credits.txt e assets/tracker.json.</p><p>Icone degli strumenti: PokeAPI/sprites. Semedormita, forziere, dettagli del dungeon ed effetti pixel: grafica originale del progetto. Carattere VT323: Peter Hull, licenza SIL OFL.</p><p>Testi ufficiali italiani estratti da Esploratori del Cielo. Calcolo dei danni: damage-eos. Mappe e progressione roguelite sono originali di questo progetto.</p><p>La riproduzione completa delle regole EoS è ancora in lavorazione: effetti secondari, recupero naturale, esperienza e gestione dei turni richiedono ulteriori verifiche. Le specie successive a EoS usano adattamenti dichiarati.</p>",
     [["Chiudi"]],
   );
 $("stairs-button").onclick = () => act(() => game.stairs());
@@ -390,23 +393,79 @@ $("attack-button").onclick = () => act(() => game.regularAttack());
 $("wait-button").onclick = () => act(() => game.wait());
 $("bag-shortcut").onclick = () =>
   $("bag").scrollIntoView({ behavior: "smooth" });
-document
-  .querySelectorAll("[data-direction]")
-  .forEach(
-    (b) =>
-      (b.onclick = () =>
-        act(() => game.move(...b.dataset.direction.split(",").map(Number)))),
-  );
-$("dungeon").onclick = (e) => {
+let facingMode = false;
+function orient(dx, dy) {
+  if (
+    busy ||
+    view !== "expedition" ||
+    $("modal").open ||
+    game.run?.state !== "playing"
+  )
+    return;
+  game.face(game.run.player, dx, dy);
+  save();
+  hud();
+}
+$("face-button").onclick = () => {
+  facingMode = !facingMode;
+  renderer.facingMode = facingMode;
+  $("face-button").setAttribute("aria-pressed", String(facingMode));
+  $("face-button").textContent = facingMode ? "Orienta: attivo" : "Orienta";
+  document.body.classList.toggle("orienting", facingMode);
+  $("face-hint").textContent = facingMode
+    ? "Tocca una direzione o la mappa. Nessun turno consumato."
+    : "Gira senza consumare turni · clic destro sulla mappa";
+};
+document.querySelectorAll("[data-direction]").forEach(
+  (b) =>
+    (b.onclick = () => {
+      const [dx, dy] = b.dataset.direction.split(",").map(Number);
+      if (facingMode) orient(dx, dy);
+      else act(() => game.move(dx, dy));
+    }),
+);
+function mapPoint(e) {
   const r = $("dungeon").getBoundingClientRect(),
     c = renderer.camera;
-  const x = Math.floor((e.clientX - r.left - c.x) / c.size),
-    y = Math.floor((e.clientY - r.top - c.y) / c.size);
+  return {
+    x: Math.floor((e.clientX - r.left - c.x) / c.size),
+    y: Math.floor((e.clientY - r.top - c.y) / c.size),
+  };
+}
+$("dungeon").onclick = (e) => {
+  const { x, y } = mapPoint(e),
+    p = game.run.player;
+  if (facingMode) {
+    orient(x - p.x, y - p.y);
+    return;
+  }
+  const bounds = $("dungeon").getBoundingClientRect();
+  const hit = renderer.hitAreas
+    .filter(
+      (h) =>
+        h.uid !== 0 &&
+        Math.abs(h.x - (e.clientX - bounds.left)) < 22 &&
+        Math.abs(h.y - (e.clientY - bounds.top)) < 26,
+    )
+    .sort(
+      (a, b) =>
+        Math.hypot(
+          a.x - e.clientX + bounds.left,
+          a.y - e.clientY + bounds.top,
+        ) -
+        Math.hypot(b.x - e.clientX + bounds.left, b.y - e.clientY + bounds.top),
+    )[0];
   target =
-    game.run.enemies.find(
-      (m) => m.x === x && m.y === y && game.visible(x, y),
+    game.run.enemies.find((m) =>
+      hit ? m.uid === hit.uid : m.x === x && m.y === y && game.visible(x, y),
     ) || null;
   hud();
+};
+$("dungeon").oncontextmenu = (e) => {
+  e.preventDefault();
+  const { x, y } = mapPoint(e),
+    p = game.run.player;
+  orient(x - p.x, y - p.y);
 };
 window.addEventListener("keydown", (e) => {
   if (view !== "expedition" || $("modal").open || e.target.matches("input"))
@@ -428,7 +487,7 @@ window.addEventListener("keydown", (e) => {
     };
   if (dirs[k]) {
     e.preventDefault();
-    if (e.shiftKey) {
+    if (e.shiftKey || facingMode) {
       game.face(game.run.player, ...dirs[k]);
       save();
     } else act(() => game.move(...dirs[k]));

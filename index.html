@@ -40,10 +40,10 @@
         <div class="camp-hero">
           <div class="hero-text">
             <span class="eyebrow">IL CAMPO BASE</span>
-            <h1>Ogni discesa,<br />una nuova storia.</h1>
+            <h1>Mystery<br />Depths</h1>
             <p>
-              Oltre la luce delle scale, il dungeon cambia.<br />Scegli il tuo
-              compagno e scopri quanto lontano puoi arrivare.
+              Scegli il tuo compagno. Prepara le mosse.<br />Le profondità ti
+              aspettano.
             </p>
             <div class="camp-stats" id="camp-stats"></div>
           </div>
@@ -59,8 +59,8 @@
         </div>
         <div class="selection-heading">
           <div>
-            <span class="eyebrow">01 / IL TUO COMPAGNO</span>
-            <h2>Chi partirà con te?</h2>
+            <span class="eyebrow">FORMA LA TUA SPEDIZIONE</span>
+            <h2>Scegli il Pokémon</h2>
           </div>
           <p>29 starter · 9 regioni · una sola spedizione</p>
         </div>
@@ -115,7 +115,8 @@
               ></canvas>
               <div id="target-label" class="target-label" hidden></div>
               <div class="map-bottomline">
-                <span>PASSO DOPO PASSO</span><span id="seed-label"></span>
+                <span>ESPLORA · COMBATTI · SOPRAVVIVI</span
+                ><span id="seed-label"></span>
               </div>
             </div>
             <div class="move-heading">
@@ -126,6 +127,12 @@
               >
             </div>
             <div id="move-bar" class="move-bar"></div>
+            <div class="orientation-controls">
+              <button id="face-button" aria-pressed="false">Orienta</button
+              ><span id="face-hint"
+                >Gira senza consumare turni · clic destro sulla mappa</span
+              >
+            </div>
             <div class="touch-controls" aria-label="Comandi rapidi">
               <button data-direction="-1,-1" aria-label="Muovi in diagonale">
                 <svg

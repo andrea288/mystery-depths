@@ -14,7 +14,7 @@ Pin: PRET `e3f02199ebe9e263ee67b07f36b3f240f83ef5d9`; DAMAGE
 | --- | --- | --- | --- | --- |
 | PRNG primario/secondari | PRET dg_random.c | 36.000 transizioni C/JS, incluse probabilità e range | verificato | Ordine globale delle chiamate nel dungeon non equivalente |
 | Sequenza e velocità | PRET overlay_29_022EBCE8.s | Giocatore → nemici → stati/fame | differente | Scheduler frazionario, azioni multiple e velocità non implementati |
-| Movimento, orientamento e diagonali | PRET/DEBUG | Otto direzioni, collisioni, orientamento gratuito, angoli bloccati | non verificato | Mobilità speciale e equivalenza completa da implementare |
+| Movimento, orientamento e diagonali | PRET/DEBUG | Otto direzioni, collisioni, orientamento gratuito con tastiera/mouse/touch, test browser degli invarianti | non verificato | Mobilità speciale e equivalenza completa da implementare |
 | Crescita e soglie esperienza | PRET monster.md/m_level.bin; DAMAGE levelup-stats | 5.000 righe confrontate fra due rappresentazioni, 50 specie | verificato | Sequenza completa del level-up non confrontata con ROM |
 | Esperienza da nemici | PRET main_0205283C.c e overlay_29_02308FBC.c | Base+base×(livello−1)/10; metà senza mosse | non verificato | Collegamenti, QI, casi speciali assenti; boss trattati come incontri roguelite |
 | Danni, tipi, critici, precisione | DAMAGE + RNG adattato | WASM reale, 64 test upstream e 256 confronti C++/WASM | non verificato | Due build dello stesso calcolatore non sono riferimento indipendente; precheck Lightningrod/Storm Drain upstream approssimati |
@@ -37,8 +37,8 @@ Pin: PRET `e3f02199ebe9e263ee67b07f36b3f240f83ef5d9`; DAMAGE
 | Mosse permanenti, quattro slot, reset run | Estensione intenzionale | Test simulazione e percorso browser reale dopo morte | verificato | Catalogo limitato alle 37 mosse presenti |
 | Salvataggi/import/export | Schema v1, meccaniche v4; migrazione v3 | Roundtrip, replay, migrazione conservativa, rifiuto corruzioni senza mutazioni, browser reload | verificato | Archivio locale al browser; nessun cloud sync |
 | Asset locali | SPRITE | 50 specie, 922 file verificati, 770 PNG decodificati | verificato | Dieci specie prive di Faint nella fonte |
-| Direzioni/frame/tempi/ancoraggi | SPRITE; CODEC chara_wan/sheets.py | Renderer a 60 Hz, metadati XML, ancoraggi ombre; QA browser | non verificato | Nessun confronto frame per frame con originale; effetti temporali generici |
-| Effetti visivi delle mosse | Originale | Attack/Hurt e numeri, senza effetti originali completi | differente | Asset/effetti specifici da acquisire e integrare |
+| Direzioni/frame/tempi/ancoraggi | SPRITE; CODEC chara_wan/sheets.py | Renderer a 60 Hz, metadati XML, ancoraggi ombre; QA browser | non verificato | Interpolazione, affondo e particelle originali del progetto; nessun confronto frame per frame |
+| Effetti visivi delle mosse | Originale | Attack/Hurt, affondo, particelle pixel per tipo e numeri; grafica originale del progetto | differente | Asset/effetti specifici da acquisire e integrare |
 | Italiano ufficiale | PRET text_i.str; CODEC; PokeAPI nomi moderni | 18.482 stringhe roundtrip, 5.042 esportate; termini di gioco ufficiali | verificato | Testo narrativo originale del progetto; descrizioni UI sintetiche |
 | Specie post-EoS | Modulo dichiarato | Donatori di statistiche, tipi, abilità e learnset documentati | differente | Conversioni intenzionali, non specie originali né regole moderne |
 | Percorso completo browser | Requisito utente | Starter → combattimenti → boss 5 → piano 6 → ripresa → morte → nuova run | verificato | Test di applicazione, non certificazione del motore originale |

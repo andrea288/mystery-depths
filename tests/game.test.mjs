@@ -316,3 +316,21 @@ test("Turbofuoco scongela prima del danno, anche a vuoto, e conserva il sonno", 
   assert.equal(g.hasStatus(e, "freeze"), false);
   assert.equal(g.hasStatus(e, "sleep"), true);
 });
+
+test("Provviste garantite e primi piani senza trappole", () => {
+  const g = make();
+  for (let seed = 1; seed <= 100; seed++) {
+    g.start(1, seed);
+    const kinds = new Set(g.run.items.map((i) => i.type));
+    for (const kind of ["berry", "ether", "apple"])
+      assert.ok(kinds.has(kind), `${seed}: ${kind}`);
+    assert.equal(g.run.traps.length, 0);
+    assert.ok(g.run.enemies.every((e) => e.level >= 2 && e.level <= 3));
+    g.run.floor = 3;
+    g.buildFloor();
+    assert.equal(g.run.traps.length, 0);
+    g.run.floor = 5;
+    g.buildFloor();
+    assert.equal(g.run.enemies[0].level, 9);
+  }
+});

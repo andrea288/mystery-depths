@@ -9,3 +9,17 @@
 
 ## Missing or substituted actions
 None: every Pokémon has Idle, Walk and Attack art plus a portrait. Action aliases, if any, are recorded in data.js sourceAction/file fields.
+
+## Interfaccia pixel e strumenti (22 ottobre 2026)
+
+Le icone Baccarancia, Elisir Max e Mela provengono da PokeAPI/sprites, al commit
+97a7832d307311c0e1c6ea9035308bf80cc94f81. Sono icone Pokémon, non una dichiarazione
+di identità con gli sprite strumenti di EoS. I diritti delle immagini Pokémon
+restano dei rispettivi titolari. Semedormita e forziere sono piccoli disegni SVG
+originali del progetto, realizzati su griglia 32×32. Pavimenti, pareti ed effetti
+sono disegnati dal renderer; non sono estrazioni dal gioco originale.
+
+VT323 di Peter Hull, Google Fonts commit 45e3d5269e4a17d823f6d84470bc084dc5ae46f6:
+licenza SIL Open Font License 1.1 conservata in `fonts/OFL.txt`.
+URL fissati e SHA-256 sono in `ui-sources.json`; script riproducibile:
+`python scripts/fetch_ui_assets.py`. Tutto viene servito localmente.

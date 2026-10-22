@@ -1,0 +1,32 @@
+[
+  {
+    "path": "assets/items/berry.png",
+    "url": "https://raw.githubusercontent.com/PokeAPI/sprites/97a7832d307311c0e1c6ea9035308bf80cc94f81/sprites/items/oran-berry.png",
+    "credit": "PokeAPI/sprites; Pok\u00e9mon artwork belongs to its respective rights holders",
+    "sha256": "4d4d31e7c29a4540d5f438b87bb1762bf3cd7b0920e523fc9020f6c0bace1c1a"
+  },
+  {
+    "path": "assets/items/ether.png",
+    "url": "https://raw.githubusercontent.com/PokeAPI/sprites/97a7832d307311c0e1c6ea9035308bf80cc94f81/sprites/items/max-elixir.png",
+    "credit": "PokeAPI/sprites; Pok\u00e9mon artwork belongs to its respective rights holders",
+    "sha256": "20edb1619c42fccd2882d67e7c192f45c9186daf72282c254a2bb1c2e4f5a190"
+  },
+  {
+    "path": "assets/items/apple.png",
+    "url": "https://raw.githubusercontent.com/PokeAPI/sprites/97a7832d307311c0e1c6ea9035308bf80cc94f81/sprites/items/apple.png",
+    "credit": "PokeAPI/sprites; Pok\u00e9mon artwork belongs to its respective rights holders",
+    "sha256": "8c374f1c78e18ca3227dc303f8574953fbd2f9ec728ffa7049478c134dda243d"
+  },
+  {
+    "path": "assets/fonts/VT323-Regular.ttf",
+    "url": "https://raw.githubusercontent.com/google/fonts/45e3d5269e4a17d823f6d84470bc084dc5ae46f6/ofl/vt323/VT323-Regular.ttf",
+    "credit": "VT323 by Peter Hull; SIL Open Font License 1.1",
+    "sha256": "cf4de751ada78ceac033dbe16a687742939995b77bc2a052ae17a4957958594d"
+  },
+  {
+    "path": "assets/fonts/OFL.txt",
+    "url": "https://raw.githubusercontent.com/google/fonts/45e3d5269e4a17d823f6d84470bc084dc5ae46f6/ofl/vt323/OFL.txt",
+    "credit": "VT323 by Peter Hull; SIL Open Font License 1.1",
+    "sha256": "27d9af34210253e7ca1251fbace86c6f65b40031d6ce1a75493a1b2093631298"
+  }
+]

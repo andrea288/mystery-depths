@@ -1,4 +1,4 @@
-import { BIOMES } from "./game.mjs";
+import { BIOMES, DIRS } from "./game.mjs";
 const cache = new Map();
 let metadata;
 async function sprite(id) {
@@ -31,7 +31,18 @@ export class Renderer {
     this.mini = mini;
     this.art = new Map();
     this.events = [];
+    this.reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    this.items = new Map();
+    for (const key of ["berry", "ether", "apple", "seed", "chest"]) {
+      const img = new Image();
+      img.src = `assets/items/${key}.${["seed", "chest"].includes(key) ? "svg" : "png"}`;
+      img
+        .decode()
+        .then(() => this.items.set(key, img))
+        .catch(console.error);
+    }
     this.camera = { x: 0, y: 0 };
+    this.hitAreas = [];
   }
   async prepare(ids) {
     await Promise.all(
@@ -39,7 +50,11 @@ export class Renderer {
     );
   }
   animate(events) {
-    this.events = events.map((e) => ({ ...e, time: performance.now() }));
+    const now = performance.now();
+    this.events = [
+      ...this.events.filter((e) => now - e.time < 900),
+      ...events.map((e) => ({ ...e, time: now })),
+    ].slice(-100);
   }
   mon(mon, x, y, time, scale = 2) {
     const ctx = this.ctx;
@@ -50,6 +65,22 @@ export class Renderer {
           e.uid === mon.uid &&
           time - e.time < (e.type === "defeat" ? 900 : 350),
       );
+    if (ev && !this.reducedMotion) {
+      const progress = Math.min(1, (time - ev.time) / 160);
+      if (ev.type === "step") {
+        x += (ev.from.x - ev.to.x) * 40 * (1 - progress);
+        y += (ev.from.y - ev.to.y) * 40 * (1 - progress);
+      }
+      if (ev.type === "attack") {
+        const pulse =
+          Math.sin(Math.min(1, (time - ev.time) / 220) * Math.PI) * 9;
+        x += Math.sign(ev.to.x - ev.from.x) * pulse;
+        y += Math.sign(ev.to.y - ev.from.y) * pulse;
+      }
+      if (ev.type === "hit")
+        x += Math.sin((time - ev.time) / 18) * 3 * (1 - progress);
+    }
+    this.hitAreas.push({ uid: mon.uid, x, y });
     const a = this.art.get(mon.species);
     if (!a) return;
     const action =
@@ -113,6 +144,7 @@ export class Renderer {
       c.width = width;
       c.height = height;
     }
+    this.hitAreas = [];
     ctx.imageSmoothingEnabled = false;
     ctx.fillStyle = "#101e26";
     ctx.fillRect(0, 0, width, height);
@@ -120,8 +152,15 @@ export class Renderer {
     if (!r) return;
     const size = 40,
       b = BIOMES[r.biome];
-    const ox = Math.round(width / 2 - r.player.x * size - size / 2),
-      oy = Math.round(height / 2 - r.player.y * size - size / 2);
+    const step = this.events.findLast(
+      (e) => e.type === "step" && e.uid === 0 && time - e.time < 160,
+    );
+    const follow =
+      step && !this.reducedMotion ? 1 - (time - step.time) / 160 : 0;
+    const cameraX = r.player.x + (step ? step.from.x - step.to.x : 0) * follow;
+    const cameraY = r.player.y + (step ? step.from.y - step.to.y : 0) * follow;
+    const ox = Math.round(width / 2 - cameraX * size - size / 2),
+      oy = Math.round(height / 2 - cameraY * size - size / 2);
     this.camera = { x: ox, y: oy, size };
     for (let y = 0; y < r.h; y++)
       for (let x = 0; x < r.w; x++) {
@@ -141,17 +180,50 @@ export class Renderer {
         ctx.fillRect(px, py, size, size);
         ctx.fillStyle = wall ? b.edge : "#ffffff08";
         ctx.fillRect(px + 1, py + 1, size - 2, wall ? 8 : 1);
+        const noise = (x * 73 + y * 127 + x * y * 17) >>> 0;
         if (wall) {
-          ctx.fillStyle = "#00000030";
-          ctx.fillRect(px + 1, py + size - 6, size - 2, 6);
+          ctx.fillStyle = "#00000042";
+          ctx.fillRect(px, py + 25, size, 15);
+          ctx.fillStyle = b.edge;
+          ctx.fillRect(px + 3, py + 4, 14, 8);
+          ctx.fillRect(px + 20, py + 3, 17, 10);
+          ctx.fillStyle = "#ffffff10";
+          ctx.fillRect(px + 4, py + 4, 11, 2);
+          ctx.fillRect(px + 22, py + 3, 12, 2);
+          ctx.fillStyle = "#00000036";
+          ctx.fillRect(px + 17, py + 2, 3, 13);
+          ctx.fillRect(px + 2, py + 15, 36, 2);
+          ctx.fillStyle = b.edge;
+          ctx.fillRect(px + 6, py + 18, 24, 7);
+          if (noise % 3 === 0) {
+            ctx.fillStyle = b.accent;
+            ctx.globalAlpha *= 0.3;
+            ctx.fillRect(px + 5, py + 5, 6, 3);
+            ctx.fillRect(px + 8, py + 8, 3, 5);
+          }
         } else {
-          ctx.fillStyle = "#00000016";
+          ctx.fillStyle = "#ffffff08";
+          ctx.fillRect(px + 2, py + 2, 16, 16);
+          ctx.fillRect(px + 22, py + 22, 15, 15);
+          ctx.fillStyle = "#00000026";
+          ctx.fillRect(px + 2, py + 19, 15, 2);
+          ctx.fillRect(px + 21, py + 37, 16, 2);
           ctx.fillRect(
-            px + ((x * 17 + y * 3) % 28),
-            py + ((y * 13 + x) % 29),
-            5,
+            px + (noise % 28) + 3,
+            py + ((noise >> 3) % 28) + 3,
+            4,
             2,
           );
+          if (r.map[y - 1]?.[x]) {
+            ctx.fillStyle = "#00000035";
+            ctx.fillRect(px, py, size, 7);
+          }
+          if (noise % 7 === 0) {
+            ctx.fillStyle = b.accent;
+            ctx.globalAlpha *= 0.25;
+            ctx.fillRect(px + 8, py + 26, 2, 5);
+            ctx.fillRect(px + 5, py + 28, 2, 3);
+          }
         }
       }
     ctx.globalAlpha = 1;
@@ -183,6 +255,17 @@ export class Renderer {
       x: ox + o.x * size + size / 2,
       y: oy + o.y * size + size / 2,
     });
+    if (this.facingMode) {
+      const [dx, dy] = DIRS[r.player.facing];
+      const mark = point({ x: r.player.x + dx, y: r.player.y + dy });
+      ctx.fillStyle = "#ffdf7b30";
+      ctx.fillRect(mark.x - 18, mark.y - 18, 36, 36);
+      ctx.strokeStyle = "#ffe198";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(mark.x - 16, mark.y - 16, 32, 32);
+      ctx.fillStyle = "#ffe198";
+      ctx.fillRect(mark.x - 3, mark.y - 3, 6, 6);
+    }
     const ex = point(r.exit);
     if (r.seen[r.exit.y][r.exit.x]) {
       ctx.fillStyle = "#e6c889";
@@ -192,14 +275,20 @@ export class Renderer {
     for (const item of r.items)
       if (game.visible(item.x, item.y)) {
         const p = point(item);
-        ctx.font = "22px Georgia";
-        ctx.textAlign = "center";
-        ctx.fillStyle = "#edd19b";
-        ctx.fillText(
-          item.type === "chest" ? "▣" : item.type === "apple" ? "●" : "◆",
-          p.x,
-          p.y + 7,
-        );
+        const icon = this.items.get(item.type);
+        const bob = this.reducedMotion
+          ? 0
+          : Math.round(Math.sin(time / 280 + item.x) * 2);
+        ctx.fillStyle = "#00000040";
+        ctx.fillRect(p.x - 9, p.y + 9, 18, 4);
+        if (icon)
+          ctx.drawImage(
+            icon,
+            Math.round(p.x - 16),
+            Math.round(p.y - 18 + bob),
+            32,
+            32,
+          );
       }
     for (const mon of [...r.enemies, r.player].sort((a, b) => a.y - b.y)) {
       if (mon !== r.player && !game.visible(mon.x, mon.y)) continue;
@@ -226,7 +315,56 @@ export class Renderer {
         );
       }
     }
-    ctx.font = "bold 15px sans-serif";
+    if (!this.reducedMotion)
+      for (const ev of this.events) {
+        const age = time - ev.time;
+        if (
+          age < 0 ||
+          age > 420 ||
+          !["attack", "hit", "heal"].includes(ev.type)
+        )
+          continue;
+        const p = point(ev.to),
+          from = point(ev.from),
+          t = age / 420;
+        const colors = {
+          fire: "#ffc15e",
+          water: "#86d8ff",
+          grass: "#b4e989",
+          electric: "#fff28c",
+          ice: "#c3fcff",
+          poison: "#dc9ce7",
+          ghost: "#ad9cf1",
+          normal: "#fff0c4",
+        };
+        ctx.globalAlpha = 1 - t;
+        ctx.fillStyle =
+          ev.type === "heal" ? "#b6f5a1" : colors[ev.element] || "#ffe9a9";
+        if (
+          ev.type === "attack" &&
+          Math.max(
+            Math.abs(ev.to.x - ev.from.x),
+            Math.abs(ev.to.y - ev.from.y),
+          ) > 1
+        ) {
+          const travel = Math.min(1, t * 2.5);
+          ctx.fillRect(
+            Math.round(from.x + (p.x - from.x) * travel) - 4,
+            Math.round(from.y + (p.y - from.y) * travel) - 4,
+            8,
+            8,
+          );
+        } else
+          for (let i = 0; i < 8; i++) {
+            const angle = (i * Math.PI) / 4,
+              radius = 5 + t * 27;
+            const x = Math.round(p.x + Math.cos(angle) * radius),
+              y = Math.round(p.y - 8 + Math.sin(angle) * radius);
+            ctx.fillRect(x, y, i % 2 ? 3 : 5, i % 2 ? 3 : 5);
+          }
+      }
+    ctx.globalAlpha = 1;
+    ctx.font = "24px Pixel, monospace";
     ctx.textAlign = "center";
     for (const ev of this.events) {
       const age = time - ev.time;

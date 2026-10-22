@@ -292,7 +292,7 @@
         ids = ids.filter((i) => this.D.pokemon[i]);
         const e = this.makeMon(
           ids[Number((depth / 5n - 1n) % BigInt(ids.length))],
-          Math.min(100, 5 + Number(r.floor)),
+          Math.min(100, 4 + Number(r.floor)),
           true,
         );
         Object.assign(e, {
@@ -357,7 +357,13 @@
         ).filter((i) => this.D.pokemon[i]);
         for (let i = 1; i < r.rooms.length; i++) {
           let room = r.rooms[i],
-            count = this.rng.int(1, Math.min(3, 1 + Math.floor(r.floor / 4)));
+            count =
+              Number(r.floor) <= 4 && i % 2 === 0
+                ? 0
+                : this.rng.int(
+                    1,
+                    Math.min(3, 1 + Math.floor((r.floor - 1) / 5)),
+                  );
           for (let j = 0; j < count; j++) {
             const pos = this.freeSpot(room);
             if (!pos) continue;
@@ -365,12 +371,15 @@
               ids[
                 this.rng.int(
                   0,
-                  Math.min(ids.length - 1, 3 + Math.floor(r.floor / 2)),
+                  Math.min(ids.length - 1, 1 + Math.floor(r.floor / 3)),
                 )
               ];
             let e = this.makeMon(
               species,
-              Math.min(100, 1 + Number(r.floor) + this.rng.int(0, 1)),
+              Math.min(
+                100,
+                2 + Math.floor(Number(r.floor) * 0.85) + this.rng.int(0, 1),
+              ),
             );
             Object.assign(e, pos, { uid: r.uid++, awake: false });
             r.enemies.push(e);
@@ -380,10 +389,12 @@
             if (pos)
               r.items.push({
                 ...pos,
-                type: this.rng.pick(["berry", "ether", "apple", "chest"]),
+                type:
+                  { 1: "berry", 3: "ether", 5: "apple" }[i] ||
+                  this.rng.pick(["berry", "ether", "apple", "chest"]),
               });
           }
-          if (r.floor > 2 && this.rng.next() < 0.5) {
+          if (r.floor > 3 && this.rng.next() < 0.25) {
             let pos = this.freeSpot(room);
             if (pos)
               r.traps.push({
@@ -567,7 +578,10 @@
       const r = this.run;
       if (r.state === "dead") return;
       r.player.hp = 0;
-      this.effect("defeat", r.player, r.player, { uid: 0, mon: clone(r.player) });
+      this.effect("defeat", r.player, r.player, {
+        uid: 0,
+        mon: clone(r.player),
+      });
       r.state = "dead";
       this.meta.best = depthMax(this.meta.best, r.floor);
       this.meta.records.unshift({

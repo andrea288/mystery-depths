@@ -1,8 +1,10 @@
 {
   "archiveStandalone": true,
-  "mechanicsVersion": 4,
-  "externalRequests": [],
+  "pixelUI": true,
+  "turn": 0,
+  "icons": true,
+  "font": true,
+  "overflow": false,
   "errors": [],
-  "turn": 1,
-  "horizontalOverflow": false
+  "externalRequests": []
 }

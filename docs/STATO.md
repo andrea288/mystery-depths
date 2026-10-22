@@ -11,7 +11,7 @@ ricompense, livelli, fame, quattro strumenti, salvataggi e ripresa, import/expor
 morte e nuova spedizione con progressi conservati. `npm start` avvia su localhost.
 WASM e asset sono già inclusi. Avvio Windows via `avvia-windows.bat`.
 
-La prova browser ha superato il boss del quinto piano in 831 turni/16 vittorie,
+La prova browser ha superato il boss del quinto piano in 574 turni/10 vittorie,
 ripreso un salvataggio e completato morte/nuova run senza errori JavaScript.
 Vedere `test-results/browser-journey.json` e `browser-journey.log`.
 
@@ -69,4 +69,24 @@ non viene implementato il comportamento completo.
 Import v3 validato prima di convertire, senza mutare l’input; durata e tempo
 restante al prossimo danno preservati. La chiave browser resta
 `mystery-depths-v3` per trovare i salvataggi esistenti. HUD mostra gli stati
-simultanei. 30 test JS e percorso browser fino al piano 6 superati.
+simultanei. 31 test JS e percorso browser fino al piano 6 superati.
+
+## Grafica pixel, comandi e bilanciamento
+
+Interfaccia rifatta con VT323 locale, cornici pixel, HUD compatto e PS/Pancia
+sopra la mappa su mobile. Icone strumenti PokeAPI fissate; SVG originali per
+Semedormita e forziere. Provenienza e hash: assets/ui-sources.json.
+Renderer con interpolazione dei passi, affondo, reazione ai colpi, particelle
+per tipo e oggetti animati; rispetta prefers-reduced-motion. Le aree cliccabili
+seguono i Pokémon durante il movimento. Non sono effetti originali di EoS.
+
+Orienta attiva la rotazione gratuita tramite pad, mappa e tastiera; clic destro
+sulla mappa sempre disponibile. Prova browser mouse/touch verifica invarianti
+di turno, Pancia, PP, nemici e RNG, più persistenza dopo reload.
+
+Bilanciamento del generatore roguelite: primi quattro piani con stanze alternate
+senza nemici, specie resistenti introdotte più tardi, una Baccarancia, un Elisir
+Max e una Mela garantiti nei piani normali. Trappole dal quarto piano al 25%
+per stanza. Livelli nemici 2+floor(piano×0,85)+0..1, guardiani piano+4, limite
+100. Formule del danno, crescita, PP e fame EoS non alterate.
+Per rigenerare il download: python scripts/package_runtime.py.
