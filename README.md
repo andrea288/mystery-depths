@@ -12,6 +12,9 @@ Nessun sito è stato pubblicato. Il codice è nel repository
 [`andrea288/mystery-depths`](https://github.com/andrea288/mystery-depths).
 Il proprietario gestisce la visibilità nelle impostazioni GitHub.
 
+Per scaricare solo il gioco pronto all’avvio: [mystery-depths-gioco.zip](downloads/mystery-depths-gioco.zip) (circa 3,4 MB).
+Il repository contiene anche sorgenti, fonti e test.
+
 ## Avvio
 
 Serve **Node.js 22 o successivo**. Codice, dati, sprite e WebAssembly sono inclusi;
