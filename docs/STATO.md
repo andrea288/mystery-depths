@@ -1,4 +1,4 @@
-# Stato di ripresa — 21 ottobre 2026
+# Stato di ripresa — 22 ottobre 2026
 
 Cartella attiva: `/workspace/mystery-depths`. Repository originale
 `/workspace/andrea288` lasciato intatto. Non creare worktree o riclonare il lavoro.
@@ -18,14 +18,14 @@ Vedere `test-results/browser-journey.json` e `browser-journey.log`.
 Il requisito di fedeltà completa EoS resta aperto: leggere CONFORMITA.md prima di
 qualunque affermazione. Non aggiungere probabilità o formule dalla serie principale.
 
-## Blocchi di accesso reali
+## Repository e accesso
 
-`gh api user` ha verificato l'account **andrea288**. Il repository
-`andrea288/mystery-depths` ha risposto 404. La creazione privata ha fallito con
-`GraphQL: Resource not accessible by integration (createRepository)`.
-Anche POST user/repos via API REST ha restituito 403. Non esiste un remote
-configurato e non è stato eseguito un push. Non sostituire
-il repository con il profilo pubblico andrea288/andrea288.
+Il proprietario ha creato `andrea288/mystery-depths` e autorizzato il push.
+`origin` punta a quel repository; `main` è stata caricata e il commit remoto
+è stato verificato. GitHub mostrava il repository come pubblico al momento
+del caricamento. Il proprietario ha dichiarato che lo renderà privato.
+L'integrazione GitHub non può cambiarne la visibilità: PATCH ha restituito 403.
+Non confondere questo repository con il profilo `andrea288/andrea288`.
 
 Il post Reddit richiesto dall'utente non è stato letto: inizialmente il proxy
 restituiva CONNECT 403; ora la pagina restituisce solo una challenge e il JSON

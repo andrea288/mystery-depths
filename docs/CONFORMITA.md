@@ -42,7 +42,7 @@ Pin: PRET `e3f02199ebe9e263ee67b07f36b3f240f83ef5d9`; DAMAGE
 | Italiano ufficiale | PRET text_i.str; CODEC; PokeAPI nomi moderni | 18.482 stringhe roundtrip, 5.042 esportate; termini di gioco ufficiali | verificato | Testo narrativo originale del progetto; descrizioni UI sintetiche |
 | Specie post-EoS | Modulo dichiarato | Donatori di statistiche, tipi, abilità e learnset documentati | differente | Conversioni intenzionali, non specie originali né regole moderne |
 | Percorso completo browser | Requisito utente | Starter → combattimenti → boss 5 → piano 6 → ripresa → morte → nuova run | verificato | Test di applicazione, non certificazione del motore originale |
-| Repository privato e push | GitHub | Account andrea288 verificato; creazione GraphQL e REST negata | non verificato | Permessi integrazione: 403, nessun remote o push |
+| Repository e push | GitHub | `main` caricata su `andrea288/mystery-depths`; commit remoto e file principali verificati | verificato | Al momento del push il repository era pubblico; il proprietario ha scelto di renderlo privato dopo il caricamento |
 
 Non dichiarare il requisito prioritario concluso finché rimangono queste
 righe “differente” o “non verificato” nel nucleo originale. La giocabilità

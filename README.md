@@ -8,8 +8,9 @@ Non richiede account né servizi esterni durante il gioco.
 Cielo non è soddisfatto.** Il calcolo dei danni usa `damage-eos` in WebAssembly;
 il resto del motore non riproduce ancora tutte le regole originali. La matrice
 [CONFORMITA.md](docs/CONFORMITA.md) elenca precisamente le differenze.
-Nessun sito è stato pubblicato. Il repository GitHub privato non è stato creato:
-l'integrazione autenticata non ha il permesso `createRepository`.
+Nessun sito è stato pubblicato. Il codice è nel repository
+[`andrea288/mystery-depths`](https://github.com/andrea288/mystery-depths).
+Il proprietario gestisce la visibilità nelle impostazioni GitHub.
 
 ## Avvio
 
