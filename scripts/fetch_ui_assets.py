@@ -13,3 +13,10 @@ for dest,url,credit in assets:
  manifest.append(dict(path=dest,url=url,credit=credit,sha256=hashlib.sha256(data).hexdigest()))
 (R/'assets/ui-sources.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print('Downloaded',len(manifest),'pinned assets')
+
+# Extra item artwork is pinned separately so the provenance remains stable.
+for item in json.loads((R/'assets/items/sources-extra.json').read_text()):
+ data=urllib.request.urlopen(item['url'],timeout=30).read()
+ if hashlib.sha256(data).hexdigest()!=item['sha256']: raise ValueError('Unexpected asset: '+item['path'])
+ (R/item['path']).write_bytes(data)
+print('Verified and downloaded eight extra item icons')

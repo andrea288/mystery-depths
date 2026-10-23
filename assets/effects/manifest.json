@@ -1,0 +1,181 @@
+{
+  "source": "PMDCollab/RawAsset",
+  "commit": "03c80dad937911572f8fb19903771a47956fc696",
+  "sheets": {
+    "Ember": {
+      "file": "Ember.png",
+      "size": 24,
+      "frames": 9,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Ember.None.png",
+      "sha256": "2875d15af0d787a2185f359679f5a120d14cc63687c5a88e4a3811e2145ad76d"
+    },
+    "Flamethrower": {
+      "file": "Flamethrower.png",
+      "size": 54,
+      "frames": 12,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Flamethrower.None.png",
+      "sha256": "cdf854eb86da7cccaa4650a7e892f096e0bf0ccbc69512d2ae31bd9f895ffa74"
+    },
+    "Hit_Neutral": {
+      "file": "Hit_Neutral.png",
+      "size": 64,
+      "frames": 4,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Hit_Neutral.None.png",
+      "sha256": "6db334999c61b4791c31466cb6bdd0a57f72b49e3a50d66ca51a1b7c2b643f8e"
+    },
+    "Shadow_Ball": {
+      "file": "Shadow_Ball.png",
+      "size": 24,
+      "frames": 2,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Shadow_Ball.None.png",
+      "sha256": "bb6db172f0bd7f4230748c154958ec8f5bee01fa6807cdeb3f06640eb59c1f03"
+    },
+    "Razor_Leaf": {
+      "file": "Razor_Leaf.png",
+      "size": 32,
+      "frames": 8,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Razor_Leaf.None.png",
+      "sha256": "4e0a060cd0b3628e43dc1fb378db413886b9a23d86594797ff4cf5e7d02fea31"
+    },
+    "Magical_Leaf": {
+      "file": "Magical_Leaf.png",
+      "size": 48,
+      "frames": 9,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Magical_Leaf.None.png",
+      "sha256": "e59364889f872f5921d58ec2b392b00747d6bea014782fc97093d62e35be3906"
+    },
+    "Absorb": {
+      "file": "Absorb.png",
+      "size": 32,
+      "frames": 9,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Absorb.None.png",
+      "sha256": "e204f3731ee07915e501657abab5d96d901d22282279a51badf71e3aad08f275"
+    },
+    "Bubbles_Blue": {
+      "file": "Bubbles_Blue.png",
+      "size": 16,
+      "frames": 8,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Bubbles_Blue.None.png",
+      "sha256": "a5f94f956f2345889ced3e4fcddb91a640c030b47cd26c944a61810f828a0937"
+    },
+    "Bubble_Pop_Blue": {
+      "file": "Bubble_Pop_Blue.png",
+      "size": 24,
+      "frames": 13,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Bubble_Pop_Blue.None.png",
+      "sha256": "468581362d497d172963fc1938a954208e0d3764852ea3abb0dd00b73d173296"
+    },
+    "Spark": {
+      "file": "Spark.png",
+      "size": 72,
+      "frames": 4,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Spark.None.png",
+      "sha256": "bdd600a4c96b182a95ee375c7aa87a8c52fbba4a4c0056dd4685a53f73ec368e"
+    },
+    "Shock_Wave": {
+      "file": "Shock_Wave.png",
+      "size": 32,
+      "frames": 4,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Shock_Wave.None.png",
+      "sha256": "5a666377fe354d8b19c4857a1854ef0457f358ed09ae67ca502958beeac8c3ff"
+    },
+    "Ice_RSE": {
+      "file": "Ice_RSE.png",
+      "size": 16,
+      "frames": 3,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Ice_RSE.None.png",
+      "sha256": "97c400d4174862b4d85aea9c8880d7f18755fae4ff0a5cfc6730ee04ab59e67c"
+    },
+    "Ice_Pieces": {
+      "file": "Ice_Pieces.png",
+      "size": 16,
+      "frames": 3,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Ice_Pieces.None.png",
+      "sha256": "7f7746d6e8f05771b322919c914b7bd57086a8cfd419c5afc954a4ad588ca997"
+    },
+    "Fire_Spin_Front": {
+      "file": "Fire_Spin_Front.png",
+      "size": 88,
+      "frames": 57,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Fire_Spin_Front.None.png",
+      "sha256": "c2178e648c7f24d2571276a973ca922c54678a048392774d00c6332f516dc4bd"
+    },
+    "Fire_Fang_Hit": {
+      "file": "Fire_Fang_Hit.png",
+      "size": 80,
+      "frames": 6,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Fire_Fang_Hit.None.png",
+      "sha256": "dec49ae09a77923eeaab55b9afcb264eae957319309adbee2d74d148ccabd074"
+    },
+    "Leaf_Blade": {
+      "file": "Leaf_Blade.png",
+      "size": 88,
+      "frames": 31,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Leaf_Blade.None.png",
+      "sha256": "b652a92ca4e2f44b86fff2c8eb474714152616850d22ef3e1f049282684528b7"
+    },
+    "Lick": {
+      "file": "Lick.png",
+      "size": 32,
+      "frames": 5,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Lick.None.png",
+      "sha256": "c7c125faf775af3c1016a25145f0ba27fd1196caee5c58aff99d9745ec1aafab"
+    },
+    "Rock_Pieces": {
+      "file": "Rock_Pieces.png",
+      "size": 16,
+      "frames": 15,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Rock_Pieces.None.png",
+      "sha256": "7ce6a9100e85d798a50e81337b6be041ddc156796ef478f60a9af98e676c8762"
+    },
+    "Rock_Smash": {
+      "file": "Rock_Smash.png",
+      "size": 72,
+      "frames": 11,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Rock_Smash.None.png",
+      "sha256": "3d485d867baa778a17598acc370a36d7b5bdba31330519c2213750cdc8a9ea99"
+    },
+    "Bullet_Punch": {
+      "file": "Bullet_Punch.png",
+      "size": 64,
+      "frames": 9,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Bullet_Punch.None.png",
+      "sha256": "1ce192b304744ef4f2e63f9129e05133915981e50184fa59f24e6000126ced6d"
+    },
+    "Fangs_RSE": {
+      "file": "Fangs_RSE.png",
+      "size": 32,
+      "frames": 4,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Fangs_RSE.None.png",
+      "sha256": "4f35e725c618e167d088ea444be94ac43dcc87c10f3e41925ddc0e98c80c27f1"
+    },
+    "Dragon_Pulse_Ball": {
+      "file": "Dragon_Pulse_Ball.png",
+      "size": 32,
+      "frames": 4,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Dragon_Pulse_Ball.None.png",
+      "sha256": "aff8f700bce4a9883910522e49d2eefa92afa2d9d2f19b67f5cff23915a74570"
+    },
+    "Healing_Wish_Hit": {
+      "file": "Healing_Wish_Hit.png",
+      "size": 40,
+      "frames": 8,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Healing_Wish_Hit.None.png",
+      "sha256": "b8e2736e3b41659f65acf16e3f1431755e47b2bc43546bf39961962514dfc490"
+    },
+    "Metal_Burst_Hit": {
+      "file": "Metal_Burst_Hit.png",
+      "size": 24,
+      "frames": 5,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Metal_Burst_Hit.None.png",
+      "sha256": "b495d2c78ecd984e6e26b81ea19f001295471b7ac8113b202dee0edc551e91d1"
+    },
+    "Vine_Whip_2": {
+      "file": "Vine_Whip_2.png",
+      "size": 32,
+      "frames": 3,
+      "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Particle/Vine_Whip_2.None.png",
+      "sha256": "9b14b4afcf8073fd3d3744f22153bc323a5a3b56ea50c83999f20b525b51c357"
+    }
+  }
+}

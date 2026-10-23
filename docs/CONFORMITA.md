@@ -35,10 +35,10 @@ Pin: PRET `e3f02199ebe9e263ee67b07f36b3f240f83ef5d9`; DAMAGE
 | Mappe e seed | Estensione intenzionale | 2.000 mappe runtime con scale raggiungibili; snapshot RNG | verificato | Generatore volutamente roguelite, non quello originale |
 | Piani oltre 2^53 | Estensione intenzionale | BigInt per progressione, boss e biomi; test integrato | verificato | Limite tecnico 128 cifre; livelli saturano a 100 |
 | Mosse permanenti, quattro slot, reset run | Estensione intenzionale | Test simulazione e percorso browser reale dopo morte | verificato | Catalogo limitato alle 37 mosse presenti |
-| Salvataggi/import/export | Schema v1, meccaniche v4; migrazione v3 | Roundtrip, replay, migrazione conservativa, rifiuto corruzioni senza mutazioni, browser reload | verificato | Archivio locale al browser; nessun cloud sync |
+| Salvataggi/import/export | Schema v1, meccaniche v5; migrazione v3/v4 | Roundtrip, replay, migrazione conservativa, rifiuto corruzioni senza mutazioni, browser reload | verificato | Archivio locale al browser; nessun cloud sync |
 | Asset locali | SPRITE | 50 specie, 922 file verificati, 770 PNG decodificati | verificato | Dieci specie prive di Faint nella fonte |
 | Direzioni/frame/tempi/ancoraggi | SPRITE; CODEC chara_wan/sheets.py | Renderer a 60 Hz, metadati XML, ancoraggi ombre; QA browser | non verificato | Interpolazione, affondo e particelle originali del progetto; nessun confronto frame per frame |
-| Effetti visivi delle mosse | Originale | Attack/Hurt, affondo, particelle pixel per tipo e numeri; grafica originale del progetto | differente | Asset/effetti specifici da acquisire e integrare |
+| Effetti visivi delle mosse | PMDCollab/RawAsset | 25 fogli, 37 associazioni, sequenza temporale, PS all’impatto, pausa e velocità | differente | Abbinamenti e tempi adattati; manca confronto frame per frame con EoS |
 | Italiano ufficiale | PRET text_i.str; CODEC; PokeAPI nomi moderni | 18.482 stringhe roundtrip, 5.042 esportate; termini di gioco ufficiali | verificato | Testo narrativo originale del progetto; descrizioni UI sintetiche |
 | Specie post-EoS | Modulo dichiarato | Donatori di statistiche, tipi, abilità e learnset documentati | differente | Conversioni intenzionali, non specie originali né regole moderne |
 | Percorso completo browser | Requisito utente | Starter → combattimenti → boss 5 → piano 6 → ripresa → morte → nuova run | verificato | Test di applicazione, non certificazione del motore originale |
@@ -47,3 +47,15 @@ Pin: PRET `e3f02199ebe9e263ee67b07f36b3f240f83ef5d9`; DAMAGE
 Non dichiarare il requisito prioritario concluso finché rimangono queste
 righe “differente” o “non verificato” nel nucleo originale. La giocabilità
 verificata non annulla gli scostamenti documentati.
+
+## Strumenti e presentazione — 23 ottobre 2026
+
+Otto nuovi strumenti: Baccapesca, Baccaliegia, Baccafrago, Semesalute,
+Semevita, Baccacedro, Melagrande e Gigantomela. Nomi da text_i.str; effetti
+di riferimento da PRET `src/overlay_29_0231CBC8.c` (commit e3f02199):
+Semevita +3 PS massimi, Baccacedro recupero 100 o +2 PS massimi a PS pieni,
+Melagrande recupero 100 Pancia e Gigantomela riempimento; a Pancia piena +10
+capacità. Restano aperte le interazioni complete con abilità, stati non
+implementati e ingestione degli strumenti nel motore originale.
+La sequenza visiva opera su una copia dello stato: non cambia RNG, danni o
+numero di turni. I tempi scelti sono di presentazione, non dati originali EoS.

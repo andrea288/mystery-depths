@@ -272,7 +272,7 @@ test("Migrazione v3: conserva durata, prossima scadenza, progressi e input origi
   const snapshot = structuredClone(old);
   g.restore(old);
   assert.deepEqual(old, snapshot);
-  assert.equal(g.run.mechanicsVersion, 4);
+  assert.equal(g.run.mechanicsVersion, 5);
   assert.deepEqual(g.run.player.statuses, {
     burn: { id: "burn", turns: 128, clock: 33 },
     cringe: { id: "flinch", turns: 2, clock: 0 },
@@ -333,4 +333,64 @@ test("Provviste garantite e primi piani senza trappole", () => {
     g.buildFloor();
     assert.equal(g.run.enemies[0].level, 9);
   }
+});
+
+test("Otto strumenti: cure mirate, PS massimi e Pancia secondo gli effetti EoS", () => {
+  const g = make();
+  g.start(252, 42);
+  g.run.enemies = [];
+  const p = g.run.player;
+  for (const [item, status] of [
+    ["pecha", "poison"],
+    ["cheri", "paralysis"],
+    ["rawst", "burn"],
+  ]) {
+    g.inflict(p, status);
+    g.run.bag[item] = 1;
+    g.applyItem(item);
+    assert.equal(g.hasStatus(p, status), false);
+    assert.equal(g.run.bag[item], 0);
+  }
+  g.inflict(p, "sleep");
+  g.inflict(p, "burn");
+  g.run.bag.healSeed = 1;
+  g.applyItem("healSeed");
+  assert.deepEqual(p.statuses, {});
+  p.hp = p.maxHp;
+  let max = p.maxHp;
+  g.run.bag.lifeSeed = 1;
+  g.applyItem("lifeSeed");
+  assert.equal(p.maxHp, max + 3);
+  assert.equal(p.hp, p.maxHp);
+  max = p.maxHp;
+  g.run.bag.sitrus = 2;
+  g.applyItem("sitrus");
+  assert.equal(p.maxHp, max + 2);
+  p.hp = 1;
+  g.applyItem("sitrus");
+  assert.equal(p.hp, p.maxHp);
+  assert.equal(p.maxHp, max + 2);
+  g.run.belly = 10;
+  g.run.bag.bigApple = 1;
+  g.applyItem("bigApple");
+  assert.equal(g.run.belly, 100);
+  g.run.bag.hugeApple = 1;
+  g.applyItem("hugeApple");
+  assert.equal(g.run.maxBelly, 110);
+  assert.equal(g.run.belly, 110);
+  g.validateRun(g.run);
+});
+test("Migrazione v4: nuovo zaino senza regalare strumenti o modificare l’input", () => {
+  const g = make();
+  g.start(1, 9);
+  const old = g.export();
+  old.run.mechanicsVersion = 4;
+  old.run.bag = { berry: 2, ether: 1, apple: 1, seed: 0 };
+  const copy = structuredClone(old);
+  g.restore(old);
+  assert.equal(g.run.mechanicsVersion, 5);
+  assert.equal(g.run.bag.healSeed, 0);
+  assert.equal(g.run.bag.berry, 2);
+  assert.deepEqual(old, copy);
+  g.validateRun(g.run);
 });

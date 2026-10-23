@@ -42,6 +42,34 @@ export const ITEMS = {
     color: "#e1cc8c",
   },
 };
+Object.assign(ITEMS, {
+  pecha: { name: "Baccapesca", desc: "Cura il veleno.", cure: "poison" },
+  cheri: { name: "Baccaliegia", desc: "Cura la paralisi.", cure: "paralysis" },
+  rawst: { name: "Baccafrago", desc: "Cura la scottatura.", cure: "burn" },
+  healSeed: {
+    name: "Semesalute",
+    desc: "Guarisce gli stati alterati negativi.",
+  },
+  lifeSeed: {
+    name: "Semevita",
+    desc: "Aumenta di 3 i PS massimi durante la spedizione.",
+  },
+  sitrus: {
+    name: "Baccacedro",
+    desc: "Recupera 100 PS; a PS pieni aumenta di 2 i PS massimi.",
+  },
+  bigApple: {
+    name: "Melagrande",
+    desc: "Recupera 100 di Pancia; a Pancia piena aumenta di 10 la capacità.",
+  },
+  hugeApple: {
+    name: "Gigantomela",
+    desc: "Riempie la Pancia; a Pancia piena aumenta di 10 la capacità.",
+  },
+});
+Object.assign(globalThis.MD.ITEMS, ITEMS);
+export const itemIcon = (key) =>
+  `assets/items/${key}.${["seed", "chest"].includes(key) ? "svg" : "png"}`;
 export const PROVISIONS = {
   recovery: { berry: 2 },
   pp: { ether: 2, apple: 1 },
@@ -123,11 +151,35 @@ export class Game extends Base {
       throw Error("Mosse equipaggiate non valide.");
     this.combat = new DungeonRng(seed >>> 0);
     const r = super.start(species, seed, loadout);
-    r.mechanicsVersion = 4;
+    r.mechanicsVersion = 5;
+    for (const key of Object.keys(ITEMS)) r.bag[key] ??= 0;
+    r.bag.healSeed = 1;
     r.combatRng = this.combat.snapshot();
     r.maxBelly = 100;
     r.pendingMoves = [];
     return r;
+  }
+  buildFloor() {
+    super.buildFloor();
+    const r = this.run;
+    if (r.rooms.length > 1) {
+      const pos = this.freeSpot(r.rooms[2] || r.rooms[1]);
+      if (pos)
+        r.items.push({
+          ...pos,
+          type: this.rng.pick([
+            "pecha",
+            "cheri",
+            "rawst",
+            "healSeed",
+            "lifeSeed",
+            "sitrus",
+            "bigApple",
+            "hugeApple",
+          ]),
+        });
+    }
+    this.sync();
   }
   sync() {
     super.sync();
@@ -306,6 +358,8 @@ export class Game extends Base {
     this.effect("attack", a, target, {
       element: m?.type || "normal",
       move: m?.name || "Attacco",
+      slug: m?.slug || "pound",
+      actor: a.name,
       uid: a.uid,
     });
     if (
@@ -622,6 +676,39 @@ export class Game extends Base {
       p = r.player;
     if (!ITEMS[item] || !r.bag[item]) return;
     r.bag[item]--;
+    this.effect("item", p, p, {
+      uid: 0,
+      actor: p.name,
+      move: ITEMS[item].name,
+      item,
+    });
+    const heal = (amount) => {
+      const n = Math.min(amount, p.maxHp - p.hp);
+      p.hp += n;
+      this.effect("heal", p, p, { uid: 0, amount: n });
+    };
+    if (ITEMS[item].cure && this.hasStatus(p, ITEMS[item].cure))
+      delete p.statuses[STATUS_GROUP[ITEMS[item].cure]];
+    if (item === "healSeed") p.statuses = {};
+    if (item === "lifeSeed") {
+      const n = Math.min(3, 999 - p.maxHp);
+      p.maxHp += n;
+      heal(n);
+    }
+    if (item === "sitrus") {
+      if (p.hp === p.maxHp) {
+        const n = Math.min(2, 999 - p.maxHp);
+        p.maxHp += n;
+        heal(n);
+      } else heal(100);
+    }
+    if (["bigApple", "hugeApple"].includes(item)) {
+      if (r.belly === r.maxBelly) r.maxBelly = Math.min(200, r.maxBelly + 10);
+      r.belly = Math.min(
+        r.maxBelly,
+        r.belly + (item === "bigApple" ? 100 : 999),
+      );
+    }
     if (item === "berry") {
       const restored = Math.min(100, p.maxHp - p.hp);
       p.hp += restored;
@@ -724,12 +811,24 @@ export class Game extends Base {
     return true;
   }
   validateRun(r) {
-    if (!r || ![3, 4].includes(r.mechanicsVersion))
+    if (!r || ![3, 4, 5].includes(r.mechanicsVersion))
       throw Error("Salvataggio di una versione incompatibile.");
     // The handoff validator assumes invented relics: validate our strict reward schema separately.
     const reward = r.reward;
     const copy = {
       ...r,
+      bag:
+        r.mechanicsVersion < 5
+          ? Object.fromEntries(
+              Object.keys(ITEMS).map((k) => [
+                k,
+                r.bag?.[k] ??
+                  (["berry", "ether", "apple", "seed"].includes(k)
+                    ? undefined
+                    : 0),
+              ]),
+            )
+          : r.bag,
       reward:
         r.state === "reward"
           ? [{ kind: "supply" }, { kind: "supply" }, { kind: "supply" }]
@@ -882,7 +981,15 @@ export class Game extends Base {
     )
       throw Error("PS incompatibili con la spedizione.");
     for (const key of Object.keys(ITEMS))
-      if (!integer(r.bag[key], 0, 999)) throw Error("Zaino fuori limite.");
+      if (
+        !integer(r.bag[key], 0, 999) &&
+        !(
+          r.mechanicsVersion < 5 &&
+          !["berry", "ether", "apple", "seed"].includes(key) &&
+          r.bag[key] === undefined
+        )
+      )
+        throw Error("Zaino fuori limite.");
     if (
       r.state === "reward" &&
       (!Array.isArray(reward) ||
@@ -936,6 +1043,8 @@ export class Game extends Base {
         }
         this.run.mechanicsVersion = 4;
       }
+      for (const key of Object.keys(ITEMS)) this.run.bag[key] ??= 0;
+      this.run.mechanicsVersion = 5;
       this.rng = new globalThis.MD.RNG(this.run.rngState);
       this.rng.state = this.run.rngState;
       this.combat = DungeonRng.restore(this.run.combatRng);

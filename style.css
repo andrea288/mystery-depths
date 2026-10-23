@@ -1027,3 +1027,127 @@ canvas {
   clear: both;
   padding-top: 10px;
 }
+.action-banner {
+  position: absolute;
+  top: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 18px;
+  border: 2px solid #ffe4a4;
+  background: #17233bed;
+  color: #fff1c1;
+  text-align: center;
+  z-index: 5;
+  max-width: 80%;
+  pointer-events: none;
+  font-size: 25px;
+  box-shadow: 3px 3px #070d19;
+}
+.skip-animation {
+  display: none;
+  margin-top: 8px;
+}
+.playing-action .skip-animation {
+  display: block;
+}
+.playing-action .move-bar,
+.playing-action .touch-controls {
+  opacity: 0.6;
+}
+.playing-action #dungeon {
+  cursor: progress;
+}
+.bag-tools {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+.bag-tools select {
+  font-size: 17px;
+  padding: 3px;
+  min-width: 0;
+}
+#bag {
+  max-height: 240px;
+  overflow: auto;
+}
+#bag button small {
+  display: block;
+  color: #adbbc7;
+  font-size: 14px;
+  line-height: 1.1;
+}
+#bag-count {
+  font-size: 15px;
+}
+.options-list {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0;
+}
+.options-list label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.options-list input {
+  width: auto;
+}
+.full-log {
+  max-height: 60vh;
+  overflow: auto;
+  padding-left: 25px;
+}
+.full-log li {
+  margin: 8px 0;
+}
+.full-log small {
+  color: var(--gold);
+}
+.status-chip {
+  display: inline-block;
+  border: 1px solid #e6a272;
+  background: #503342;
+  padding: 3px 6px;
+  font-size: 16px;
+  margin: 2px;
+}
+.low-hp {
+  border-color: #ed8979 !important;
+}
+#survival-warning {
+  color: #ffbd85;
+  font-size: 17px;
+}
+#survival-warning:empty,
+#status-list:empty {
+  display: none;
+}
+.pp-gauge {
+  height: 3px;
+  background: linear-gradient(to right, #c5df97 var(--pp), #0e182b var(--pp));
+  display: block;
+}
+@media (max-width: 700px) {
+  .action-banner {
+    font-size: 20px;
+    top: 30px;
+    padding: 6px 10px;
+  }
+  .bag-tools {
+    max-width: 100%;
+  }
+  #survival-warning,
+  #status-list {
+    order: -1;
+  }
+  #bag {
+    max-height: 210px;
+  }
+  .header-actions {
+    gap: 5px;
+  }
+  .brand {
+    font-size: 18px;
+  }
+}

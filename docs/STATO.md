@@ -1,4 +1,4 @@
-# Stato di ripresa — 22 ottobre 2026
+# Stato di ripresa — 23 ottobre 2026
 
 Cartella attiva: `/workspace/mystery-depths`. Repository originale
 `/workspace/andrea288` lasciato intatto. Non creare worktree o riclonare il lavoro.
@@ -7,11 +7,11 @@ Cartella attiva: `/workspace/mystery-depths`. Repository originale
 
 Interfaccia italiana, 29 starter con filtro regioni, selezione mosse, 50 specie,
 37 mosse di danno, cinque biomi, mappe con seed, boss ogni cinque piani,
-ricompense, livelli, fame, quattro strumenti, salvataggi e ripresa, import/export,
+ricompense, livelli, fame, dodici strumenti, salvataggi e ripresa, import/export,
 morte e nuova spedizione con progressi conservati. `npm start` avvia su localhost.
 WASM e asset sono già inclusi. Avvio Windows via `avvia-windows.bat`.
 
-La prova browser ha superato il boss del quinto piano in 574 turni/10 vittorie,
+La prova browser ha superato il boss del quinto piano in 853 turni/15 vittorie,
 ripreso un salvataggio e completato morte/nuova run senza errori JavaScript.
 Vedere `test-results/browser-journey.json` e `browser-journey.log`.
 
@@ -69,7 +69,7 @@ non viene implementato il comportamento completo.
 Import v3 validato prima di convertire, senza mutare l’input; durata e tempo
 restante al prossimo danno preservati. La chiave browser resta
 `mystery-depths-v3` per trovare i salvataggi esistenti. HUD mostra gli stati
-simultanei. 31 test JS e percorso browser fino al piano 6 superati.
+simultanei. 37 test JS e percorso browser fino al piano 6 superati.
 
 ## Grafica pixel, comandi e bilanciamento
 
@@ -90,3 +90,13 @@ Max e una Mela garantiti nei piani normali. Trappole dal quarto piano al 25%
 per stanza. Livelli nemici 2+floor(piano×0,85)+0..1, guardiani piano+4, limite
 100. Formule del danno, crescita, PP e fame EoS non alterate.
 Per rigenerare il download: python scripts/package_runtime.py.
+
+## Aggiornamento animazioni
+
+Sequenza visiva indipendente dalla simulazione, 25 fogli locali per 37 mosse,
+otto nuovi strumenti e opzioni persistenti. Elenco completo delle 50 modifiche
+in MIGLIORAMENTI-50.md. Salvataggi con meccaniche v5, migrazione da v3/v4.
+
+Verifiche del 23 ottobre: 37/37 test automatici, percorso reale fino al piano 6
+in 853 turni con 15 vittorie, ripresa, morte e nuova partita. Prove desktop/touch
+e animazioni eseguite anche contro lo ZIP estratto: nessun errore JS o asset 404.

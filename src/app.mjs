@@ -1,6 +1,29 @@
-import { Game, ITEMS, BIOMES } from "./game.mjs";
+import { Game, ITEMS, BIOMES, itemIcon } from "./game.mjs";
 import { Renderer } from "./render.mjs";
+import { Playback } from "./presentation.mjs";
 import createCore from "../assets/wasm/eos-core.mjs";
+let playback = null,
+  lastVisualEvent = -1;
+const preferenceDefaults = {
+  speed: 1,
+  shake: true,
+  sound: false,
+  minimap: true,
+  numbers: true,
+  grid: false,
+  confirmItems: false,
+  range: true,
+};
+let preferences = { ...preferenceDefaults };
+try {
+  const saved = JSON.parse(
+    localStorage.getItem("mystery-depths-options") || "{}",
+  );
+  for (const k of Object.keys(preferenceDefaults))
+    if (typeof saved[k] === typeof preferenceDefaults[k])
+      preferences[k] = saved[k];
+  if (![0.35, 0.65, 1, 1.4].includes(preferences.speed)) preferences.speed = 1;
+} catch {}
 const $ = (id) => document.getElementById(id),
   esc = (s) =>
     String(s).replace(
@@ -73,6 +96,7 @@ function modal(title, body, actions = []) {
   if (!$("modal").open) $("modal").showModal();
 }
 function camp() {
+  if (busy) return;
   view = "camp";
   document.body.dataset.screen = "camp";
   $("camp").hidden = false;
@@ -192,8 +216,8 @@ async function expedition() {
   $("dungeon").focus();
   stateDialog();
 }
-function hud() {
-  const r = game.run,
+function hud(displayGame = game) {
+  const r = displayGame.run,
     p = r.player;
   if (!r) return;
   $("biome-kicker").textContent = BIOMES[r.biome].name;
@@ -208,27 +232,60 @@ function hud() {
   $("move-bar").innerHTML = Array.from({ length: 4 }, (_, i) => {
     const s = p.moves[i],
       m = s && D.moves[s.id];
-    return `<button data-move="${i}" ${!m || !s.pp ? "disabled" : ""}><kbd>${i + 1}</kbd><strong>${m ? m.name : "—"}</strong><span>${m ? types[m.type] + " · " + s.pp + "/" + m.pp + " PP" : "Mossa da apprendere"}</span></button>`;
+    return `<button title="${m ? m.name + ": potenza " + m.power + ", precisione " + m.accuracy : "Slot libero"}" data-move="${i}" ${!m || !s.pp ? "disabled" : ""}><kbd>${i + 1}</kbd><strong>${m ? m.name : "—"}</strong><span>${m ? types[m.type] + " · " + s.pp + "/" + m.pp + " PP" : "Mossa da apprendere"}</span><i class="pp-gauge" style="--pp:${m ? (s.pp / m.pp) * 100 : 0}%"></i></button>`;
   }).join("");
   $("move-bar")
     .querySelectorAll("button")
     .forEach((b) => {
       b.onclick = () => act(() => game.useMove(+b.dataset.move, target));
       b.onmouseenter = b.onfocus = () => {
-        renderer.rangeMove = D.moves[p.moves[+b.dataset.move]?.id];
+        renderer.rangeMove = preferences.range
+          ? D.moves[p.moves[+b.dataset.move]?.id]
+          : null;
       };
       b.onmouseleave = b.onblur = () => (renderer.rangeMove = null);
     });
+  const bagFilter = $("bag-filter")?.value || "owned";
+  $("bag-count").textContent =
+    Object.values(r.bag).reduce((a, b) => a + b, 0) + " strumenti";
+  $("player-card").classList.toggle("low-hp", p.hp / p.maxHp <= 0.25);
+  $("survival-warning").textContent =
+    p.hp / p.maxHp <= 0.25
+      ? "PS bassi: cura il Pokémon!"
+      : r.belly <= 20
+        ? "La Pancia si sta svuotando."
+        : "";
+  $("status-list").innerHTML = Object.values(p.statuses)
+    .map(
+      (st) =>
+        `<span class="status-chip">${esc(globalThis.MD.STATUS_NAMES[st.id])}${st.turns < 127 ? " · " + Math.max(0, st.turns - 1) : ""}</span>`,
+    )
+    .join("");
   $("bag").innerHTML = Object.entries(ITEMS)
+    .filter(([key]) => bagFilter === "all" || r.bag[key] > 0)
+    .sort((a, b) =>
+      $("bag-sort")?.value === "quantity"
+        ? r.bag[b[0]] - r.bag[a[0]]
+        : a[1].name.localeCompare(b[1].name, "it"),
+    )
     .map(
       ([key, item]) =>
-        `<button data-item="${key}" title="${item.desc}" ${r.bag[key] ? "" : "disabled"}><img class="item-sprite" src="assets/items/${key}.${key === "seed" ? "svg" : "png"}" alt=""><span>${item.name}</span><b>×${r.bag[key]}</b></button>`,
+        `<button data-item="${key}" title="${item.desc}" ${r.bag[key] ? "" : "disabled"}><img class="item-sprite" src="${itemIcon(key)}" alt=""><span>${item.name}<small>${item.desc}</small></span><b>×${r.bag[key]}</b></button>`,
     )
     .join("");
   $("bag")
     .querySelectorAll("button")
     .forEach(
-      (b) => (b.onclick = () => act(() => game.useItem(b.dataset.item))),
+      (b) =>
+        (b.onclick = () => {
+          const key = b.dataset.item;
+          if (preferences.confirmItems)
+            modal(ITEMS[key].name, "<p>" + ITEMS[key].desc + "</p>", [
+              ["Usa", () => act(() => game.useItem(key))],
+              ["Annulla"],
+            ]);
+          else act(() => game.useItem(key));
+        }),
     );
   $("combat-log").innerHTML = r.log
     .slice(0, 12)
@@ -237,12 +294,17 @@ function hud() {
         `<li class="${esc(l.tone)}"><small>${l.turn}</small>${esc(l.text)}</li>`,
     )
     .join("");
-  if (target && !r.enemies.includes(target)) target = null;
-  $("target-label").hidden = !target;
-  if (target)
+  const visibleTarget = target && r.enemies.find((e) => e.uid === target.uid);
+  if (target && !visibleTarget && !playback) target = null;
+  $("target-label").hidden = !visibleTarget;
+  if (visibleTarget)
     $("target-label").textContent =
-      `${target.name} · ${target.hp}/${target.maxHp} PS`;
-  renderer.draw(game, performance.now(), target);
+      `${visibleTarget.name} · Lv ${visibleTarget.level} · ${D.pokemon[visibleTarget.species].types.map((t) => types[t]).join("/")} · ${visibleTarget.hp}/${visibleTarget.maxHp} PS`;
+  renderer.draw(
+    displayGame,
+    playback ? playback.elapsed : performance.now(),
+    target,
+  );
 }
 function act(fn) {
   if (
@@ -253,12 +315,23 @@ function act(fn) {
   )
     return;
   try {
-    const turn = game.run.turn;
+    const before = structuredClone(game.run);
     fn();
-    if (game.run.turn !== turn) renderer.animate(game.events);
     save();
-    hud();
-    stateDialog();
+    if (game.run.turn !== before.turn) {
+      const relevant = game.events.filter(
+        (e) =>
+          e.uid === 0 || e.type === "attack" || game.visible(e.to.x, e.to.y),
+      );
+      playback = new Playback(game, before, relevant, preferences.speed);
+      busy = true;
+      renderer.events = [];
+      document.body.classList.add("playing-action");
+      hud(playback.game);
+    } else {
+      hud();
+      stateDialog();
+    }
   } catch (e) {
     console.error(e);
     modal("La spedizione è in pausa", `<p>${esc(e.message)}</p>`, [["Chiudi"]]);
@@ -329,10 +402,13 @@ function menu() {
       [
         "Riprendi",
         () => {
-          if (view === "expedition") stateDialog();
+          if (view === "expedition" && !busy) stateDialog();
         },
       ],
       ["Campo base", camp],
+      ["Opzioni", optionsMenu],
+      ["Diario completo", journal],
+      ["Schermo intero", fullScreen],
       [
         "Esporta salvataggio",
         () => {
@@ -352,7 +428,112 @@ function menu() {
     ],
   );
 }
+function applyPreferences() {
+  renderer.options = preferences;
+  $("minimap").hidden = !preferences.minimap;
+  try {
+    localStorage.setItem("mystery-depths-options", JSON.stringify(preferences));
+  } catch {}
+}
+function optionsMenu() {
+  const labels = {
+    shake: "Movimento quando si subisce un colpo",
+    sound: "Suoni sintetici",
+    minimap: "Minimappa",
+    numbers: "Numeri dei danni",
+    grid: "Griglia del dungeon",
+    confirmItems: "Conferma prima di usare strumenti",
+    range: "Mostra portata delle mosse",
+  };
+  modal(
+    "Opzioni",
+    `<label>Velocità animazioni <select id="animation-speed">${[
+      [1.4, "Lenta"],
+      [1, "Normale"],
+      [0.65, "Rapida"],
+      [0.35, "Molto rapida"],
+    ]
+      .map(
+        ([v, label]) =>
+          `<option value="${v}" ${v === preferences.speed ? "selected" : ""}>${label}</option>`,
+      )
+      .join("")}</select></label><div class="options-list">${Object.entries(
+      labels,
+    )
+      .map(
+        ([k, label]) =>
+          `<label><input type="checkbox" data-option="${k}" ${preferences[k] ? "checked" : ""}>${label}</label>`,
+      )
+      .join(
+        "",
+      )}</div><p class="muted">Le preferenze di movimento ridotto del dispositivo sono rispettate. La velocità cambia dalla prossima azione.</p>`,
+    [["Chiudi"]],
+  );
+  $("animation-speed").onchange = (e) => {
+    preferences.speed = +e.target.value;
+    applyPreferences();
+  };
+  document.querySelectorAll("[data-option]").forEach(
+    (b) =>
+      (b.onchange = () => {
+        preferences[b.dataset.option] = b.checked;
+        applyPreferences();
+      }),
+  );
+}
+function journal() {
+  modal(
+    "Diario completo",
+    `<ol class="full-log">${(game.run?.log || []).map((l) => `<li><small>${l.turn}</small> ${esc(l.text)}</li>`).join("")}</ol>`,
+    [["Chiudi"]],
+  );
+}
+async function fullScreen() {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else await document.documentElement.requestFullscreen();
+  } catch {
+    toast("Schermo intero non disponibile in questo browser.");
+  }
+}
+let audioContext;
+function soundEffect(e) {
+  if (!preferences.sound || !["attack", "heal", "item"].includes(e?.type))
+    return;
+  try {
+    audioContext ??= new (window.AudioContext || window.webkitAudioContext)();
+    audioContext.resume();
+    const o = audioContext.createOscillator(),
+      g = audioContext.createGain();
+    o.type = "triangle";
+    o.frequency.setValueAtTime(
+      e.type === "attack" ? 230 : 520,
+      audioContext.currentTime,
+    );
+    o.frequency.exponentialRampToValueAtTime(
+      e.type === "attack" ? 90 : 800,
+      audioContext.currentTime + 0.16,
+    );
+    g.gain.setValueAtTime(0.025, audioContext.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
+    o.connect(g).connect(audioContext.destination);
+    o.start();
+    o.stop(audioContext.currentTime + 0.21);
+  } catch {}
+}
+$("bag-filter").onchange = $("bag-sort").onchange = () =>
+  hud(playback?.game || game);
+$("skip-animation").onclick = () => {
+  if (playback) playback.advance(playback.duration);
+};
+$("full-screen").onclick = fullScreen;
+$("journal-button").onclick = journal;
 $("import-file").onchange = async (e) => {
+  if (busy) {
+    toast("Concludi l’animazione prima di importare.");
+    e.target.value = "";
+    return;
+  }
   try {
     const f = e.target.files[0];
     if (!f) return;
@@ -379,13 +560,13 @@ $("home-link").onclick = (e) => {
 $("help-button").onclick = () =>
   modal(
     "Guida alla discesa",
-    "<p>Ogni azione consuma un turno. Muoviti con frecce o WASD; Q, E, Z e C permettono passi diagonali. Tieni premuto Maiusc per orientarti senza muoverti.</p><p>Spazio: attacco normale. Numeri 1–4: mosse. Punto: attendi. Invio: scendi quando sei sulle scale. Fai clic su un nemico per selezionarlo.</p><p>Controlla PS, PP e Pancia. Usa gli strumenti dallo zaino. Ogni cinque piani un guardiano custodisce l’uscita. Dopo ogni piano scegli una ricompensa.</p>",
+    "<p>Ogni azione consuma un turno. Muoviti con frecce o WASD; Q, E, Z e C permettono passi diagonali. Tieni premuto Maiusc per orientarti senza muoverti.</p><p>Spazio: attacco normale. Numeri 1–4: mosse. Punto: attendi. V: orientamento gratuito. Tab: cambia bersaglio. M: minimappa. F: schermo intero. L: diario. B: zaino. Invio: scendi quando sei sulle scale. Fai clic su un nemico per selezionarlo.</p><p>Controlla PS, PP e Pancia. Usa gli strumenti dallo zaino. Ogni cinque piani un guardiano custodisce l’uscita. Dopo ogni piano scegli una ricompensa.</p>",
     [["Ho capito", stateDialog]],
   );
 $("credits-button").onclick = () =>
   modal(
     "Note e crediti",
-    "<p>Progetto personale non ufficiale. Pokémon appartiene ai rispettivi titolari. Sprite e ritratti: collaboratori di SpriteCollab; attribuzioni complete nei file assets/spritebot_credits.txt e assets/tracker.json.</p><p>Icone degli strumenti: PokeAPI/sprites. Semedormita, forziere, dettagli del dungeon ed effetti pixel: grafica originale del progetto. Carattere VT323: Peter Hull, licenza SIL OFL.</p><p>Testi ufficiali italiani estratti da Esploratori del Cielo. Calcolo dei danni: damage-eos. Mappe e progressione roguelite sono originali di questo progetto.</p><p>La riproduzione completa delle regole EoS è ancora in lavorazione: effetti secondari, recupero naturale, esperienza e gestione dei turni richiedono ulteriori verifiche. Le specie successive a EoS usano adattamenti dichiarati.</p>",
+    "<p>Progetto personale non ufficiale. Pokémon appartiene ai rispettivi titolari. Sprite e ritratti: collaboratori di SpriteCollab; attribuzioni complete nei file assets/spritebot_credits.txt e assets/tracker.json.</p><p>Icone degli strumenti: PokeAPI/sprites e PMDCollab/RawAsset. Effetti delle mosse: 25 fogli PMDCollab/RawAsset, con abbinamenti e tempi adattati per questo progetto; fonti in assets/effects/manifest.json. Semedormita, forziere e dettagli del dungeon: grafica originale del progetto. Carattere VT323: Peter Hull, licenza SIL OFL.</p><p>Testi ufficiali italiani estratti da Esploratori del Cielo. Calcolo dei danni: damage-eos. Mappe e progressione roguelite sono originali di questo progetto.</p><p>La riproduzione completa delle regole EoS è ancora in lavorazione: effetti secondari, recupero naturale, esperienza e gestione dei turni richiedono ulteriori verifiche. Le specie successive a EoS usano adattamenti dichiarati.</p>",
     [["Chiudi"]],
   );
 $("stairs-button").onclick = () => act(() => game.stairs());
@@ -433,6 +614,7 @@ function mapPoint(e) {
   };
 }
 $("dungeon").onclick = (e) => {
+  if (busy) return;
   const { x, y } = mapPoint(e),
     p = game.run.player;
   if (facingMode) {
@@ -485,11 +667,40 @@ window.addEventListener("keydown", (e) => {
       z: [-1, 1],
       c: [1, 1],
     };
+  if (k === "v") {
+    e.preventDefault();
+    $("face-button").click();
+    return;
+  }
+  if (k === "m") {
+    preferences.minimap = !preferences.minimap;
+    applyPreferences();
+    return;
+  }
+  if (k === "f") {
+    fullScreen();
+    return;
+  }
+  if (k === "l") {
+    journal();
+    return;
+  }
+  if (k === "b") {
+    $("bag").scrollIntoView({ behavior: "smooth" });
+    return;
+  }
+  if (k === "tab") {
+    e.preventDefault();
+    if (busy) return;
+    const enemies = game.run.enemies.filter((m) => game.visible(m.x, m.y));
+    target = enemies[(enemies.indexOf(target) + 1) % enemies.length] || null;
+    hud();
+    return;
+  }
   if (dirs[k]) {
     e.preventDefault();
     if (e.shiftKey || facingMode) {
-      game.face(game.run.player, ...dirs[k]);
-      save();
+      orient(...dirs[k]);
     } else act(() => game.move(...dirs[k]));
   } else if (/^[1-4]$/.test(k)) {
     e.preventDefault();
@@ -501,7 +712,10 @@ window.addEventListener("keydown", (e) => {
   else if (k === "enter") {
     e.preventDefault();
     act(() => game.stairs());
-  } else if (k === "escape") menu();
+  } else if (k === "escape") {
+    e.preventDefault();
+    menu();
+  }
 });
 $("modal").addEventListener("cancel", (e) => {
   if (
@@ -516,6 +730,7 @@ async function init() {
     [D] = await Promise.all([(await fetch("assets/game/data.json")).json()]);
     const core = await createCore();
     game = new Game(D, core);
+    applyPreferences();
     let stored;
     try {
       stored = localStorage.getItem(KEY);
@@ -546,8 +761,41 @@ async function init() {
     $("loading").hidden = true;
     $("app").hidden = false;
     camp();
+    let previousFrame = performance.now();
     function frame(t) {
-      if (view === "expedition") renderer.draw(game, t, target);
+      const delta = Math.min(80, Math.max(0, t - previousFrame));
+      previousFrame = t;
+      if (playback) {
+        playback.advance(delta, $("modal").open || document.hidden);
+        renderer.events = playback.events;
+        $("action-banner").textContent = playback.current
+          ? (playback.current.actor || "") +
+            " · " +
+            (playback.current.move || "Strumento")
+          : "Turno in corso…";
+        $("action-banner").hidden = false;
+        if (playback.index !== lastVisualEvent) {
+          lastVisualEvent = playback.index;
+          soundEffect(playback.events.at(-1));
+          hud(playback.game);
+        }
+        if (playback.done) {
+          playback = null;
+          busy = false;
+          renderer.events = [];
+          lastVisualEvent = -1;
+          document.body.classList.remove("playing-action");
+          $("action-banner").hidden = true;
+          hud();
+          stateDialog();
+        }
+      }
+      if (view === "expedition")
+        renderer.draw(
+          playback?.game || game,
+          playback ? playback.elapsed : t,
+          target,
+        );
       else if (campRenderer.preview) campRenderer.draw(campRenderer.preview, t);
       requestAnimationFrame(frame);
     }

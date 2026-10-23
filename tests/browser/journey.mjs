@@ -22,6 +22,10 @@ let lastFloor = 0,
   resumed = false,
   permanent = false;
 for (let step = 0; step < 2500; step++) {
+  if (await page.locator("body.playing-action").count()) {
+    await page.locator("#skip-animation").evaluate((button) => button.click());
+    await page.locator("body.playing-action").waitFor({ state: "hidden" });
+  }
   const plan = await page.evaluate(() => {
     const save = JSON.parse(localStorage.getItem("mystery-depths-v3")),
       g = new window.qaGame(window.qaData, {});
@@ -185,6 +189,12 @@ if (reachedBoss) {
       break;
     }
     await page.keyboard.press(".");
+    if (await page.locator("body.playing-action").count()) {
+      await page
+        .locator("#skip-animation")
+        .evaluate((button) => button.click());
+      await page.locator("body.playing-action").waitFor({ state: "hidden" });
+    }
   }
   if (died) {
     await page

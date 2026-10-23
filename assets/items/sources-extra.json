@@ -1,0 +1,42 @@
+[
+  {
+    "path": "assets/items/pecha.png",
+    "url": "https://raw.githubusercontent.com/PokeAPI/sprites/97a7832d307311c0e1c6ea9035308bf80cc94f81/sprites/items/pecha-berry.png",
+    "sha256": "9efb16dc703ef654ce0532329613d51150dcc3c9a77f0101f33d54b15a00028a"
+  },
+  {
+    "path": "assets/items/cheri.png",
+    "url": "https://raw.githubusercontent.com/PokeAPI/sprites/97a7832d307311c0e1c6ea9035308bf80cc94f81/sprites/items/cheri-berry.png",
+    "sha256": "949f8cb36532f09ff97ca41f97db3104abc16c209496181fea38839d79c5ce00"
+  },
+  {
+    "path": "assets/items/rawst.png",
+    "url": "https://raw.githubusercontent.com/PokeAPI/sprites/97a7832d307311c0e1c6ea9035308bf80cc94f81/sprites/items/rawst-berry.png",
+    "sha256": "3c3976d2121647f4c1b19673de8424baa80f59f5d4ea91e447c14fef5da64066"
+  },
+  {
+    "path": "assets/items/sitrus.png",
+    "url": "https://raw.githubusercontent.com/PokeAPI/sprites/97a7832d307311c0e1c6ea9035308bf80cc94f81/sprites/items/sitrus-berry.png",
+    "sha256": "934d9dcfdc189fd01987f1e0356e079cf32d4d3aafac89ca3e77158c8f44c10e"
+  },
+  {
+    "path": "assets/items/healSeed.png",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Seed_Blue.None.png",
+    "sha256": "90512cc3fd2af6526a33c52eb7b6d28f2a619052c8611861920818eed438c6a1"
+  },
+  {
+    "path": "assets/items/lifeSeed.png",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Seed_Red.None.png",
+    "sha256": "e889d25a4c0cdb210a22c551b1f0ee9d683337ac863bbb6d24c552f02ff159b5"
+  },
+  {
+    "path": "assets/items/bigApple.png",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Apple_Red.None.png",
+    "sha256": "c4fe9fd2408eb8cfe43b63587103ad91fc2b0706788ccef1894d2d15b36e94fd"
+  },
+  {
+    "path": "assets/items/hugeApple.png",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Apple_Gold.None.png",
+    "sha256": "e2fcecbfa981bb21ba2d60784c317bf3504e72c9be7ad70bbb1bc9825fa7cf0d"
+  }
+]

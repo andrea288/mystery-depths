@@ -19,7 +19,13 @@
         ><span class="brand-mark">◆</span> MYSTERY <b>DEPTHS</b></a
       ><span class="header-tag">IL RICHIAMO DELLE PROFONDITÀ</span>
       <div class="header-actions">
-        <span id="save-state" aria-live="polite"></span
+        <button
+          id="full-screen"
+          class="icon-button"
+          aria-label="Schermo intero"
+        >
+          ⛶</button
+        ><span id="save-state" aria-live="polite"></span
         ><button
           id="help-button"
           class="icon-button"
@@ -104,6 +110,12 @@
                 tabindex="0"
                 aria-label="Dungeon: frecce o WASD per muoverti, numeri da 1 a 4 per le mosse"
               ></canvas>
+              <div
+                id="action-banner"
+                class="action-banner"
+                role="status"
+                hidden
+              ></div>
               <div class="map-topline">
                 <span id="map-location"></span><span id="turn-label"></span>
               </div>
@@ -127,6 +139,9 @@
               >
             </div>
             <div id="move-bar" class="move-bar"></div>
+            <button id="skip-animation" class="skip-animation">
+              Concludi animazione
+            </button>
             <div class="orientation-controls">
               <button id="face-button" aria-pressed="false">Orienta</button
               ><span id="face-hint"
@@ -206,16 +221,35 @@
           </div>
           <aside class="sidebar">
             <section id="player-card" class="panel"></section>
+            <div id="status-list"></div>
+            <p id="survival-warning" role="status"></p>
             <section class="panel bag-panel">
               <div class="panel-heading">
                 <h3>Zaino</h3>
                 <span>PROVVISTE DI SPEDIZIONE</span>
               </div>
+              <div class="bag-tools">
+                <select id="bag-filter" aria-label="Filtra strumenti">
+                  <option value="owned">Posseduti</option>
+                  <option value="all">Tutti</option></select
+                ><select id="bag-sort" aria-label="Ordina strumenti">
+                  <option value="name">Nome</option>
+                  <option value="quantity">Quantità</option>
+                </select>
+              </div>
+              <span id="bag-count" class="muted"></span>
               <div id="bag"></div>
             </section>
             <section class="panel log-panel">
               <div class="panel-heading">
                 <h3>Diario</h3>
+                <button
+                  id="journal-button"
+                  class="icon-button"
+                  aria-label="Diario completo"
+                >
+                  +
+                </button>
                 <span id="kills-label"></span>
               </div>
               <ol

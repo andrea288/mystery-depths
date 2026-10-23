@@ -12,7 +12,7 @@ Nessun sito è stato pubblicato. Il codice è nel repository
 [`andrea288/mystery-depths`](https://github.com/andrea288/mystery-depths).
 Il proprietario gestisce la visibilità nelle impostazioni GitHub.
 
-Per scaricare solo il gioco pronto all’avvio: [mystery-depths-gioco.zip](downloads/mystery-depths-gioco.zip) (circa 3,6 MB).
+Per scaricare solo il gioco pronto all’avvio: [mystery-depths-gioco.zip](downloads/mystery-depths-gioco.zip) .
 Il repository contiene anche sorgenti, fonti e test.
 
 ## Avvio
@@ -28,6 +28,16 @@ Aprire `http://127.0.0.1:4173`. Il server accetta connessioni solo dalla macchin
 locale. Chiudere con Ctrl+C. Su Windows fare doppio clic su `avvia-windows.bat`;
 su Linux/macOS eseguire `./avvia-linux-mac.sh`. Lo script Windows è predisposto,
 ma non è stato eseguito su una macchina Windows in questa sessione.
+
+## Animazioni e strumenti
+
+Le mosse hanno sequenze più lente e leggibili con anticipazione, effetti e
+risposte nemiche in successione. Sono inclusi 25 fogli di effetti locali e
+12 strumenti. Dal menu Opzioni si possono scegliere quattro velocità,
+minimappa, griglia, numeri dei danni, conferma strumenti e suoni sintetici.
+Le 50 modifiche realizzate sono elencate in
+[MIGLIORAMENTI-50.md](docs/MIGLIORAMENTI-50.md). I tempi sono adattati,
+non identici fotogramma per fotogramma a EoS.
 
 ## Comandi e progressi
 

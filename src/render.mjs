@@ -1,5 +1,24 @@
-import { BIOMES, DIRS } from "./game.mjs";
+import { BIOMES, DIRS, ITEMS, itemIcon } from "./game.mjs";
+import { EFFECTS } from "./presentation.mjs";
 const cache = new Map();
+let effectSheets;
+async function loadEffects() {
+  effectSheets ??= fetch("assets/effects/manifest.json")
+    .then((r) => r.json())
+    .then(async (data) => {
+      const result = {};
+      await Promise.all(
+        Object.entries(data.sheets).map(async ([key, def]) => {
+          const img = new Image();
+          img.src = "assets/effects/" + def.file;
+          await img.decode();
+          result[key] = { ...def, img };
+        }),
+      );
+      return result;
+    });
+  return effectSheets;
+}
 let metadata;
 async function sprite(id) {
   if (cache.has(id)) return cache.get(id);
@@ -33,9 +52,9 @@ export class Renderer {
     this.events = [];
     this.reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
     this.items = new Map();
-    for (const key of ["berry", "ether", "apple", "seed", "chest"]) {
+    for (const key of [...Object.keys(ITEMS), "chest"]) {
       const img = new Image();
-      img.src = `assets/items/${key}.${["seed", "chest"].includes(key) ? "svg" : "png"}`;
+      img.src = itemIcon(key);
       img
         .decode()
         .then(() => this.items.set(key, img))
@@ -45,6 +64,7 @@ export class Renderer {
     this.hitAreas = [];
   }
   async prepare(ids) {
+    this.fx = await loadEffects();
     await Promise.all(
       [...new Set(ids)].map(async (id) => this.art.set(id, await sprite(id))),
     );
@@ -63,21 +83,23 @@ export class Renderer {
       .find(
         (e) =>
           e.uid === mon.uid &&
-          time - e.time < (e.type === "defeat" ? 900 : 350),
+          time - e.time < (e.duration || (e.type === "defeat" ? 900 : 350)),
       );
     if (ev && !this.reducedMotion) {
-      const progress = Math.min(1, (time - ev.time) / 160);
+      const progress = Math.min(1, (time - ev.time) / (ev.duration || 160));
       if (ev.type === "step") {
         x += (ev.from.x - ev.to.x) * 40 * (1 - progress);
         y += (ev.from.y - ev.to.y) * 40 * (1 - progress);
       }
       if (ev.type === "attack") {
         const pulse =
-          Math.sin(Math.min(1, (time - ev.time) / 220) * Math.PI) * 9;
+          Math.sin(
+            Math.min(1, (time - ev.time) / (ev.duration || 220)) * Math.PI,
+          ) * 9;
         x += Math.sign(ev.to.x - ev.from.x) * pulse;
         y += Math.sign(ev.to.y - ev.from.y) * pulse;
       }
-      if (ev.type === "hit")
+      if (ev.type === "hit" && this.options?.shake !== false)
         x += Math.sin((time - ev.time) / 18) * 3 * (1 - progress);
     }
     this.hitAreas.push({ uid: mon.uid, x, y });
@@ -99,7 +121,10 @@ export class Renderer {
     let tick =
         action === "Idle"
           ? Math.floor((time / 1000) * 60) % total
-          : Math.min(total - 1, Math.floor(((time - ev.time) / 1000) * 60)),
+          : Math.min(
+              total - 1,
+              Math.floor(((time - ev.time) / (ev.duration || 350)) * total),
+            ),
       frame = 0;
     while (
       frame < animation.durations.length - 1 &&
@@ -153,10 +178,13 @@ export class Renderer {
     const size = 40,
       b = BIOMES[r.biome];
     const step = this.events.findLast(
-      (e) => e.type === "step" && e.uid === 0 && time - e.time < 160,
+      (e) =>
+        e.type === "step" && e.uid === 0 && time - e.time < (e.duration || 160),
     );
     const follow =
-      step && !this.reducedMotion ? 1 - (time - step.time) / 160 : 0;
+      step && !this.reducedMotion
+        ? 1 - (time - step.time) / (step.duration || 160)
+        : 0;
     const cameraX = r.player.x + (step ? step.from.x - step.to.x : 0) * follow;
     const cameraY = r.player.y + (step ? step.from.y - step.to.y : 0) * follow;
     const ox = Math.round(width / 2 - cameraX * size - size / 2),
@@ -224,6 +252,10 @@ export class Renderer {
             ctx.fillRect(px + 8, py + 26, 2, 5);
             ctx.fillRect(px + 5, py + 28, 2, 3);
           }
+        }
+        if (this.options?.grid) {
+          ctx.strokeStyle = "#ffffff25";
+          ctx.strokeRect(px, py, size, size);
         }
       }
     ctx.globalAlpha = 1;
@@ -315,60 +347,89 @@ export class Renderer {
         );
       }
     }
-    if (!this.reducedMotion)
-      for (const ev of this.events) {
-        const age = time - ev.time;
-        if (
-          age < 0 ||
-          age > 420 ||
-          !["attack", "hit", "heal"].includes(ev.type)
-        )
-          continue;
-        const p = point(ev.to),
-          from = point(ev.from),
-          t = age / 420;
-        const colors = {
-          fire: "#ffc15e",
-          water: "#86d8ff",
-          grass: "#b4e989",
-          electric: "#fff28c",
-          ice: "#c3fcff",
-          poison: "#dc9ce7",
-          ghost: "#ad9cf1",
-          normal: "#fff0c4",
-        };
-        ctx.globalAlpha = 1 - t;
-        ctx.fillStyle =
-          ev.type === "heal" ? "#b6f5a1" : colors[ev.element] || "#ffe9a9";
-        if (
-          ev.type === "attack" &&
-          Math.max(
-            Math.abs(ev.to.x - ev.from.x),
-            Math.abs(ev.to.y - ev.from.y),
-          ) > 1
-        ) {
-          const travel = Math.min(1, t * 2.5);
-          ctx.fillRect(
-            Math.round(from.x + (p.x - from.x) * travel) - 4,
-            Math.round(from.y + (p.y - from.y) * travel) - 4,
-            8,
-            8,
-          );
-        } else
-          for (let i = 0; i < 8; i++) {
-            const angle = (i * Math.PI) / 4,
-              radius = 5 + t * 27;
-            const x = Math.round(p.x + Math.cos(angle) * radius),
-              y = Math.round(p.y - 8 + Math.sin(angle) * radius);
-            ctx.fillRect(x, y, i % 2 ? 3 : 5, i % 2 ? 3 : 5);
-          }
+    for (const ev of this.events) {
+      const duration = ev.duration || 1100,
+        age = time - ev.time;
+      if (
+        age < 0 ||
+        age > duration ||
+        !["attack", "heal", "item"].includes(ev.type)
+      )
+        continue;
+      const t = age / duration,
+        p = point(ev.to),
+        a = point(ev.from);
+      let [key, kind] = EFFECTS[ev.slug] || ["Hit_Neutral", "impact"];
+      if (ev.type === "heal" || ev.type === "item") {
+        key = "Healing_Wish_Hit";
+        kind = "impact";
       }
+      const sheet = this.fx?.[key];
+      if (!sheet) continue;
+      if (t < 0.2 && ev.type === "attack") {
+        ctx.strokeStyle = "#ffe8aa";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(a.x - 18, a.y - 22, 36, 36);
+        continue;
+      }
+      let x = p.x,
+        y = p.y,
+        scale = 2;
+      const phase = Math.max(0, Math.min(1, (t - 0.2) / 0.8));
+      if (kind === "projectile") {
+        const travel = Math.min(1, phase / 0.6);
+        x = a.x + (p.x - a.x) * travel;
+        y = a.y + (p.y - a.y) * travel;
+      }
+      if (kind === "drain") {
+        x = p.x + (a.x - p.x) * phase;
+        y = p.y + (a.y - p.y) * phase;
+      }
+      const frame = this.reducedMotion
+        ? Math.min(2, sheet.frames - 1)
+        : Math.min(sheet.frames - 1, Math.floor(phase * sheet.frames));
+      const draw = (x, y, s = scale) =>
+        ctx.drawImage(
+          sheet.img,
+          frame * sheet.size,
+          0,
+          sheet.size,
+          sheet.size,
+          Math.round(x - (sheet.size * s) / 2),
+          Math.round(y - (sheet.size * s) / 2 - 8),
+          sheet.size * s,
+          sheet.size * s,
+        );
+      ctx.globalAlpha = this.reducedMotion ? 0.65 : 1;
+      if (kind === "beam") {
+        const distance = Math.hypot(p.x - a.x, p.y - a.y),
+          count = Math.max(1, Math.ceil(distance / 22));
+        for (
+          let i = 1;
+          i <= Math.max(1, Math.ceil(count * Math.min(1, phase * 2)));
+          i++
+        )
+          draw(
+            a.x + ((p.x - a.x) * i) / count,
+            a.y + ((p.y - a.y) * i) / count,
+            1.5,
+          );
+      } else if (kind === "room") {
+        for (let i = -1; i <= 1; i++)
+          for (let j = -1; j <= 1; j++) draw(p.x + i * 32, p.y + j * 32, 1.5);
+      } else draw(x, y);
+    }
     ctx.globalAlpha = 1;
     ctx.font = "24px Pixel, monospace";
     ctx.textAlign = "center";
     for (const ev of this.events) {
       const age = time - ev.time;
-      if (age > 800 || !["hit", "heal", "text"].includes(ev.type)) continue;
+      if (
+        age > 800 ||
+        this.options?.numbers === false ||
+        !["hit", "heal", "text"].includes(ev.type)
+      )
+        continue;
       const p = point(ev.to);
       ctx.globalAlpha = 1 - age / 800;
       ctx.fillStyle = ev.type === "heal" ? "#a4e4aa" : "#fff0d4";
@@ -380,10 +441,14 @@ export class Renderer {
     }
     ctx.globalAlpha = 1;
     for (const ev of this.events.filter(
-      (e) => e.type === "defeat" && e.uid !== 0 && e.mon && time - e.time < 900,
+      (e) =>
+        e.type === "defeat" &&
+        e.uid !== 0 &&
+        e.mon &&
+        time - e.time < (e.duration || 900),
     )) {
       const p = point(ev.to);
-      ctx.globalAlpha = 1 - (time - ev.time) / 900;
+      ctx.globalAlpha = 1 - (time - ev.time) / (ev.duration || 900);
       this.mon(ev.mon, p.x, p.y, time);
       ctx.globalAlpha = 1;
     }
