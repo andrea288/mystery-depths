@@ -1,8 +1,8 @@
 {
-  "species": 50,
-  "filesVerified": 922,
-  "pngDecoded": 770,
-  "eightDirectionWalkSheets": 50,
+  "species": 128,
+  "filesVerified": 2209,
+  "pngDecoded": 1823,
+  "eightDirectionWalkSheets": 128,
   "animationTimingComparedToOriginal": false,
   "browserRenderingScope": "separate tests/browser suite"
 }

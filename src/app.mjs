@@ -1,8 +1,10 @@
-import { Game, TYPE_NAMES } from "./team.mjs";
+import { TYPE_NAMES } from "./team.mjs";
+import { Game, DIFFICULTIES, TACTICS, WEATHER, GEAR } from "./adventure.mjs";
 import { ITEMS, BIOMES, itemIcon } from "./game.mjs";
 import { Renderer } from "./render.mjs";
 import { Playback } from "./presentation.mjs";
 import createCore from "../assets/wasm/eos-core.mjs";
+let chosenDifficulty = "normal";
 let playback = null,
   lastVisualEvent = -1;
 const preferenceDefaults = {
@@ -171,6 +173,40 @@ function renderCamp() {
             : loadout.filter((x) => x !== n);
         }),
     );
+  $("start-button").insertAdjacentHTML(
+    "beforebegin",
+    `<label>Difficoltà <select id="run-difficulty">${Object.entries(
+      DIFFICULTIES,
+    )
+      .map(
+        ([key, d]) =>
+          `<option value="${key}" ${key === chosenDifficulty ? "selected" : ""}>${d.name}</option>`,
+      )
+      .join(
+        "",
+      )}</select></label><details class="challenge-import"><summary>Gioca una sfida condivisa</summary><input id="challenge-code" placeholder="Codice MD2:…" aria-label="Codice sfida"><button id="load-challenge">Avvia sfida</button></details>`,
+  );
+  $("run-difficulty").onchange = (e) => (chosenDifficulty = e.target.value);
+  $("load-challenge").onclick = () => {
+    const code = $("challenge-code").value.trim();
+    const launch = () => {
+      try {
+        game.startChallenge(code);
+        target = null;
+        save();
+        expedition();
+      } catch (e) {
+        toast(e.message);
+      }
+    };
+    if (game.run?.state === "playing")
+      modal(
+        "Avviare una nuova sfida?",
+        "<p>La spedizione attuale terminerà.</p>",
+        [["Avvia", launch], ["Annulla"]],
+      );
+    else launch();
+  };
   $("start-button").onclick = () => {
     const value = $("seed-input").value;
     const seed =
@@ -182,7 +218,7 @@ function renderCamp() {
       return;
     }
     const start = () => {
-      game.start(selected, seed, loadout);
+      game.start(selected, seed, loadout, { difficulty: chosenDifficulty });
       target = null;
       save();
       expedition();
@@ -238,6 +274,7 @@ function hud(displayGame = game) {
     ? displayGame.active().find((m) => m.uid === commandUid) || p
     : p;
   teamHud(displayGame);
+  adventureHud(displayGame);
   $("move-bar").innerHTML = Array.from({ length: 4 }, (_, i) => {
     const s = acting.moves[i],
       m = s && D.moves[s.id];
@@ -246,15 +283,10 @@ function hud(displayGame = game) {
   $("move-bar")
     .querySelectorAll("button")
     .forEach((b) => {
-      b.onclick = () => {
-        if (tactical()) {
-          commandMode = +b.dataset.move;
-          hud();
-        } else act(() => game.useMove(+b.dataset.move, target));
-      };
+      b.onclick = () => selectMove(+b.dataset.move);
       b.onmouseenter = b.onfocus = () => {
         renderer.rangeMove = preferences.range
-          ? D.moves[p.moves[+b.dataset.move]?.id]
+          ? D.moves[acting.moves[+b.dataset.move]?.id]
           : null;
       };
       b.onmouseleave = b.onblur = () => (renderer.rangeMove = null);
@@ -289,18 +321,7 @@ function hud(displayGame = game) {
     .join("");
   $("bag")
     .querySelectorAll("button")
-    .forEach(
-      (b) =>
-        (b.onclick = () => {
-          const key = b.dataset.item;
-          if (preferences.confirmItems)
-            modal(ITEMS[key].name, "<p>" + ITEMS[key].desc + "</p>", [
-              ["Usa", () => act(() => game.useItem(key))],
-              ["Annulla"],
-            ]);
-          else act(() => game.useItem(key));
-        }),
-    );
+    .forEach((b) => (b.onclick = () => useBagItem(b.dataset.item)));
   $("combat-log").innerHTML = r.log
     .slice(0, 12)
     .map(
@@ -331,6 +352,9 @@ function act(fn) {
   try {
     const before = structuredClone(game.run);
     fn();
+    renderer
+      .prepare([...game.members(), ...game.run.enemies].map((m) => m.species))
+      .catch(console.error);
     save();
     if (game.run.turn !== before.turn) {
       const relevant = game.events.filter(
@@ -470,6 +494,324 @@ function teamHud(displayGame) {
   if ($("resolve-orders"))
     $("resolve-orders").onclick = () => act(() => game.resolveOrders());
 }
+function adventureHud(displayGame) {
+  const r = displayGame.run,
+    a = r.adventure;
+  if (!a) return;
+  const near = displayGame.siteNearby(),
+    idx = near ? a.sites.indexOf(near) : -1;
+  const labels = {
+    treasure: "Apri il tesoro",
+    rest: "Riposa",
+    merchant: "Parla al mercante",
+    trial: "Accetta la sfida",
+    rescue: "Soccorri " + (near ? D.pokemon[near.species]?.name : ""),
+  };
+  $("adventure-bar").innerHTML =
+    `<span>${WEATHER[a.weather]} · ${DIFFICULTIES[a.difficulty].name} · <b>${a.coins} monete</b></span><button id="discovery-button">Scoperte</button><button id="challenge-button">Codice sfida</button>${near ? `<button id="site-button">${esc(labels[near.kind])}</button>` : ""}`;
+  $("discovery-button").onclick = discoveryMenu;
+  $("challenge-button").onclick = challengeMenu;
+  if ($("site-button")) $("site-button").onclick = () => siteMenu(idx);
+  renderer.orderMove =
+    tactical() && typeof commandMode === "number"
+      ? D.moves[commanded().moves[commandMode]?.id]
+      : null;
+  if (r.tactics?.phase === "plan") {
+    const intent = a.bossIntent;
+    const text = intent
+      ? `Guardiano · fase ${a.bossPhase}: ${intent.kind === "move" ? "si sposterà sulle caselle blu" : (intent.move ? D.moves[intent.move].name : "Attacco") + " sulle caselle rosse"}.`
+      : "";
+    $("tactics-panel").insertAdjacentHTML(
+      "beforeend",
+      `<p class="boss-intent">${esc(text)}</p>${game.orderPreview().some((o) => o.conflict) ? '<p class="danger">Conflitto negli ordini: controlla le caselle arancioni.</p>' : ""}`,
+    );
+    if (game.orderPreview().some((o) => o.conflict))
+      $("resolve-orders").disabled = true;
+  }
+}
+function useBagItem(key) {
+  if (busy) return;
+  const consume = (uid) => {
+    const go = () => act(() => game.useItemOn(key, uid));
+    if (preferences.confirmItems)
+      modal(ITEMS[key].name, `<p>${esc(ITEMS[key].desc)}</p>`, [
+        ["Usa", go],
+        ["Annulla"],
+      ]);
+    else go();
+  };
+  if (["apple", "bigApple", "hugeApple", "seed"].includes(key)) {
+    consume(0);
+    return;
+  }
+  modal(
+    "Chi usa " + ITEMS[key].name + "?",
+    "<p>Scegli un Pokémon della squadra. Durante un boss lo strumento occupa l’ordine dello starter.</p>",
+    [
+      ...game
+        .members()
+        .filter((m) => m.hp > 0)
+        .map((m) => [
+          `${m.name} · ${m.hp}/${m.maxHp} PS`,
+          () => consume(m.uid),
+        ]),
+      ["Annulla"],
+    ],
+  );
+}
+function selectMove(slot) {
+  if (busy) return;
+  const actor = tactical() ? commanded() : game.run.player,
+    move = D.moves[actor.moves[slot]?.id];
+  if (!move) return;
+  if (
+    move.damageClass === "status" &&
+    ["heal", "protect", "atk", "def", "spd"].includes(move.statusEffect)
+  ) {
+    modal(
+      move.name,
+      "<p>Scegli il bersaglio alleato entro quattro caselle.</p>",
+      [
+        ...game
+          .active()
+          .filter(
+            (m) =>
+              Math.max(Math.abs(m.x - actor.x), Math.abs(m.y - actor.y)) <= 4,
+          )
+          .map((m) => [
+            m.name,
+            () =>
+              tactical()
+                ? sendOrder({ type: "moveAttack", slot, targetUid: m.uid })
+                : act(() => game.useMove(slot, m)),
+          ]),
+        ["Annulla"],
+      ],
+    );
+    return;
+  }
+  if (tactical()) {
+    commandMode = slot;
+    hud();
+  } else act(() => game.useMove(slot, target));
+}
+function memberMenu(uid) {
+  if (busy) return;
+  const m = game.members().find((m) => m.uid === uid);
+  if (!m) return;
+  const locked = !!game.run.tactics && game.run.tactics.phase !== "won";
+  const moves = game.availableMoves(m);
+  modal(
+    m.name + " · gestione",
+    `<p>Lv ${m.level} · ${m.hp}/${m.maxHp} PS · ${m.uid === 0 ? game.run.xp : m.teamXp} PE · ${m.bond} legame</p><p>Abilità: ${D.pokemon[
+      m.species
+    ].abilities
+      .filter((a) => a !== "Unknown")
+      .map((a) => esc(game.abilityName(a)))
+      .join(
+        " / ",
+      )}${m.copiedAbility ? " · Traccia: " + esc(game.abilityName(m.copiedAbility)) : ""}</p><label>Tattica nei piani normali <select id="member-tactic">${Object.entries(
+      TACTICS,
+    )
+      .map(
+        ([key, name]) =>
+          `<option value="${key}" ${m.tactic === key ? "selected" : ""}>${name}</option>`,
+      )
+      .join(
+        "",
+      )}</select></label><h3>Mosse equipaggiate</h3><p>Disattiva una mossa per impedire all’IA di usarla. Cambiare mossa conserva i PP rimasti; l’equipaggiamento si modifica fuori dalle battaglie boss.</p><div class="member-moves">${Array.from(
+      { length: 4 },
+      (_, slot) => {
+        const s = m.moves[slot];
+        return `<label>Slot ${slot + 1}<select data-move-slot="${slot}" ${locked ? "disabled" : ""}><option value="">${s ? "Sostituisci " + D.moves[s.id].name : "Slot libero"}</option>${moves
+          .filter((id) => !m.moves.some((x) => x.id === id))
+          .map(
+            (id) => `<option value="${id}">${esc(D.moves[id].name)}</option>`,
+          )
+          .join(
+            "",
+          )}</select>${s ? `<button data-auto-move="${s.id}">${m.disabledMoves.includes(s.id) ? "IA: disattivata" : "IA: attiva"} · ${s.pp}/${D.moves[s.id].pp} PP</button>` : ""}</label>`;
+      },
+    ).join(
+      "",
+    )}</div><h3>Strumento tenuto</h3>${m.held ? `<img class="gear-sprite" src="assets/items/gear/${m.held}.png" alt="">` : ""}<select id="held-gear" ${locked ? "disabled" : ""}><option value="">Nessuno</option>${Object.keys(
+      GEAR,
+    )
+      .filter(
+        (k) =>
+          !GEAR[k].evolution &&
+          (game.run.adventure.gear[k] > 0 || m.held === k),
+      )
+      .map(
+        (k) =>
+          `<option value="${k}" ${m.held === k ? "selected" : ""}>${esc(game.gearName(k))} · ${GEAR[k].desc}</option>`,
+      )
+      .join("")}</select><h3>Evoluzione</h3>${
+      game
+        .evolutionOptions(uid)
+        .map(
+          (e) =>
+            `<button data-evolve="${e.to}" ${!e.ready || locked ? "disabled" : ""}>${esc(D.pokemon[e.to].name)} · Lv ${e.level}${e.item ? " · " + esc(game.gearName(e.item)) : ""}${e.bond ? " · " + e.bond + " legame" : ""}</button>`,
+        )
+        .join("") || "<p>Questa forma non ha altre evoluzioni disponibili.</p>"
+    }<p>Puoi mantenere la forma attuale: l’evoluzione non è automatica.</p>`,
+    [["Torna alla squadra", teamMenu], ["Chiudi"]],
+  );
+  $("member-tactic").onchange = (e) => {
+    game.setTactic(uid, e.target.value);
+    save();
+  };
+  document.querySelectorAll("[data-move-slot]").forEach(
+    (b) =>
+      (b.onchange = () => {
+        if (b.value) {
+          game.equipMove(uid, +b.dataset.moveSlot, +b.value);
+          save();
+          memberMenu(uid);
+        }
+      }),
+  );
+  document.querySelectorAll("[data-auto-move]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        game.toggleMove(uid, +b.dataset.autoMove);
+        save();
+        memberMenu(uid);
+      }),
+  );
+  $("held-gear").onchange = (e) => {
+    game.equipGear(uid, e.target.value || null);
+    save();
+    memberMenu(uid);
+  };
+  document.querySelectorAll("[data-evolve]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        modal(
+          "Evolvere " + m.name + "?",
+          `<p>Diventerà ${esc(D.pokemon[b.dataset.evolve].name)}. Il suo posto nella squadra resta lo stesso.</p>`,
+          [
+            [
+              "Evolvi",
+              async () => {
+                if (game.evolve(uid, +b.dataset.evolve)) {
+                  save();
+                  await renderer.prepare(game.members().map((x) => x.species));
+                  hud();
+                }
+                memberMenu(uid);
+              },
+            ],
+            ["Mantieni la forma", () => memberMenu(uid)],
+          ],
+        );
+      }),
+  );
+}
+function discoveryMenu() {
+  const d = game.meta.discoveries;
+  modal(
+    "Registro delle scoperte",
+    `<p>${d.species.length}/${Object.keys(D.pokemon).length} Pokémon incontrati · ${game.starterIds().length} starter disponibili · ${d.bosses.length}/18 tipi di guardiani sconfitti</p><details open><summary>Pokémon incontrati</summary><div class="discovery-grid">${d.species.map((id) => `<article><img src="assets/portraits/${id}.png" alt=""><span>${esc(D.pokemon[id].name)}</span><small>${game.starterIds().includes(id) ? "Starter disponibile" : "Incontrato"}</small></article>`).join("")}</div></details><details><summary>Strumenti scoperti (${d.items.length})</summary><p>${d.items.map((k) => esc(ITEMS[k]?.name || game.gearName(k))).join(" · ") || "Nessuno"}</p></details><details><summary>Guardiani sconfitti</summary><p>${d.bosses.map((k) => TYPE_NAMES[k]).join(" · ") || "Nessuno"}</p></details>`,
+    [["Chiudi"]],
+  );
+}
+function challengeMenu() {
+  if (!game.run) return;
+  modal(
+    "Sfida con seed",
+    `<p>Condividi questo codice per ricreare starter, mosse iniziali, difficoltà e mappa nella stessa versione del gioco.</p><textarea id="share-code" readonly>${esc(game.exportChallenge())}</textarea><button id="copy-challenge">Copia codice</button><h3>Record delle sfide su questo dispositivo</h3>${game.meta.challengeRecords.map((r) => `<p>Piano ${r.floor} · ${r.turn} turni<br><small>${esc(r.code)}</small></p>`).join("") || "<p>Completa una sfida per registrare un risultato.</p>"}`,
+    [["Chiudi"]],
+  );
+  $("copy-challenge").onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(game.exportChallenge());
+      toast("Codice copiato.");
+    } catch {
+      $("share-code").select();
+      toast("Seleziona e copia il codice.");
+    }
+  };
+}
+function siteMenu(index) {
+  if (busy) return;
+  const s = game.run.adventure.sites[index];
+  if (!s) return;
+  if (s.kind === "merchant") {
+    merchantMenu(index);
+    return;
+  }
+  const titles = {
+    treasure: "Scrigno del tesoro",
+    rest: "Punto di ristoro",
+    trial: "Sfida facoltativa",
+    rescue: "Un Pokémon in difficoltà",
+  };
+  const descriptions = {
+    treasure: "Apri lo scrigno per ottenere monete e uno strumento.",
+    rest: "Recupera PS, PP e Pancia. Il ristoro può essere usato una sola volta.",
+    trial:
+      "Affronta due avversari più forti. Vincendo ottieni 80 monete. Puoi proseguire senza accettare.",
+    rescue:
+      D.pokemon[s.species]?.name +
+      " può unirsi alla squadra senza essere mandato KO.",
+  };
+  if (s.kind === "rescue" && game.run.companions.length >= 5) {
+    modal(
+      titles.rescue,
+      `<p>${esc(descriptions.rescue)} La squadra è al completo: scegli il compagno da sostituire. Lo starter resta in squadra; la sostituzione costa un turno a tutti.</p>`,
+      [
+        ...game.run.companions.map((m) => [
+          "Sostituisci " + m.name,
+          () => act(() => game.interact(index, m.uid)),
+        ]),
+        ["Lascia stare"],
+      ],
+    );
+    return;
+  }
+  modal(
+    titles[s.kind],
+    `<p>${esc(descriptions[s.kind])}</p><p>L’interazione consuma un turno.</p>`,
+    [["Conferma", () => act(() => game.interact(index))], ["Lascia stare"]],
+  );
+}
+function merchantMenu(index) {
+  const s = game.run.adventure.sites[index],
+    a = game.run.adventure;
+  modal(
+    "Mercante del dungeon",
+    `<p>Hai ${a.coins} monete. Gli acquisti non consumano turni.</p><h3>Acquista</h3><div class="shop-grid">${s.stock.map((i) => `<button data-buy="${i.key}" ${i.left < 1 || a.coins < i.price ? "disabled" : ""}>${GEAR[i.key] ? `<img class="gear-sprite" src="assets/items/gear/${i.key}.png" alt="">` : ""}${esc(ITEMS[i.key]?.name || game.gearName(i.key))}<small>${i.price} monete · ${i.left} disponibili</small></button>`).join("")}</div><h3>Vendi</h3><div class="shop-grid">${Object.entries(
+      { ...game.run.bag, ...a.gear },
+    )
+      .filter(([k, n]) => n > 0)
+      .map(
+        ([k, n]) =>
+          `<button data-sell="${k}">${esc(ITEMS[k]?.name || game.gearName(k))} ×${n}</button>`,
+      )
+      .join("")}</div>`,
+    [["Chiudi"]],
+  );
+  document.querySelectorAll("[data-buy]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        game.buy(index, b.dataset.buy);
+        save();
+        hud();
+        merchantMenu(index);
+      }),
+  );
+  document.querySelectorAll("[data-sell]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        game.sell(index, b.dataset.sell);
+        save();
+        hud();
+        merchantMenu(index);
+      }),
+  );
+}
+
 function teamMenu() {
   if (busy) return;
   const r = game.run;
@@ -479,11 +821,14 @@ function teamMenu() {
       .members()
       .map(
         (m) =>
-          `<article><img src="assets/portraits/${m.species}.png" alt=""><strong>${esc(m.name)}${m.uid === 0 ? " ★" : ""}</strong><span>Lv ${m.level} · ${m.hp}/${m.maxHp} PS · ${m.uid === 0 || m.active ? "In campo" : "Riserva"}</span>${m.uid !== 0 && m.active ? `<button data-withdraw="${m.uid}">Ritira · 1 turno</button>` : ""}${m.uid !== 0 && !m.active && m.hp > 0 ? `<button data-bring="${m.uid}">Schiera · 1 turno</button>` : ""}</article>`,
+          `<article><img src="assets/portraits/${m.species}.png" alt=""><strong>${esc(m.name)}${m.uid === 0 ? " ★" : ""}</strong><span>Lv ${m.level} · ${m.hp}/${m.maxHp} PS · ${m.uid === 0 || m.active ? "In campo" : "Riserva"}</span><button data-manage-member="${m.uid}">Mosse, tattica ed evoluzione</button>${m.uid !== 0 && m.active ? `<button data-withdraw="${m.uid}">Ritira · 1 turno</button>` : ""}${m.uid !== 0 && !m.active && m.hp > 0 ? `<button data-bring="${m.uid}">Schiera · 1 turno</button>` : ""}</article>`,
       )
       .join("")}</div>`,
     [["Chiudi"]],
   );
+  document
+    .querySelectorAll("[data-manage-member]")
+    .forEach((b) => (b.onclick = () => memberMenu(+b.dataset.manageMember)));
   document.querySelectorAll("[data-withdraw]").forEach(
     (b) =>
       (b.onclick = () => {
@@ -577,7 +922,7 @@ function stateDialog() {
   if (r.state === "reward") {
     modal(
       "Un passo più in profondità",
-      `<p>Piano ${r.floor} completato. Scegli una ricompensa.</p><div class="reward-grid">${r.reward.map((v, i) => `<button data-reward="${i}"><span>${v.kind === "move" ? "MOSSA PERMANENTE" : "PROVVISTE"}</span><h3>${esc(v.name)}</h3><p>${esc(v.desc)}</p></button>`).join("")}</div>`,
+      `<p>Piano ${r.floor} completato. Prossimo piano: ${game.weatherPreview()}. Scegli una ricompensa.</p><div class="reward-grid">${r.reward.map((v, i) => `<button data-reward="${i}"><span>${v.kind === "move" ? "MOSSA PERMANENTE" : "PROVVISTE"}</span><h3>${esc(v.name)}</h3><p>${esc(v.desc)}</p></button>`).join("")}</div>`,
     );
     $("modal-content")
       .querySelectorAll("[data-reward]")
@@ -990,7 +1335,7 @@ window.addEventListener("keydown", (e) => {
     } else act(() => game.move(...dirs[k]));
   } else if (/^[1-4]$/.test(k)) {
     e.preventDefault();
-    act(() => game.useMove(+k - 1, target));
+    selectMove(+k - 1);
   } else if (k === " ") {
     e.preventDefault();
     act(() => game.regularAttack());

@@ -1,3 +1,4 @@
+import { drawAdventure } from "./adventure-render.mjs";
 import { BIOMES, DIRS, ITEMS, itemIcon } from "./game.mjs";
 import { EFFECTS } from "./presentation.mjs";
 const cache = new Map();
@@ -313,6 +314,11 @@ export class Renderer {
       ctx.fillStyle = "#ffe198";
       ctx.fillRect(mark.x - 3, mark.y - 3, 6, 6);
     }
+    drawAdventure(ctx, game, point, size, time, {
+      move: this.rangeMove || this.orderMove,
+      actor: this.commandUid ?? 0,
+      reducedMotion: this.reducedMotion,
+    });
     const ex = point(r.exit);
     if (r.seen[r.exit.y][r.exit.x]) {
       ctx.fillStyle = "#e6c889";

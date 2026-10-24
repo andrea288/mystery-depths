@@ -40,11 +40,18 @@ la spedizione. I Pokémon reclutati si sbloccano anche come starter.
 Ci sono 18 guardiani e biomi legati ai tipi, inclusa un'estensione Folletto.
 [Guida completa a squadra, comandi e regole](docs/SQUADRA-E-GUARDIANI.md).
 
+## Espansione: 20 aggiunte
+
+128 specie, evoluzioni facoltative, esperienza condivisa, tattiche degli alleati,
+strumenti tenuti, cure mirate, anteprime e fasi dei boss, meteo, terreni, stanze
+speciali, mercanti, soccorsi, scoperte persistenti e sfide con seed condivisibile.
+[Elenco delle 20 funzionalità, comandi e limiti](docs/MIGLIORAMENTI-20.md).
+
 ## Animazioni e strumenti
 
-Le 47 mosse disponibili hanno sequenze più lente e leggibili con anticipazione, effetti e
+Le 57 mosse disponibili hanno sequenze più lente e leggibili con anticipazione, effetti e
 risposte nemiche in successione. Sono inclusi 25 fogli di effetti locali e
-12 strumenti. Dal menu Opzioni si possono scegliere quattro velocità,
+12 consumabili e 13 nuovi accessori/strumenti evolutivi. Dal menu Opzioni si possono scegliere quattro velocità,
 minimappa, griglia, numeri dei danni, conferma strumenti e suoni sintetici.
 Le 50 modifiche realizzate sono elencate in
 [MIGLIORAMENTI-50.md](docs/MIGLIORAMENTI-50.md). I tempi sono adattati,

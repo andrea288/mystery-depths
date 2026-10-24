@@ -10,9 +10,12 @@ assert not manifest["failures"], manifest["failures"]
 assert len(manifest["species"]) == 29
 assert len({s["dex"] for s in manifest["species"]}) == 29
 manifest["species"] += json.loads((ROOT / "data/assets-extra.json").read_text())
-assert len(manifest["species"]) == 50
+runtime = json.loads((ROOT / "assets/game/data.json").read_text())
+assert {s["dex"] for s in manifest["species"]} == {int(k) for k in runtime["pokemon"]}
+assert len({s["dex"] for s in manifest["species"]}) == len(manifest["species"])
+count = len(manifest["species"])
 checked, png_count = 0, 0
-sheet = Image.new("RGB", (7 * 180, 8 * 140), "#101b24")
+sheet = Image.new("RGB", (7 * 180, ((count + 6) // 7) * 140), "#101b24")
 draw = ImageDraw.Draw(sheet)
 for index, species in enumerate(manifest["species"]):
     for entry in species["files"]:
@@ -40,13 +43,13 @@ for index, species in enumerate(manifest["species"]):
         frame.thumbnail((76, 80), Image.Resampling.NEAREST)
         sheet.paste(frame, (x + 94, y + 12), frame)
     draw.text((x + 4, y + 98), species["name"], fill="white")
-    draw.text((x + 4, y + 116), species["region"], fill="#8bc9ad")
+    draw.text((x + 4, y + 116), (species["region"] or "Speciali"), fill="#8bc9ad")
 for entry in manifest["commonFiles"]:
     assert hashlib.sha256((ROOT / entry["path"]).read_bytes()).hexdigest() == entry["sha256"]
     checked += 1
 sheet.save(ROOT / "test-results/assets-contact-sheet.png")
-report = {"species": 50, "filesVerified": checked, "pngDecoded": png_count,
-          "eightDirectionWalkSheets": 50,
+report = {"species": count, "filesVerified": checked, "pngDecoded": png_count,
+          "eightDirectionWalkSheets": count,
           "animationTimingComparedToOriginal": False,
           "browserRenderingScope": "separate tests/browser suite"}
 (ROOT / "test-results/assets-verification.json").write_text(json.dumps(report, indent=2) + "\n")

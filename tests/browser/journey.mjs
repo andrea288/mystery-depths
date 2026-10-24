@@ -10,12 +10,13 @@ page.on("pageerror", (e) => errors.push(e.message));
 await page.goto(process.env.GAME_URL || "http://127.0.0.1:4173");
 await page.locator('[data-starter="4"]').click();
 await page.locator("#seed-input").fill("314159");
+await page.locator("#run-difficulty").selectOption("relaxed");
 await page.locator("#start-button").click();
 await page.locator("#player-card h3").waitFor();
 // Read-only copy of each autosave is used to choose legal keyboard actions.
 await page.evaluate(async () => {
   window.qaData = await (await fetch("assets/game/data.json")).json();
-  window.qaGame = (await import("./src/team.mjs")).Game;
+  window.qaGame = (await import("./src/adventure.mjs")).Game;
   window.qaCore = await (await import("./assets/wasm/eos-core.mjs")).default();
 });
 const records = [];
@@ -80,8 +81,10 @@ for (let step = 0; step < 2500; step++) {
     });
     for (const order of orders) {
       await page.locator(`[data-command="${order.uid}"]`).click();
-      if (order.item) await page.locator(`[data-item="${order.item}"]`).click();
-      else if (order.wait) await page.locator("#order-wait").click();
+      if (order.item) {
+        await page.locator(`[data-item="${order.item}"]`).click();
+        await page.getByRole("button", { name: /^Charmander ·/ }).click();
+      } else if (order.wait) await page.locator("#order-wait").click();
       else {
         if (order.slot !== undefined)
           await page.locator(`[data-move="${order.slot}"]`).click();
@@ -99,6 +102,24 @@ for (let step = 0; step < 2500; step++) {
           }[[order.dx, order.dy].join(",")],
         );
       }
+    }
+    // The new preview rejects colliding destinations; correct them through the UI.
+    for (
+      let attempt = 0;
+      attempt < 3 && !(await page.locator("#resolve-orders").isEnabled());
+      attempt++
+    ) {
+      const uid = await page.evaluate(() => {
+        const g = new window.qaGame(window.qaData, window.qaCore);
+        g.restore(JSON.parse(localStorage.getItem("mystery-depths-v3")));
+        return g
+          .orderPreview()
+          .filter((o) => o.conflict)
+          .sort((a, b) => b.uid - a.uid)[0]?.uid;
+      });
+      if (uid === undefined) throw Error("Ordine mancante senza conflitto");
+      await page.locator(`[data-command="${uid}"]`).click();
+      await page.locator("#order-wait").click();
     }
     await page.locator("#resolve-orders").click();
     continue;
@@ -229,7 +250,7 @@ for (let step = 0; step < 2500; step++) {
       await page.locator("#player-card h3").waitFor();
       await page.evaluate(async () => {
         window.qaData = await (await fetch("assets/game/data.json")).json();
-        window.qaGame = (await import("./src/team.mjs")).Game;
+        window.qaGame = (await import("./src/adventure.mjs")).Game;
         window.qaCore = await (
           await import("./assets/wasm/eos-core.mjs")
         ).default();
@@ -244,6 +265,8 @@ for (let step = 0; step < 2500; step++) {
   }
   if (plan.item) {
     await page.locator(`[data-item="${plan.item}"]`).click();
+    if (!["apple", "bigApple", "hugeApple", "seed"].includes(plan.item))
+      await page.getByRole("button", { name: /^Charmander ·/ }).click();
     continue;
   }
   if (plan.target) {

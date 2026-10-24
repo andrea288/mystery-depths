@@ -1,5 +1,19 @@
 # Matrice di conformità
 
+## Aggiornamento del 24 ottobre 2026
+
+L’espansione documentata in [MIGLIORAMENTI-20.md](MIGLIORAMENTI-20.md) porta il
+catalogo a 128 specie e 57 mosse e i salvataggi alle meccaniche v7. Include
+strumenti tenuti, meteo, mosse di stato, rigenerazione dei compagni, evoluzioni,
+tattiche, telegraph e fasi boss, assenti nella fotografia storica sottostante.
+I nomi sono localizzati ufficialmente; questi nuovi handler sono adattamenti
+roguelite, non certificazioni di parità EoS. La guida distingue fonti e limiti.
+Il nucleo danni ordinari WASM resta invariato; i modificatori di difficoltà e
+l’adattamento KO sono applicati dal gioco. 74 test automatici superati.
+
+## Matrice storica precedente all’espansione
+
+
 Riferimento delle regole: **EoS NA**. Testi italiani: messaggi EU. Non è stato
 eseguito un confronto integrale con la ROM in un emulatore. “Verificato” vale
 soltanto per la prova indicata; non significa che l'intero gioco sia identico.

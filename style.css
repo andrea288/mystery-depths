@@ -1230,3 +1230,99 @@ canvas {
     word-break: normal;
   }
 }
+.adventure-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 2px solid #657780;
+  background: #162933;
+}
+.adventure-bar span {
+  flex: 1;
+}
+.adventure-bar button {
+  font-size: 17px;
+  padding: 6px;
+}
+.boss-intent {
+  color: #ffc396;
+  border-top: 1px solid #926d54;
+  padding-top: 8px;
+}
+.member-moves,
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.member-moves label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.shop-grid small {
+  display: block;
+}
+.discovery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+}
+.discovery-grid article {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 8px;
+  border: 2px solid #62777a;
+}
+.discovery-grid img {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+}
+.discovery-grid small {
+  font-size: 14px;
+  color: #b6ccad;
+}
+#share-code {
+  width: 100%;
+  min-height: 70px;
+  word-break: break-all;
+}
+#member-tactic,
+#held-gear {
+  max-width: 100%;
+  padding: 8px;
+}
+.challenge-import {
+  margin: 10px 0;
+}
+.challenge-import input {
+  width: 100%;
+}
+.challenge-import summary,
+details > summary {
+  cursor: pointer;
+  color: #e4d098;
+  padding: 8px;
+}
+@media (max-width: 650px) {
+  .adventure-bar button {
+    font-size: 16px;
+  }
+  .shop-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .member-moves {
+    grid-template-columns: 1fr;
+  }
+}
+.gear-sprite {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  vertical-align: middle;
+  margin-right: 6px;
+}

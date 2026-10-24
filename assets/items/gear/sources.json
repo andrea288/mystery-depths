@@ -1,0 +1,80 @@
+[
+  {
+    "key": "powerBand",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Band_Brown.None.png",
+    "sha256": "a65edb21e2824e49189891f54916121345869388b7166acf8df5217cf195d894",
+    "adaptedMapping": true
+  },
+  {
+    "key": "specialBand",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Band_Pink.None.png",
+    "sha256": "e62637d4ae74764aed694315afa1bea038408ee34b9c83fc1918fc9dfd145ac7",
+    "adaptedMapping": true
+  },
+  {
+    "key": "defScarf",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Scarf_Blue.None.png",
+    "sha256": "f0cf416107faceefb964bf03001b541f836860f2b2c719f9cf2cc707105d85ff",
+    "adaptedMapping": true
+  },
+  {
+    "key": "zincBand",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Band_Gray.None.png",
+    "sha256": "5e858754268fd2956391e485cd897f3451c22168ce862990526ff3976c227ab6",
+    "adaptedMapping": true
+  },
+  {
+    "key": "detectBand",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Band_Green.None.png",
+    "sha256": "b4b939e887ecf6558963dab69b9a46b5715f381c8d9e70914df880700e733d91",
+    "adaptedMapping": true
+  },
+  {
+    "key": "pechaScarf",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Scarf_Pink.None.png",
+    "sha256": "49b462334f27f2da0336e0f199d6396f1b3d1041c6102821ce35214ce080a4bf",
+    "adaptedMapping": true
+  },
+  {
+    "key": "insomniscope",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Band_Tan.None.png",
+    "sha256": "928b7dee1ed34bb5cfd8dd00d63cc9dc4636bd344b49acf4dee82bef2ce44af1",
+    "adaptedMapping": true
+  },
+  {
+    "key": "thunderStone",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Stone_Yellow.None.png",
+    "sha256": "fcac27692ac3cc8632d12d32a2f6c26d4e30c1d7636cebb857f1c29bfba924a2",
+    "adaptedMapping": true
+  },
+  {
+    "key": "fireStone",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Stone_Red.None.png",
+    "sha256": "3ac7c8fb411cab45b83403532d64b54d9670ac84cae323887d4ca5447c7266a5",
+    "adaptedMapping": true
+  },
+  {
+    "key": "waterStone",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Stone_Blue.None.png",
+    "sha256": "ce5ea0ce15b39f9b019ebd8943254f7fcccf069be0cc9d993302404fe8e8d38e",
+    "adaptedMapping": true
+  },
+  {
+    "key": "linkCable",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Band_Gray.None.png",
+    "sha256": "5e858754268fd2956391e485cd897f3451c22168ce862990526ff3976c227ab6",
+    "adaptedMapping": true
+  },
+  {
+    "key": "metalCoat",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Scarf_2_White.None.png",
+    "sha256": "993ef41e7bd3baf07e54bbf65ab6878bcd50fbae31d512de1b169f2f926f7000",
+    "adaptedMapping": true
+  },
+  {
+    "key": "duskStone",
+    "url": "https://raw.githubusercontent.com/PMDCollab/RawAsset/03c80dad937911572f8fb19903771a47956fc696/Item/Stone_Purple.None.png",
+    "sha256": "ae0cfa980c470598f5143e3162cc7ad5c22076c5f832fb1859a02eb87b47af15",
+    "adaptedMapping": true
+  }
+]

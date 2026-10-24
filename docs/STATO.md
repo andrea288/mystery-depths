@@ -1,3 +1,14 @@
+# Stato attuale — 24 ottobre 2026
+
+Espansione completa delle 20 funzionalità in `src/adventure.mjs` (estende
+`team.mjs`). App usa Game da adventure; salvataggi meccaniche v7 con migrazione.
+128 specie, 57 mosse, 13 nuovi strumenti, 75 nuove forme con asset locali.
+Guida corrente: `MIGLIORAMENTI-20.md`. Non descrivere le nuove regole adattate
+come riproduzione integrale EoS. Test: `npm test` (74); browser su Chromium
+con `GAME_URL` configurabile. Rigenerare gli archivi dopo ogni modifica runtime.
+
+## Note precedenti, conservate come storico
+
 # Stato di ripresa — 23 ottobre 2026
 
 Cartella attiva: `/workspace/mystery-depths`. Repository originale

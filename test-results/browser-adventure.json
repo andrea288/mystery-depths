@@ -1,0 +1,26 @@
+[
+  {
+    "mobile": false,
+    "healingTarget": true,
+    "tactics": true,
+    "equipment": true,
+    "evolution": true,
+    "sharedSeed": true,
+    "merchant": true,
+    "orderPreviewAndSwap": true,
+    "discoveries": true,
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "healingTarget": true,
+    "tactics": true,
+    "equipment": true,
+    "evolution": true,
+    "sharedSeed": true,
+    "merchant": true,
+    "orderPreviewAndSwap": true,
+    "discoveries": true,
+    "errors": []
+  }
+]

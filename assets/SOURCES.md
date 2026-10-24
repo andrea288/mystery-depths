@@ -55,3 +55,13 @@ Nuove estrazioni di crescita EoS in data/eos-growth.json.
 Nome italiano Magibrillio: PokeAPI, fonte e hash in data/fairy-move-source.json.
 Effetto visivo: foglio Healing_Wish_Hit già attribuito a PMDCollab/RawAsset,
 adattato al progetto. La mossa e il tipo Folletto sono estensioni dichiarate.
+
+## Espansione avventura — 24 ottobre 2026
+
+75 ulteriori specie evolute da SpriteCollab, alla revisione fissata già usata
+dal progetto: manifest `data/assets-extra.json`, crediti individuali nelle
+cartelle `assets/pokemon/`. Le 13 icone accessori/evoluzione sono locali, con
+URL fissati, hash e mapping adattati in `assets/items/gear/sources.json`.
+Nomi ufficiali italiani EoS in `assets/game/adventure-labels.json`.
+Statistiche di riferimento delle evoluzioni successive a EoS in
+`data/evolution-donors.json`; limiti in `docs/MIGLIORAMENTI-20.md`.

@@ -1,0 +1,91 @@
+
+> mystery-depths@0.1.0 test
+> node --test tests/*.test.mjs
+
+✔ Avventura: 29 starter, nuove aree e roundtrip v7 senza alterare RNG (83.896512ms)
+✔ Anteprima ordini: conflitti visibili e nessun turno consumato (3.096413ms)
+✔ Scambio simultaneo: due ordini reciproci scambiano le posizioni nello stesso turno (6.861752ms)
+✔ Intenzioni boss bloccate prima del turno, fasi e arena mutano con i PS (10.747359ms)
+✔ Cura mirata e PP ripristinati sul compagno, non sullo starter (3.617351ms)
+✔ Esperienza alla squadra, riserve al 50%, apprendimento e PP non ricaricabili cambiando slot (3.843374ms)
+✔ Tattiche e disattivazione mosse sono salvate e rispettate dalla selezione IA (2.584048ms)
+✔ Evoluzioni a scelta, requisiti e consumi strumenti; lo starter conserva uid 0 (2.247843ms)
+✔ Rapporti fra tipi consultabili senza consumo RNG o PP (3.985644ms)
+✔ Abilità di campo: Sincronismo, Idratazione e Magicscudo hanno effetti reali (6.671642ms)
+✔ Mosse di stato: cura, protezione, potenziamento e paralisi (1.773734ms)
+✔ Strumento tenuto: effetto nel nucleo e protezione dallo stato (7.284215ms)
+✔ Terreno: ghiaccio fa scivolare, tipi Ghiaccio e Volante lo ignorano (1.148303ms)
+✔ Meteo influenza danni e previsione del piano successivo (1.378992ms)
+✔ Stanze: tesoro monouso, ristoro e ricompensa della sfida (2.906643ms)
+✔ Mercante: stock limitato, compra e vende senza monete negative (1.394846ms)
+✔ Soccorso: reclutamento senza KO, sblocco starter e nessuna duplicazione dell’evento (0.600365ms)
+✔ Registro persistente: specie, strumenti e guardiani (5.930029ms)
+✔ Difficoltà e codice sfida riproducono mappa, squadra iniziale e opzioni (2.366939ms)
+✔ Migrazione v6 conservativa e rifiuto dati corrotti senza mutare la partita (4.336712ms)
+✔ Soccorso a squadra piena: scelta obbligatoria, starter intoccabile e strumento restituito (1.948191ms)
+✔ Protezione, Vigore e Testadura prevengono i rispettivi danni (1.057278ms)
+✔ Salvataggi: rifiuta identificatori corrotti di una sfida facoltativa (4.130967ms)
+✔ Evoluzione e cambio mosse conservano un salvataggio v7 stabile (2.22577ms)
+✔ 2000 seed/piano: ogni cella, scala e spawn è raggiungibile, bordo chiuso, spawn unici (451.557822ms)
+✔ stesso seed e piano riproducono esattamente la mappa; il piano cambia la mappa (1.085079ms)
+✔ piani oltre MAX_SAFE_INTEGER non traboccano; boss ogni quinto piano (0.200656ms)
+✔ input invalidi e limiti espliciti vengono rifiutati (0.339731ms)
+✔ 29 starter: avvio, quattro mosse al massimo, esportazione e ripresa (46.655518ms)
+✔ Mappe runtime: 2000 seed/piani, scale raggiungibili e salvataggi validi (523.052041ms)
+✔ Ricompensa permanente, consumo, morte e reset provviste (1.593568ms)
+✔ Turni: orientamento e passi bloccati gratuiti, mossa a vuoto consuma PP (0.755994ms)
+✔ Importazione rifiutata senza modificare lo stato (2.819325ms)
+✔ Combattimento reale WASM riproducibile con salvataggio a metà (18.135306ms)
+✔ Parità WASM/native: 256 semi, statistiche e mosse originali (60.987425ms)
+✔ Discesa oltre 2^53: contatore, bioma e guardiano conservano precisione (2.82259ms)
+✔ Crescita e recupero: soglie EoS e accumulatore, nessuna cura gratuita sulle scale (0.95013ms)
+✔ Multi-colpo EoS: estrazione uniforme da due a cinque colpi (13.316355ms)
+✔ Gruppi EoS: sonno, scottatura e congelamento coesistono; la paralisi sostituisce la scottatura (2.018965ms)
+✔ Danno periodico EoS: primo tick immediato, intervallo 50, risveglio e nessun rinnovo duplicato (0.397086ms)
+✔ Migrazione v3: conserva durata, prossima scadenza, progressi e input originale (4.276472ms)
+✔ Turbofuoco scongela prima del danno, anche a vuoto, e conserva il sonno (0.593425ms)
+✔ Provviste garantite e primi piani senza trappole (26.04898ms)
+✔ Otto strumenti: cure mirate, PS massimi e Pancia secondo gli effetti EoS (0.864845ms)
+✔ Migrazione v4: nuovo zaino senza regalare strumenti o modificare l’input (0.87565ms)
+✔ fonte italiana originale fissata e hash del binario conservato (3.535481ms)
+✔ nomi originali e grafia dell'epoca sono preservati (0.274855ms)
+✔ nessun fallback inglese o traduzione inventata per voci assenti (0.304178ms)
+✔ Animazioni: PS al momento dell’impatto, risposta successiva e simulazione immutata (2.303305ms)
+✔ Pausa e velocità cambiano solo la presentazione (4.057389ms)
+✔ 37 mosse hanno effetti disponibili e fogli con frame validi (9.874282ms)
+✔ Multi-colpo: impatti distinti e sequenza completa prima del nemico (0.417426ms)
+✔ apprendimento permanente per specie, idempotente, senza mutare lo stato precedente (2.23219ms)
+✔ massimo quattro mosse equipaggiate, tutte apprese, nessun duplicato (0.379589ms)
+✔ salvataggio e ripresa del profilo, export/import senza perdita (1.365773ms)
+✔ run e bonus temporanei non possono essere serializzati come progressione permanente (0.157703ms)
+✔ import corrotto, versione futura, proprietà ostili, specie e mosse ignote non cancellano i dati (1.541231ms)
+✔ errore quota storage propagato, senza fingere un salvataggio riuscito (0.296416ms)
+✔ 36000 risultati e transizioni confrontati con il sorgente C indipendente fissato (52.428856ms)
+✔ snapshot RNG mantiene la sequenza; init conserva modalità e indice (0.945393ms)
+✔ range uguale non consuma RNG; probabilità 0 e 100 consumano ciascuna un'estrazione (0.188668ms)
+✔ KO per specie e scelta singola per piano; sblocco starter permanente (12.201681ms)
+✔ Sei membri, tre attivi, starter non sostituibile, cambio costa un turno (6.540609ms)
+✔ Boss: schieramento solo nelle ultime tre righe; nessuna azione senza tutti gli ordini (3.237321ms)
+✔ Ordini boss separati: muove solo il Pokémon ordinato e non parte IA alleata (1.616332ms)
+✔ Alleati seguono e preferiscono una mossa superefficace quando combattono (8.886496ms)
+✔ KO dello starter termina la run anche con compagni vivi (1.727787ms)
+✔ 18 guardiani e biomi coerenti, incontri favoriti e difficoltà crescente (9.645135ms)
+✔ Salvataggio conserva squadra, ordini e KO; rifiuta corruzioni senza modifiche (4.357542ms)
+✔ Migrazione v5 e nessun danno amico dalle mosse ad area (2.940604ms)
+✔ Folletto: Magibrillio è superefficace contro Drago; Acciaio contro Folletto (4.73681ms)
+✔ Ritirare un alleato costa un turno, lascia lo starter e consente schierare meno di tre (1.489154ms)
+✔ Corridoio: lo starter può passare attraverso un alleato scambiando posizione (1.083777ms)
+✔ Cambio: gli alleati non attaccano, il nemico risponde e gli ordini sono cancellati (1.92043ms)
+ℹ tests 74
+ℹ suites 0
+ℹ pass 74
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 816.799443
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

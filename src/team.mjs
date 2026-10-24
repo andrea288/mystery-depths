@@ -180,8 +180,8 @@ export class Game extends SoloGame {
       r.enemies = [e];
       r.tactics = { phase: "deploy", orders: {} };
     } else {
-      const pool = Object.values(this.D.pokemon).filter((p) =>
-        p.types.includes(theme.type),
+      const pool = Object.values(this.D.pokemon).filter(
+        (p) => p.types.includes(theme.type) && !p.minEncounterLevel,
       );
       for (let i = 0; i < r.enemies.length; i++) {
         if (pool.length && i % 4 !== 3) {

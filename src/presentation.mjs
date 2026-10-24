@@ -105,6 +105,16 @@ export class Playback {
   }
 }
 export const EFFECTS = {
+  "take-down": ["Hit_Neutral", "impact"],
+  fissure: ["Rock_Smash", "beam"],
+  recover: ["Healing_Wish_Hit", "impact"],
+  protect: ["Shock_Wave", "impact"],
+  "swords-dance": ["Metal_Burst_Hit", "impact"],
+  growl: ["Shock_Wave", "room"],
+  "thunder-wave": ["Spark", "impact"],
+  "sleep-powder": ["Magical_Leaf", "room"],
+  reflect: ["Healing_Wish_Hit", "impact"],
+  "light-screen": ["Healing_Wish_Hit", "impact"],
   "silver-wind": ["Magical_Leaf", "room"],
   earthquake: ["Rock_Pieces", "room"],
   psychic: ["Shock_Wave", "impact"],
