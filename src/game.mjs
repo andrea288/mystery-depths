@@ -375,7 +375,7 @@ export class Game extends Base {
           ? 5
           : this.combat.range(2, 6)
         : m?.strikes || 1;
-    for (let i = 0; i < hits && target.hp > 0; i++) {
+    for (let i = 0; i < hits && target.hp > 0 && a.hp > 0; i++) {
       const cfg = {
         move: {
           id: m?.eosName || "Regular Attack",
@@ -387,7 +387,7 @@ export class Game extends Base {
         misc: { version: "NA" },
         rngState: this.combat.primary,
       };
-      const result = JSON.parse(this.core.singleDamage(JSON.stringify(cfg)));
+      const result = this.damageResult(cfg);
       if (result.error) throw Error("Errore nel nucleo EoS: " + result.error);
       this.combat.primary = result.rngState;
       this.combat.sequence = (this.combat.sequence + result.rngCalls) >>> 0;
@@ -418,7 +418,12 @@ export class Game extends Base {
           " −" +
           result.damage +
           " PS" +
-          (result.critical ? " · Brutto colpo!" : ""),
+          (result.critical ? " · Brutto colpo!" : "") +
+          (result.matchup === 3
+            ? " · Superefficace!"
+            : result.matchup < 2
+              ? " · Poco efficace…"
+              : ""),
         target === this.run.player ? "danger" : "",
       );
       if (m && ["absorb", "mega-drain", "giga-drain"].includes(m.slug)) {
@@ -436,6 +441,9 @@ export class Game extends Base {
       }
       if (m && target.hp > 0) this.secondaryEffect(a, target, m);
     }
+  }
+  damageResult(cfg) {
+    return JSON.parse(this.core.singleDamage(JSON.stringify(cfg)));
   }
   ability(mon, name) {
     return this.D.pokemon[mon.species].abilities.includes(name);
@@ -837,7 +845,7 @@ export class Game extends Base {
     super.validateRun(copy);
     if (
       !Array.isArray(r.pendingMoves) ||
-      r.pendingMoves.length > 37 ||
+      r.pendingMoves.length > Object.keys(this.D.moves).length ||
       r.pendingMoves.some(
         (id) => !this.D.pokemon[r.player.species].learnset.includes(id),
       )

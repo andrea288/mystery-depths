@@ -1,0 +1,18 @@
+[
+  {
+    "mobile": false,
+    "ordersWaitForAll": true,
+    "swapCostsOneTurn": true,
+    "starterProtected": true,
+    "saveRestored": true,
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "ordersWaitForAll": true,
+    "swapCostsOneTurn": true,
+    "starterProtected": true,
+    "saveRestored": true,
+    "errors": []
+  }
+]

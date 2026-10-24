@@ -88,8 +88,8 @@ export class Renderer {
     if (ev && !this.reducedMotion) {
       const progress = Math.min(1, (time - ev.time) / (ev.duration || 160));
       if (ev.type === "step") {
-        x += (ev.from.x - ev.to.x) * 40 * (1 - progress);
-        y += (ev.from.y - ev.to.y) * 40 * (1 - progress);
+        x += (ev.from.x - ev.to.x) * (this.camera.size || 40) * (1 - progress);
+        y += (ev.from.y - ev.to.y) * (this.camera.size || 40) * (1 - progress);
       }
       if (ev.type === "attack") {
         const pulse =
@@ -175,18 +175,24 @@ export class Renderer {
     ctx.fillRect(0, 0, width, height);
     const r = game.run;
     if (!r) return;
-    const size = 40,
-      b = BIOMES[r.biome];
+    const size = r.tactics
+        ? Math.min(40, Math.floor(width / 21), Math.floor(height / 15))
+        : 40,
+      b = game.biome?.() || BIOMES[r.biome];
     const step = this.events.findLast(
       (e) =>
         e.type === "step" && e.uid === 0 && time - e.time < (e.duration || 160),
     );
     const follow =
-      step && !this.reducedMotion
+      step && !this.reducedMotion && !r.tactics
         ? 1 - (time - step.time) / (step.duration || 160)
         : 0;
-    const cameraX = r.player.x + (step ? step.from.x - step.to.x : 0) * follow;
-    const cameraY = r.player.y + (step ? step.from.y - step.to.y : 0) * follow;
+    const cameraX =
+      (r.tactics ? 12 : r.player.x) +
+      (step ? step.from.x - step.to.x : 0) * follow;
+    const cameraY =
+      (r.tactics ? 9 : r.player.y) +
+      (step ? step.from.y - step.to.y : 0) * follow;
     const ox = Math.round(width / 2 - cameraX * size - size / 2),
       oy = Math.round(height / 2 - cameraY * size - size / 2);
     this.camera = { x: ox, y: oy, size };
@@ -206,6 +212,15 @@ export class Renderer {
         const wall = r.map[y][x];
         ctx.fillStyle = wall ? b.wall : b.floor;
         ctx.fillRect(px, py, size, size);
+        if (r.tactics) {
+          if (!wall) {
+            ctx.fillStyle = (x + y) % 2 ? "#ffffff09" : "#00000010";
+            ctx.fillRect(px, py, size, size);
+            ctx.strokeStyle = "#ffffff20";
+            ctx.strokeRect(px, py, size, size);
+          }
+          continue;
+        }
         ctx.fillStyle = wall ? b.edge : "#ffffff08";
         ctx.fillRect(px + 1, py + 1, size - 2, wall ? 8 : 1);
         const noise = (x * 73 + y * 127 + x * y * 17) >>> 0;
@@ -322,11 +337,24 @@ export class Renderer {
             32,
           );
       }
-    for (const mon of [...r.enemies, r.player].sort((a, b) => a.y - b.y)) {
-      if (mon !== r.player && !game.visible(mon.x, mon.y)) continue;
+    if (r.tactics?.phase === "deploy") {
+      ctx.fillStyle = "#80dfa538";
+      ctx.strokeStyle = "#9febb4";
+      for (const cell of game.deploymentCells()) {
+        const x = ox + cell.x * size,
+          y = oy + cell.y * size;
+        ctx.fillRect(x, y, size, size);
+        ctx.strokeRect(x, y, size, size);
+      }
+    }
+    for (const mon of [...r.enemies, ...(game.active?.() || [r.player])].sort(
+      (a, b) => a.y - b.y,
+    )) {
+      if (!r.tactics && mon !== r.player && !game.visible(mon.x, mon.y))
+        continue;
       const p = point(mon);
       ctx.fillStyle =
-        mon === target
+        mon.uid === this.commandUid || mon === target
           ? "#e6c88955"
           : mon === r.player
             ? "#8dccb438"
@@ -334,11 +362,15 @@ export class Renderer {
       ctx.beginPath();
       ctx.ellipse(p.x, p.y + 13, 17, 6, 0, 0, 7);
       ctx.fill();
-      this.mon(mon, p.x, p.y, time);
+      this.mon(mon, p.x, p.y, time, (2 * size) / 40);
       if (mon !== r.player) {
         ctx.fillStyle = "#0a141a";
         ctx.fillRect(p.x - 15, p.y - 24, 30, 3);
-        ctx.fillStyle = mon.boss ? "#e9bc75" : "#d88677";
+        ctx.fillStyle = game.isAlly?.(mon)
+          ? "#8dccb4"
+          : mon.boss
+            ? "#e9bc75"
+            : "#d88677";
         ctx.fillRect(
           p.x - 15,
           p.y - 24,
@@ -449,7 +481,7 @@ export class Renderer {
     )) {
       const p = point(ev.to);
       ctx.globalAlpha = 1 - (time - ev.time) / (ev.duration || 900);
-      this.mon(ev.mon, p.x, p.y, time);
+      this.mon(ev.mon, p.x, p.y, time, (2 * size) / 40);
       ctx.globalAlpha = 1;
     }
     if (this.mini) {

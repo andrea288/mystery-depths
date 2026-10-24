@@ -29,9 +29,20 @@ locale. Chiudere con Ctrl+C. Su Windows fare doppio clic su `avvia-windows.bat`;
 su Linux/macOS eseguire `./avvia-linux-mac.sh`. Lo script Windows è predisposto,
 ma non è stato eseguito su una macchina Windows in questa sessione.
 
+## Squadra e boss tattici
+
+Recluta una specie sconfitta alla fine di ogni piano: fino a 6 Pokémon nella
+squadra e 3 in campo. Nei piani normali gli alleati sono autonomi; contro i boss
+schieri la formazione nelle tre righe inferiori e assegni un ordine a ciascuno
+prima di confermare il turno. Lo starter resta obbligatorio: il suo KO termina
+la spedizione. I Pokémon reclutati si sbloccano anche come starter.
+
+Ci sono 18 guardiani e biomi legati ai tipi, inclusa un'estensione Folletto.
+[Guida completa a squadra, comandi e regole](docs/SQUADRA-E-GUARDIANI.md).
+
 ## Animazioni e strumenti
 
-Le mosse hanno sequenze più lente e leggibili con anticipazione, effetti e
+Le 47 mosse disponibili hanno sequenze più lente e leggibili con anticipazione, effetti e
 risposte nemiche in successione. Sono inclusi 25 fogli di effetti locali e
 12 strumenti. Dal menu Opzioni si possono scegliere quattro velocità,
 minimappa, griglia, numeri dei danni, conferma strumenti e suoni sintetici.

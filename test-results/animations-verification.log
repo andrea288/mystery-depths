@@ -1,0 +1,8 @@
+{
+  animation: true,
+  inputLocked: true,
+  menuPauses: true,
+  skipPreservesSimulation: true,
+  preferencesPersist: true,
+  errors: []
+}

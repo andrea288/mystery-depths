@@ -54,12 +54,18 @@ export class Playback {
       const e = this.schedule[this.index++];
       this.events.push(e);
       const r = this.game.run,
-        mons = [r.player, ...r.enemies];
+        mons = [r.player, ...(r.companions || []), ...r.enemies];
       const mon = mons.find((m) =>
         e.uid !== undefined
           ? m.uid === e.uid
           : m.x === e.to.x && m.y === e.to.y,
       );
+      if (e.type === "teamSwap") {
+        const out = r.companions?.find((m) => m.uid === e.outUid),
+          incoming = r.companions?.find((m) => m.uid === e.inUid);
+        if (out) out.active = false;
+        if (incoming) Object.assign(incoming, e.position, { active: true });
+      }
       if (mon && e.type === "step") {
         mon.x = e.to.x;
         mon.y = e.to.y;
@@ -72,7 +78,10 @@ export class Playback {
         mon.hp = Math.min(mon.maxHp, mon.hp + e.amount);
       if (mon && e.type === "defeat") {
         mon.hp = 0;
-        if (mon.uid !== 0) r.enemies = r.enemies.filter((m) => m !== mon);
+        if (mon.uid !== 0) {
+          r.enemies = r.enemies.filter((m) => m !== mon);
+          mon.active = false;
+        }
       }
       if (["hit", "heal"].includes(e.type) && mon)
         r.log.unshift({
@@ -96,6 +105,16 @@ export class Playback {
   }
 }
 export const EFFECTS = {
+  "silver-wind": ["Magical_Leaf", "room"],
+  earthquake: ["Rock_Pieces", "room"],
+  psychic: ["Shock_Wave", "impact"],
+  gust: ["Vine_Whip_2", "projectile"],
+  "sludge-bomb": ["Shadow_Ball", "projectile"],
+  confusion: ["Shock_Wave", "impact"],
+  "aerial-ace": ["Metal_Burst_Hit", "impact"],
+  "aura-sphere": ["Dragon_Pulse_Ball", "projectile"],
+  "dark-pulse": ["Shadow_Ball", "room"],
+  "dazzling-gleam": ["Healing_Wish_Hit", "room"],
   pound: ["Hit_Neutral", "impact"],
   scratch: ["Metal_Burst_Hit", "impact"],
   "vine-whip": ["Vine_Whip_2", "beam"],

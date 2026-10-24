@@ -39,6 +39,7 @@ try {
     }
     let after = await save();
     assert.equal(after.player.facing, 1);
+    await page.locator("#dungeon").scrollIntoViewIfNeeded();
     const box = await page.locator("#dungeon").boundingBox();
     if (mobile)
       await page.touchscreen.tap(

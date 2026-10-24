@@ -8,14 +8,15 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
 await page.goto(process.env.GAME_URL || "http://127.0.0.1:4173");
-await page.locator('[data-starter="252"]').click();
+await page.locator('[data-starter="4"]').click();
 await page.locator("#seed-input").fill("314159");
 await page.locator("#start-button").click();
 await page.locator("#player-card h3").waitFor();
 // Read-only copy of each autosave is used to choose legal keyboard actions.
 await page.evaluate(async () => {
   window.qaData = await (await fetch("assets/game/data.json")).json();
-  window.qaGame = (await import("./src/game.mjs")).Game;
+  window.qaGame = (await import("./src/team.mjs")).Game;
+  window.qaCore = await (await import("./assets/wasm/eos-core.mjs")).default();
 });
 const records = [];
 let lastFloor = 0,
@@ -26,9 +27,85 @@ for (let step = 0; step < 2500; step++) {
     await page.locator("#skip-animation").evaluate((button) => button.click());
     await page.locator("body.playing-action").waitFor({ state: "hidden" });
   }
+  if (
+    await page
+      .getByRole("button", { name: "Prosegui senza reclutare", exact: true })
+      .isVisible()
+  ) {
+    const buttons = page.locator("[data-recruit]");
+    if (
+      (await buttons.count()) &&
+      (await page.evaluate(
+        () =>
+          JSON.parse(localStorage.getItem("mystery-depths-v3")).run.companions
+            .length < 5,
+      ))
+    )
+      await buttons.first().click();
+    else
+      await page
+        .getByRole("button", { name: "Prosegui senza reclutare", exact: true })
+        .click();
+  }
+  if (await page.locator("#begin-boss").isVisible()) {
+    await page.locator("#begin-boss").click();
+    continue;
+  }
+  if (await page.locator("#resolve-orders").isVisible()) {
+    const orders = await page.evaluate(() => {
+      const g = new window.qaGame(window.qaData, window.qaCore);
+      g.restore(JSON.parse(localStorage.getItem("mystery-depths-v3")));
+      return g.active().map((m) => {
+        const t = g.run.enemies[0],
+          dist = Math.max(Math.abs(m.x - t.x), Math.abs(m.y - t.y));
+        if (m.uid === 0 && m.hp < m.maxHp * 0.65 && g.run.bag.berry)
+          return { uid: m.uid, item: "berry" };
+        if (m.uid === 0 && m.moves.every((s) => s.pp === 0) && g.run.bag.ether)
+          return { uid: m.uid, item: "ether" };
+        const best = g.bestMove(m, t);
+        if (best)
+          return {
+            uid: m.uid,
+            slot: best.slot,
+            dx: Math.sign(t.x - m.x),
+            dy: Math.sign(t.y - m.y),
+          };
+        if (dist === 1 && g.canStep(m, t.x, t.y, true))
+          return { uid: m.uid, attack: true, dx: t.x - m.x, dy: t.y - m.y };
+        const step = g.pathStep(m, t);
+        return step
+          ? { uid: m.uid, dx: step.x - m.x, dy: step.y - m.y }
+          : { uid: m.uid, wait: true };
+      });
+    });
+    for (const order of orders) {
+      await page.locator(`[data-command="${order.uid}"]`).click();
+      if (order.item) await page.locator(`[data-item="${order.item}"]`).click();
+      else if (order.wait) await page.locator("#order-wait").click();
+      else {
+        if (order.slot !== undefined)
+          await page.locator(`[data-move="${order.slot}"]`).click();
+        else if (order.attack) await page.locator("#order-attack").click();
+        await page.keyboard.press(
+          {
+            "0,1": "ArrowDown",
+            "0,-1": "ArrowUp",
+            "1,0": "ArrowRight",
+            "-1,0": "ArrowLeft",
+            "-1,-1": "q",
+            "1,-1": "e",
+            "-1,1": "z",
+            "1,1": "c",
+          }[[order.dx, order.dy].join(",")],
+        );
+      }
+    }
+    await page.locator("#resolve-orders").click();
+    continue;
+  }
   const plan = await page.evaluate(() => {
     const save = JSON.parse(localStorage.getItem("mystery-depths-v3")),
-      g = new window.qaGame(window.qaData, {});
+      g = new window.qaGame(window.qaData, window.qaCore);
     g.restore(save);
     const r = g.run,
       p = r.player;
@@ -41,9 +118,12 @@ for (let step = 0; step < 2500; step++) {
         rewards: r.reward,
       };
     const danger = r.enemies.some((e) => g.visible(e.x, e.y));
+    if (danger && Object.keys(p.statuses).length && r.bag.healSeed)
+      return { item: "healSeed" };
+    if (danger && p.hp < p.maxHp * 0.8 && r.bag.sitrus)
+      return { item: "sitrus" };
     if (!danger && p.hp < p.maxHp * 0.95 && r.belly > 10) return { key: "." };
-    if (danger && p.hp < p.maxHp * 0.65 && r.bag.berry)
-      return { item: "berry" };
+    if (danger && p.hp < p.maxHp * 0.8 && r.bag.berry) return { item: "berry" };
     if (r.belly < 25 && r.bag.apple) return { item: "apple" };
     if (
       (p.moves.every((m) => m.pp === 0) ||
@@ -149,7 +229,10 @@ for (let step = 0; step < 2500; step++) {
       await page.locator("#player-card h3").waitFor();
       await page.evaluate(async () => {
         window.qaData = await (await fetch("assets/game/data.json")).json();
-        window.qaGame = (await import("./src/game.mjs")).Game;
+        window.qaGame = (await import("./src/team.mjs")).Game;
+        window.qaCore = await (
+          await import("./assets/wasm/eos-core.mjs")
+        ).default();
       });
       resumed = true;
     }

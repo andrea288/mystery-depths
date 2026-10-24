@@ -1151,3 +1151,82 @@ canvas {
     font-size: 18px;
   }
 }
+.team-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+.team-strip button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+.team-strip img,
+.team-roster img,
+.recruit-grid img {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+}
+.team-strip small {
+  display: block;
+  font-size: 14px;
+}
+.team-strip .selected {
+  border-color: #9febb4;
+  background: #294739;
+}
+.tactics-panel {
+  padding: 12px;
+  border: 3px solid #bca477;
+  background: #182d36;
+}
+.tactics-panel p {
+  margin: 6px 0;
+}
+.tactics-panel button {
+  margin: 4px;
+}
+.team-roster,
+.recruit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+.team-roster article,
+.recruit-grid button {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 2px solid #697c88;
+}
+.team-roster span {
+  font-size: 16px;
+}
+@media (max-width: 650px) {
+  .team-strip {
+    gap: 4px;
+  }
+  .team-strip button {
+    padding: 5px;
+  }
+  .team-strip img {
+    width: 28px;
+    height: 28px;
+  }
+  .tactics-panel {
+    font-size: 16px;
+  }
+}
+@media (max-width: 650px) {
+  .move-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .move-bar strong {
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+}

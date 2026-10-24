@@ -45,3 +45,13 @@ Le nuove icone provengono da PokeAPI/sprites (bacche) e PMDCollab/RawAsset
 La disponibilità pubblica non costituisce una licenza MIT per tutta la grafica:
 i diritti Pokémon restano dei rispettivi titolari; non si estende la licenza
 del codice PMDC alle immagini. Tutti questi asset sono serviti localmente.
+
+## Squadra e nuovi tipi (23 ottobre 2026)
+
+Butterfree (#12), Clefable (#36) e Dewgong (#87): SpriteCollab, commit
+9d905ec258c39b1846d33629e5ba47cb8e49dfa8. Sprite, ritratti e crediti individuali
+sono conservati nelle cartelle assets/pokemon; manifesti in data/assets-extra.json.
+Nuove estrazioni di crescita EoS in data/eos-growth.json.
+Nome italiano Magibrillio: PokeAPI, fonte e hash in data/fairy-move-source.json.
+Effetto visivo: foglio Healing_Wish_Hit già attribuito a PMDCollab/RawAsset,
+adattato al progetto. La mossa e il tipo Folletto sono estensioni dichiarate.

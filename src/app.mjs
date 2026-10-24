@@ -1,4 +1,5 @@
-import { Game, ITEMS, BIOMES, itemIcon } from "./game.mjs";
+import { Game, TYPE_NAMES } from "./team.mjs";
+import { ITEMS, BIOMES, itemIcon } from "./game.mjs";
 import { Renderer } from "./render.mjs";
 import { Playback } from "./presentation.mjs";
 import createCore from "../assets/wasm/eos-core.mjs";
@@ -55,6 +56,7 @@ const types = {
   dragon: "Drago",
   dark: "Buio",
   steel: "Acciaio",
+  fairy: "Folletto",
 };
 const KEY = "mystery-depths-v3";
 let game,
@@ -109,7 +111,7 @@ function renderCamp() {
     `<span><b>${game.meta.best}</b> piano record</span><span><b>${game.meta.runs}</b> spedizioni</span><span><b>${game.meta.kills}</b> vittorie</span>`;
   $("regions").innerHTML = [
     "Tutte",
-    ...new Set(D.starterIds.map((id) => D.pokemon[id].region)),
+    ...new Set(game.starterIds().map((id) => D.pokemon[id].region)),
   ]
     .map(
       (r) =>
@@ -125,7 +127,8 @@ function renderCamp() {
           renderCamp();
         }),
     );
-  $("starter-grid").innerHTML = D.starterIds
+  $("starter-grid").innerHTML = game
+    .starterIds()
     .filter((id) => region === "Tutte" || D.pokemon[id].region === region)
     .map(
       (id) =>
@@ -196,7 +199,7 @@ function renderCamp() {
     else start();
   };
   if ($("resume-button")) $("resume-button").onclick = expedition;
-  const preview = new Game(D, game.core);
+  const preview = new Game(D, game.core, game.meta);
   preview.start(selected, 123);
   campRenderer.preview = preview;
   campRenderer
@@ -211,6 +214,7 @@ async function expedition() {
   await renderer.prepare([
     game.run.player.species,
     ...game.run.enemies.map((e) => e.species),
+    ...game.members().map((m) => m.species),
   ]);
   hud();
   $("dungeon").focus();
@@ -220,7 +224,8 @@ function hud(displayGame = game) {
   const r = displayGame.run,
     p = r.player;
   if (!r) return;
-  $("biome-kicker").textContent = BIOMES[r.biome].name;
+  $("biome-kicker").textContent =
+    displayGame.biome().name + " · " + TYPE_NAMES[displayGame.biome().type];
   $("floor-label").textContent =
     `Piano ${r.floor}${BigInt(r.floor) % 5n === 0n ? " · Il guardiano" : ""}`;
   $("map-location").textContent = p.name;
@@ -229,15 +234,24 @@ function hud(displayGame = game) {
   $("kills-label").textContent = `${r.kills} VITTORIE`;
   $("player-card").innerHTML =
     `<div class="player-heading"><img src="assets/portraits/${p.species}.png" alt=""><div><h3>${p.name}</h3><span>Livello ${p.level}${game.statusNames(p).length ? " · " + game.statusNames(p).join(" · ") : ""}</span></div></div><p class="muted">Esperienza: ${p.level < 100 ? r.xp + "/" + game.xpNeeded() + " PE" : "Livello massimo"}</p><div class="meter-label"><span>PS</span><strong>${Math.max(0, p.hp)} / ${p.maxHp}</strong></div><div class="meter"><i style="width:${(Math.max(0, p.hp) / p.maxHp) * 100}%"></i></div><div class="meter-label"><span>Pancia</span><strong>${Math.floor(r.belly)} / ${r.maxBelly}</strong></div><div class="meter belly"><i style="width:${(r.belly / r.maxBelly) * 100}%"></i></div>`;
+  const acting = tactical()
+    ? displayGame.active().find((m) => m.uid === commandUid) || p
+    : p;
+  teamHud(displayGame);
   $("move-bar").innerHTML = Array.from({ length: 4 }, (_, i) => {
-    const s = p.moves[i],
+    const s = acting.moves[i],
       m = s && D.moves[s.id];
     return `<button title="${m ? m.name + ": potenza " + m.power + ", precisione " + m.accuracy : "Slot libero"}" data-move="${i}" ${!m || !s.pp ? "disabled" : ""}><kbd>${i + 1}</kbd><strong>${m ? m.name : "—"}</strong><span>${m ? types[m.type] + " · " + s.pp + "/" + m.pp + " PP" : "Mossa da apprendere"}</span><i class="pp-gauge" style="--pp:${m ? (s.pp / m.pp) * 100 : 0}%"></i></button>`;
   }).join("");
   $("move-bar")
     .querySelectorAll("button")
     .forEach((b) => {
-      b.onclick = () => act(() => game.useMove(+b.dataset.move, target));
+      b.onclick = () => {
+        if (tactical()) {
+          commandMode = +b.dataset.move;
+          hud();
+        } else act(() => game.useMove(+b.dataset.move, target));
+      };
       b.onmouseenter = b.onfocus = () => {
         renderer.rangeMove = preferences.range
           ? D.moves[p.moves[+b.dataset.move]?.id]
@@ -337,8 +351,210 @@ function act(fn) {
     modal("La spedizione è in pausa", `<p>${esc(e.message)}</p>`, [["Chiudi"]]);
   }
 }
+let commandUid = 0,
+  commandMode = "move";
+function tactical() {
+  return ["deploy", "plan"].includes(game.run?.tactics?.phase);
+}
+function commanded() {
+  return game.active().find((m) => m.uid === commandUid) || game.run.player;
+}
+function sendOrder(order) {
+  if (busy) return;
+  const ok = game.plan(commanded().uid, order);
+  if (!ok) toast("Ordine non valido: controlla casella, PP e direzione.");
+  save();
+  hud();
+}
+function directionCommand(dx, dy) {
+  if (busy) return true;
+  if (!tactical()) return false;
+  if (game.run.tactics.phase === "deploy") {
+    const m = commanded();
+    game.deploy(m.uid, m.x + dx, m.y + dy);
+    save();
+    hud();
+    return true;
+  }
+  sendOrder(
+    typeof commandMode === "number"
+      ? { type: "moveAttack", slot: commandMode, direction: [dx, dy] }
+      : commandMode === "attack"
+        ? { type: "attack", direction: [dx, dy] }
+        : { type: "move", dx, dy },
+  );
+  return true;
+}
+function orderLabel(order, m) {
+  if (!order) return "In campo";
+  const direction = order.direction || [order.dx, order.dy];
+  const arrow =
+    {
+      "0,1": "↓",
+      "0,-1": "↑",
+      "1,0": "→",
+      "-1,0": "←",
+      "1,1": "↘",
+      "-1,1": "↙",
+      "1,-1": "↗",
+      "-1,-1": "↖",
+    }[String(direction)] || "";
+  return (
+    (order.type === "wait"
+      ? "Attendi"
+      : order.type === "move"
+        ? "Muovi"
+        : order.type === "moveAttack"
+          ? D.moves[m.moves[order.slot].id].name
+          : order.type === "item"
+            ? ITEMS[order.item].name
+            : "Attacco") +
+    " " +
+    arrow
+  );
+}
+function teamHud(displayGame) {
+  const r = displayGame.run;
+  if (!r.companions) return;
+  const active = displayGame.active();
+  const phase = r.tactics?.phase;
+  renderer.commandUid = tactical() ? commanded().uid : null;
+  $("team-strip").innerHTML =
+    active
+      .map(
+        (m) =>
+          `<button data-command="${m.uid}" class="${m.uid === commandUid ? "selected" : ""}"><img src="assets/portraits/${m.species}.png" alt=""><span>${esc(m.name)}${m.uid === 0 ? " ★" : ""}<small>${m.hp}/${m.maxHp} PS · ${esc(orderLabel(r.tactics?.orders[m.uid], m))}</small></span></button>`,
+      )
+      .join("") +
+    '<button id="manage-team">Squadra ' +
+    (1 + r.companions.length) +
+    "/6</button>";
+  $("team-strip")
+    .querySelectorAll("[data-command]")
+    .forEach(
+      (b) =>
+        (b.onclick = () => {
+          if (busy) return;
+          commandUid = +b.dataset.command;
+          commandMode = "move";
+          hud();
+        }),
+    );
+  $("manage-team").onclick = teamMenu;
+  $("tactics-panel").hidden = !["deploy", "plan"].includes(phase);
+  if (phase === "deploy")
+    $("tactics-panel").innerHTML =
+      '<strong>Schieramento</strong><p>Seleziona un alleato e tocca una casella verde nelle tre righe inferiori. Lo starter è obbligatorio.</p><button id="begin-boss">Conferma schieramento</button>';
+  if (phase === "plan")
+    $("tactics-panel").innerHTML =
+      `<strong>Ordini per ${esc(commanded().name)}</strong><p>${typeof commandMode === "number" ? "Mossa: " + esc(D.moves[commanded().moves[commandMode].id].name) + " — scegli bersaglio o direzione." : commandMode === "attack" ? "Attacco — scegli bersaglio o direzione." : "Movimento — tocca una casella adiacente o una freccia."} Ogni Pokémon agisce una volta, poi risponde il boss. Puoi correggere gli ordini prima della conferma.</p><button id="order-move">Muovi</button><button id="order-attack">Attacco</button><button id="order-wait">Attendi</button><button id="resolve-orders" ${active.every((m) => r.tactics.orders[m.uid]) ? "" : "disabled"}>Esegui turno (${Object.keys(r.tactics.orders).length}/${active.length})</button>`;
+  if ($("begin-boss"))
+    $("begin-boss").onclick = () => {
+      if (!busy && game.beginBoss()) {
+        save();
+        hud();
+      } else toast("Disponi tutti i Pokémon nelle tre righe verdi.");
+    };
+  if ($("order-move"))
+    $("order-move").onclick = () => {
+      commandMode = "move";
+      hud();
+    };
+  if ($("order-attack"))
+    $("order-attack").onclick = () => {
+      commandMode = "attack";
+      hud();
+    };
+  if ($("order-wait"))
+    $("order-wait").onclick = () => sendOrder({ type: "wait" });
+  if ($("resolve-orders"))
+    $("resolve-orders").onclick = () => act(() => game.resolveOrders());
+}
+function teamMenu() {
+  if (busy) return;
+  const r = game.run;
+  modal(
+    "La tua squadra",
+    `<p>Massimo 6 Pokémon, 3 in campo. ★ Lo starter non può essere sostituito: se va KO, la spedizione termina. Ogni cambio consuma un turno per tutta la squadra. I compagni KO recuperano al piano successivo.</p><div class="team-roster">${game
+      .members()
+      .map(
+        (m) =>
+          `<article><img src="assets/portraits/${m.species}.png" alt=""><strong>${esc(m.name)}${m.uid === 0 ? " ★" : ""}</strong><span>Lv ${m.level} · ${m.hp}/${m.maxHp} PS · ${m.uid === 0 || m.active ? "In campo" : "Riserva"}</span>${m.uid !== 0 && m.active ? `<button data-withdraw="${m.uid}">Ritira · 1 turno</button>` : ""}${m.uid !== 0 && !m.active && m.hp > 0 ? `<button data-bring="${m.uid}">Schiera · 1 turno</button>` : ""}</article>`,
+      )
+      .join("")}</div>`,
+    [["Chiudi"]],
+  );
+  document.querySelectorAll("[data-withdraw]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        $("modal").close();
+        act(() => game.withdraw(+b.dataset.withdraw));
+      }),
+  );
+  document.querySelectorAll("[data-bring]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        const incoming = +b.dataset.bring;
+        const choose = (uid) => {
+          $("modal").close();
+          act(() => game.substitute(uid, incoming));
+          renderer
+            .prepare(game.active().map((m) => m.species))
+            .catch(console.error);
+        };
+        if (game.active().length < 3) choose(null);
+        else
+          modal(
+            "Scegli chi sostituire",
+            "<p>Lo starter resta in campo. Anche gli altri alleati rinunciano alla loro azione in questo turno.</p>",
+            [
+              ...game
+                .active()
+                .filter((m) => m.uid !== 0)
+                .map((m) => [m.name, () => choose(m.uid)]),
+              ["Annulla", teamMenu],
+            ],
+          );
+      }),
+  );
+}
+function recruitmentDialog() {
+  const r = game.run;
+  const finish = (id, replace = null) => {
+    game.recruit(id, replace);
+    save();
+    hud();
+    stateDialog();
+  };
+  modal(
+    "Un nuovo compagno",
+    `<p>Scegli un solo Pokémon mandato KO su questo piano. Ogni specie compare una volta. Il reclutamento sblocca anche lo starter per le prossime spedizioni.</p><div class="recruit-grid">${r.floorKOs.map((m) => `<button data-recruit="${m.species}"><img src="assets/portraits/${m.species}.png" alt=""><strong>${esc(D.pokemon[m.species].name)}</strong><span>Livello ${m.level}</span></button>`).join("") || "<p>Nessun Pokémon sconfitto su questo piano.</p>"}</div>`,
+    [["Prosegui senza reclutare", () => finish(null)]],
+  );
+  document.querySelectorAll("[data-recruit]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        const id = +b.dataset.recruit;
+        if (r.companions.length < 5) finish(id);
+        else
+          modal(
+            "Squadra al completo",
+            "<p>Scegli un compagno da lasciare per reclutare il nuovo Pokémon. Costa un turno e i nemici ancora presenti possono agire. Lo starter non può essere sostituito.</p>",
+            [
+              ...r.companions.map((m) => [m.name, () => finish(id, m.uid)]),
+              ["Annulla", recruitmentDialog],
+            ],
+          );
+      }),
+  );
+}
+
 function stateDialog() {
   const r = game.run;
+  if (r.state === "reward" && !r.recruitmentDone) {
+    recruitmentDialog();
+    return;
+  }
   if (r.state === "playing" && r.pendingMoves.length) {
     const id = r.pendingMoves[0];
     const choose = (i) => {
@@ -570,8 +786,16 @@ $("credits-button").onclick = () =>
     [["Chiudi"]],
   );
 $("stairs-button").onclick = () => act(() => game.stairs());
-$("attack-button").onclick = () => act(() => game.regularAttack());
-$("wait-button").onclick = () => act(() => game.wait());
+$("attack-button").onclick = () => {
+  if (tactical()) {
+    commandMode = "attack";
+    hud();
+  } else act(() => game.regularAttack());
+};
+$("wait-button").onclick = () => {
+  if (tactical()) sendOrder({ type: "wait" });
+  else act(() => game.wait());
+};
 $("bag-shortcut").onclick = () =>
   $("bag").scrollIntoView({ behavior: "smooth" });
 let facingMode = false;
@@ -601,6 +825,7 @@ document.querySelectorAll("[data-direction]").forEach(
   (b) =>
     (b.onclick = () => {
       const [dx, dy] = b.dataset.direction.split(",").map(Number);
+      if (directionCommand(dx, dy)) return;
       if (facingMode) orient(dx, dy);
       else act(() => game.move(dx, dy));
     }),
@@ -617,6 +842,33 @@ $("dungeon").onclick = (e) => {
   if (busy) return;
   const { x, y } = mapPoint(e),
     p = game.run.player;
+  if (tactical()) {
+    const ally = game.active().find((m) => m.x === x && m.y === y);
+    if (ally) {
+      commandUid = ally.uid;
+      commandMode = "move";
+      hud();
+      return;
+    }
+    const actor = commanded();
+    if (game.run.tactics.phase === "deploy") {
+      game.deploy(actor.uid, x, y);
+      save();
+      hud();
+      return;
+    }
+    const direction = [Math.sign(x - actor.x), Math.sign(y - actor.y)];
+    if (typeof commandMode === "number" || commandMode === "attack") {
+      sendOrder({
+        type: typeof commandMode === "number" ? "moveAttack" : "attack",
+        ...(typeof commandMode === "number" ? { slot: commandMode } : {}),
+        direction,
+      });
+    } else if (Math.max(Math.abs(x - actor.x), Math.abs(y - actor.y)) === 1)
+      sendOrder({ type: "move", dx: direction[0], dy: direction[1] });
+    else toast("Scegli una casella adiacente: ogni ordine muove di un passo.");
+    return;
+  }
   if (facingMode) {
     orient(x - p.x, y - p.y);
     return;
@@ -667,6 +919,40 @@ window.addEventListener("keydown", (e) => {
       z: [-1, 1],
       c: [1, 1],
     };
+  if (tactical() && !busy) {
+    if (dirs[k]) {
+      e.preventDefault();
+      directionCommand(...dirs[k]);
+      return;
+    }
+    if (/^[1-4]$/.test(k)) {
+      e.preventDefault();
+      if (commanded().moves[+k - 1]) {
+        commandMode = +k - 1;
+        hud();
+      }
+      return;
+    }
+    if (k === " ") {
+      e.preventDefault();
+      commandMode = "attack";
+      hud();
+      return;
+    }
+    if (k === ".") {
+      sendOrder({ type: "wait" });
+      return;
+    }
+    if (k === "enter") {
+      e.preventDefault();
+      if (game.run.tactics.phase === "deploy") {
+        game.beginBoss();
+        save();
+        hud();
+      } else act(() => game.resolveOrders());
+      return;
+    }
+  }
   if (k === "v") {
     e.preventDefault();
     $("face-button").click();

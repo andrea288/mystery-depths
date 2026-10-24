@@ -5,13 +5,13 @@ Cartella attiva: `/workspace/mystery-depths`. Repository originale
 
 ## Funzionante
 
-Interfaccia italiana, 29 starter con filtro regioni, selezione mosse, 50 specie,
-37 mosse di danno, cinque biomi, mappe con seed, boss ogni cinque piani,
+Interfaccia italiana, 29 starter iniziali e sblocchi tramite reclutamento, selezione mosse, 53 specie,
+47 mosse di danno (46 EoS + Magibrillio adattato), 18 biomi, mappe con seed, boss ogni cinque piani,
 ricompense, livelli, fame, dodici strumenti, salvataggi e ripresa, import/export,
 morte e nuova spedizione con progressi conservati. `npm start` avvia su localhost.
 WASM e asset sono già inclusi. Avvio Windows via `avvia-windows.bat`.
 
-La prova browser ha superato il boss del quinto piano in 853 turni/15 vittorie,
+La prova browser ha superato il boss del quinto piano in 716 turni/13 vittorie,
 ripreso un salvataggio e completato morte/nuova run senza errori JavaScript.
 Vedere `test-results/browser-journey.json` e `browser-journey.log`.
 
@@ -100,3 +100,22 @@ in MIGLIORAMENTI-50.md. Salvataggi con meccaniche v5, migrazione da v3/v4.
 Verifiche del 23 ottobre: 37/37 test automatici, percorso reale fino al piano 6
 in 853 turni con 15 vittorie, ripresa, morte e nuova partita. Prove desktop/touch
 e animazioni eseguite anche contro lo ZIP estratto: nessun errore JS o asset 404.
+
+## Squadra e guardiani: aggiornamento completato
+
+L'applicazione usa `src/team.mjs`, che estende il motore EoS di `src/game.mjs`.
+Squadra di sei membri, tre attivi, starter obbligatorio, reclutamento deduplicato
+a ogni piano e sblocco permanente degli starter. Alleati autonomi nei piani
+ordinari; schieramento e ordini individuali nei boss, senza IA alleata.
+Ogni cambio/ritiro consuma un turno della squadra. KO dello starter = fine run.
+Salvataggi meccaniche v6 con migrazione dalle versioni 3–5.
+
+18 guardiani, palette e incontri favoriti per tipo. Aggiunti Butterfree, Dewgong
+e Clefable con sprite e crescita EoS; nove mosse EoS aggiuntive e l'estensione
+Magibrillio/Folletto dichiarata in SQUADRA-E-GUARDIANI.md.
+
+Verifiche finali: 50/50 test automatici; browser fino al piano 6 in 716 turni
+con 13 vittorie e cinque compagni reclutati, ripresa, morte e nuova partita.
+Test dello ZIP estratto: squadra desktop/touch, reclutamento (due Zubat = una
+scelta), nuovo starter giocabile, orientamento gratuito, animazioni e preferenze.
+Nessun errore JavaScript nelle prove completate.

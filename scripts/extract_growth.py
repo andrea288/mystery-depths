@@ -21,4 +21,4 @@ for p in D['pokemon'].values():
   assert p['levelStats'][n]=={'hp':hp,'atk':atk,'spa':spa,'def':df,'spd':spd},(p['name'],n,p['levelStats'][n],{'hp':hp,'atk':atk,'spa':spa,'def':df,'spd':spd})
  out[p['eosSpecies']]={'expThresholds':[e[0] for e in entries],'expYield':struct.unpack_from('<H',md,offset+0x1c)[0],'regenSpeed':(md[offset+0x30]<<1)&255}
 (R/'data/eos-growth.json').write_text(json.dumps(out,separators=(',',':')))
-print('Growth independently matches damage-eos for all 50 species / 5000 levels.')
+print('Growth independently matches damage-eos:',len(D['pokemon']),'species /',len(D['pokemon'])*100,'levels.')

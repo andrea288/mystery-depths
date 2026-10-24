@@ -4002,5 +4002,529 @@
       }
     ],
     "missingAnimations": []
+  },
+  {
+    "dex": 12,
+    "name": "Butterfree",
+    "region": "Kanto",
+    "rulesModule": "eos-na",
+    "rulesVerified": false,
+    "animations": {
+      "Idle": {
+        "sheet": "Idle",
+        "frameWidth": 32,
+        "frameHeight": 56,
+        "durations": [
+          8,
+          8,
+          8,
+          8
+        ],
+        "rushFrame": null,
+        "hitFrame": null,
+        "returnFrame": null
+      },
+      "Walk": {
+        "sheet": "Walk",
+        "frameWidth": 32,
+        "frameHeight": 56,
+        "durations": [
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8
+        ],
+        "rushFrame": null,
+        "hitFrame": null,
+        "returnFrame": null
+      },
+      "Attack": {
+        "sheet": "Attack",
+        "frameWidth": 72,
+        "frameHeight": 80,
+        "durations": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "rushFrame": "2",
+        "hitFrame": "6",
+        "returnFrame": "9"
+      },
+      "Hurt": {
+        "sheet": "Hurt",
+        "frameWidth": 56,
+        "frameHeight": 72,
+        "durations": [
+          2,
+          8
+        ],
+        "rushFrame": null,
+        "hitFrame": null,
+        "returnFrame": null
+      }
+    },
+    "files": [
+      {
+        "path": "assets/pokemon/0012/AnimData.xml",
+        "sha256": "1996c162997730ee183fa53d5d3ac0305395a5fcaa99010cb02ad57ee83238c6",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/AnimData.xml",
+        "bytes": 5859
+      },
+      {
+        "path": "assets/pokemon/0012/sprite-credits.txt",
+        "sha256": "8bf440ca74ce2ddb7f907216f15d8e73638fe3d18890b3fa670683380bac0717",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/credits.txt",
+        "bytes": 135
+      },
+      {
+        "path": "assets/pokemon/0012/portrait-credits.txt",
+        "sha256": "55d04adce76934a94beace8003f686b6976fe898810982d776706183d19d2bce",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/portrait/0012/credits.txt",
+        "bytes": 244
+      },
+      {
+        "path": "assets/pokemon/0012/portrait.png",
+        "sha256": "ef86a8ae098fb1c51b11950567e5add10d6db919e87c9f795f5b52495dc3c4af",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/portrait/0012/Normal.png",
+        "bytes": 767
+      },
+      {
+        "path": "assets/pokemon/0012/Idle-Anim.png",
+        "sha256": "936ff1e2ef4d01aa3a30dc8436465bc179dea60142f5c34461091011bf934aea",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Idle-Anim.png",
+        "bytes": 10914
+      },
+      {
+        "path": "assets/pokemon/0012/Idle-Offsets.png",
+        "sha256": "353cd94a9659616ae311277cd488187e14f615e0774986df93d0dc6bd51f2dae",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Idle-Offsets.png",
+        "bytes": 672
+      },
+      {
+        "path": "assets/pokemon/0012/Idle-Shadow.png",
+        "sha256": "090430950c8c4cdb45a93bd3cc038858fe937ddf268af6c1a0c4037ca55ac460",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Idle-Shadow.png",
+        "bytes": 991
+      },
+      {
+        "path": "assets/pokemon/0012/Walk-Anim.png",
+        "sha256": "36da453a32e920275d475f669d3e58ece66f5dffda5f95c998b0aac660819ad5",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Walk-Anim.png",
+        "bytes": 19861
+      },
+      {
+        "path": "assets/pokemon/0012/Walk-Offsets.png",
+        "sha256": "85a7783981e07429593085e518dd2192b6ba4673a336a6c8a4137cae7562a991",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Walk-Offsets.png",
+        "bytes": 1745
+      },
+      {
+        "path": "assets/pokemon/0012/Walk-Shadow.png",
+        "sha256": "d6fa8ebab912ef8e4fa7d1b869ad8b29994dd756a81ba145aef29a77b1ce5640",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Walk-Shadow.png",
+        "bytes": 3057
+      },
+      {
+        "path": "assets/pokemon/0012/Attack-Anim.png",
+        "sha256": "5ce2c76805199f27dd95d25657327cdad276194af026dc3e25ef83516ae7f092",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Attack-Anim.png",
+        "bytes": 34388
+      },
+      {
+        "path": "assets/pokemon/0012/Attack-Offsets.png",
+        "sha256": "ddac97d30c882a794507ed0af9e783ee1f34b5c9585931f33c1f66a1499de765",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Attack-Offsets.png",
+        "bytes": 3787
+      },
+      {
+        "path": "assets/pokemon/0012/Attack-Shadow.png",
+        "sha256": "8725afc3e8c1040862b1cc8ad231a83a05075990a9ba4fca27d217a9e0405d68",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Attack-Shadow.png",
+        "bytes": 6333
+      },
+      {
+        "path": "assets/pokemon/0012/Hurt-Anim.png",
+        "sha256": "b614de88bd704c0c448586a1a41b29752619b1cf073869703dad9a795f3ae8cb",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Hurt-Anim.png",
+        "bytes": 7432
+      },
+      {
+        "path": "assets/pokemon/0012/Hurt-Offsets.png",
+        "sha256": "1bc81ab4651d0ccb45357b50966c34df4f39c7bc717339ffb10e5d5af7a071a3",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Hurt-Offsets.png",
+        "bytes": 539
+      },
+      {
+        "path": "assets/pokemon/0012/Hurt-Shadow.png",
+        "sha256": "db7d3db4e87983e7d724483082216d1420e2c793fda34cedf6420eb36144d721",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0012/Hurt-Shadow.png",
+        "bytes": 969
+      }
+    ]
+  },
+  {
+    "dex": 87,
+    "name": "Dewgong",
+    "region": "Kanto",
+    "rulesModule": "eos-na",
+    "rulesVerified": false,
+    "animations": {
+      "Idle": {
+        "sheet": "Idle",
+        "frameWidth": 48,
+        "frameHeight": 40,
+        "durations": [
+          30,
+          12,
+          8,
+          12,
+          8,
+          12
+        ],
+        "rushFrame": null,
+        "hitFrame": null,
+        "returnFrame": null
+      },
+      "Walk": {
+        "sheet": "Walk",
+        "frameWidth": 40,
+        "frameHeight": 48,
+        "durations": [
+          8,
+          6,
+          6,
+          6,
+          10,
+          8,
+          8
+        ],
+        "rushFrame": null,
+        "hitFrame": null,
+        "returnFrame": null
+      },
+      "Attack": {
+        "sheet": "Attack",
+        "frameWidth": 72,
+        "frameHeight": 72,
+        "durations": [
+          2,
+          4,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "rushFrame": "1",
+        "hitFrame": "3",
+        "returnFrame": "6"
+      },
+      "Hurt": {
+        "sheet": "Hurt",
+        "frameWidth": 48,
+        "frameHeight": 64,
+        "durations": [
+          2,
+          8
+        ],
+        "rushFrame": null,
+        "hitFrame": null,
+        "returnFrame": null
+      }
+    },
+    "files": [
+      {
+        "path": "assets/pokemon/0087/AnimData.xml",
+        "sha256": "b761fe99723526926480d1eb2397c975d2a48d55dbcbc1560a8caa2af472b3e3",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/AnimData.xml",
+        "bytes": 4845
+      },
+      {
+        "path": "assets/pokemon/0087/sprite-credits.txt",
+        "sha256": "822cde66e41f7f7efdf1b896b142e77cc996d7a8acfbd3363531dd3d8ec895c9",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/credits.txt",
+        "bytes": 130
+      },
+      {
+        "path": "assets/pokemon/0087/portrait-credits.txt",
+        "sha256": "a63d1427982cbc16e3d7696f06cea797bd814e203bbaaa2a00293c8ff37dd5a3",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/portrait/0087/credits.txt",
+        "bytes": 404
+      },
+      {
+        "path": "assets/pokemon/0087/portrait.png",
+        "sha256": "7e0ed6cf3318319c7789145ca0fa0f804986f4bd01c5e0e570afce8d81224ec1",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/portrait/0087/Normal.png",
+        "bytes": 1502
+      },
+      {
+        "path": "assets/pokemon/0087/Idle-Anim.png",
+        "sha256": "b342742b7115de6b98cfa3e23393c8edcb51042fa3f009431ffd3e294dd36b31",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Idle-Anim.png",
+        "bytes": 7637
+      },
+      {
+        "path": "assets/pokemon/0087/Idle-Offsets.png",
+        "sha256": "bce65a294c61c75da67deedd582199f21b13da77322181aff62350917a3875a0",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Idle-Offsets.png",
+        "bytes": 920
+      },
+      {
+        "path": "assets/pokemon/0087/Idle-Shadow.png",
+        "sha256": "64c4ff18670ee41cd592b8a8eca235b5ddc0dff6b9610e4dbaec57813e5dd894",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Idle-Shadow.png",
+        "bytes": 1454
+      },
+      {
+        "path": "assets/pokemon/0087/Walk-Anim.png",
+        "sha256": "430faf06842395392366a12653e827756b785910ba04f53be2b36944efc5954a",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Walk-Anim.png",
+        "bytes": 11405
+      },
+      {
+        "path": "assets/pokemon/0087/Walk-Offsets.png",
+        "sha256": "ace021360d2f87e2743d44253ee3593cc7ecde83255b05183db647ce8153abfb",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Walk-Offsets.png",
+        "bytes": 1135
+      },
+      {
+        "path": "assets/pokemon/0087/Walk-Shadow.png",
+        "sha256": "f39df00074889a0e4e2ee25d63d7a1e34aed645ec02a20e12a2d9814c43dd11f",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Walk-Shadow.png",
+        "bytes": 2560
+      },
+      {
+        "path": "assets/pokemon/0087/Attack-Anim.png",
+        "sha256": "ba94c1b8de55bb1e433d202e3741f1825b18fe75a38df24f0bda726825d1edeb",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Attack-Anim.png",
+        "bytes": 17567
+      },
+      {
+        "path": "assets/pokemon/0087/Attack-Offsets.png",
+        "sha256": "3df38fff724f88005a4da23ff31dfa763d30b948a39a1e5d7a763705d3f396f9",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Attack-Offsets.png",
+        "bytes": 2527
+      },
+      {
+        "path": "assets/pokemon/0087/Attack-Shadow.png",
+        "sha256": "27547e510c9f78683853a22ea270e6462f71dd7a7ea3fe1130184d37f4d2dbac",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Attack-Shadow.png",
+        "bytes": 4848
+      },
+      {
+        "path": "assets/pokemon/0087/Hurt-Anim.png",
+        "sha256": "5a80de4badf14f689f5cb032a5b16aacc163439fa1b33311d8d0d09c4be076e4",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Hurt-Anim.png",
+        "bytes": 5914
+      },
+      {
+        "path": "assets/pokemon/0087/Hurt-Offsets.png",
+        "sha256": "35aed19d662efe8ca866ef21f86b53d7947a4921147933d9a2e7983b9e2baca5",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Hurt-Offsets.png",
+        "bytes": 468
+      },
+      {
+        "path": "assets/pokemon/0087/Hurt-Shadow.png",
+        "sha256": "59e15793497a8122091a82c72c5a51beee94f1f6d7103dfedfb2604d57a02f51",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0087/Hurt-Shadow.png",
+        "bytes": 848
+      }
+    ]
+  },
+  {
+    "dex": 36,
+    "name": "Clefable",
+    "region": "Kanto",
+    "rulesModule": "eos-na",
+    "rulesVerified": false,
+    "animations": {
+      "Idle": {
+        "sheet": "Idle",
+        "frameWidth": 32,
+        "frameHeight": 48,
+        "durations": [
+          30,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "rushFrame": null,
+        "hitFrame": null,
+        "returnFrame": null
+      },
+      "Walk": {
+        "sheet": "Walk",
+        "frameWidth": 32,
+        "frameHeight": 48,
+        "durations": [
+          8,
+          6,
+          6,
+          6,
+          8,
+          6,
+          6,
+          6
+        ],
+        "rushFrame": null,
+        "hitFrame": null,
+        "returnFrame": null
+      },
+      "Attack": {
+        "sheet": "Attack",
+        "frameWidth": 72,
+        "frameHeight": 72,
+        "durations": [
+          2,
+          4,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "rushFrame": "1",
+        "hitFrame": "3",
+        "returnFrame": "6"
+      },
+      "Hurt": {
+        "sheet": "Hurt",
+        "frameWidth": 48,
+        "frameHeight": 56,
+        "durations": [
+          2,
+          8
+        ],
+        "rushFrame": null,
+        "hitFrame": null,
+        "returnFrame": null
+      }
+    },
+    "files": [
+      {
+        "path": "assets/pokemon/0036/AnimData.xml",
+        "sha256": "c10459146271fb67aedbc602b60d427e3d01d964ae36d0e53c7ffeb39e7f2a5d",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/AnimData.xml",
+        "bytes": 5372
+      },
+      {
+        "path": "assets/pokemon/0036/sprite-credits.txt",
+        "sha256": "3a39d266ac77625435a74833cc10efc791b8ecf902677aeb9d12f7f2eb27ad64",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/credits.txt",
+        "bytes": 133
+      },
+      {
+        "path": "assets/pokemon/0036/portrait-credits.txt",
+        "sha256": "85908e6fbac9da58745be50290de7a5b5b4f7af32c30534f578055866da70ce1",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/portrait/0036/credits.txt",
+        "bytes": 692
+      },
+      {
+        "path": "assets/pokemon/0036/portrait.png",
+        "sha256": "6a408c990e94ff43931b65bd6b586bd48356b5e06ec9f717bf7f3d480100bf90",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/portrait/0036/Normal.png",
+        "bytes": 1177
+      },
+      {
+        "path": "assets/pokemon/0036/Idle-Anim.png",
+        "sha256": "be0561ff0bfa38f5711e30bb0060ec03dfc65f8941971a853a592cf4e5e6a74b",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Idle-Anim.png",
+        "bytes": 13767
+      },
+      {
+        "path": "assets/pokemon/0036/Idle-Offsets.png",
+        "sha256": "4410c5b912deeabec49450f0b26a91c4050f7d991c6134512ab43355cd2a976e",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Idle-Offsets.png",
+        "bytes": 901
+      },
+      {
+        "path": "assets/pokemon/0036/Idle-Shadow.png",
+        "sha256": "98b12e753f426562b6f50a2a0960b253155343cc1310bd22dbd560378051005f",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Idle-Shadow.png",
+        "bytes": 963
+      },
+      {
+        "path": "assets/pokemon/0036/Walk-Anim.png",
+        "sha256": "7e72c95984fc4eab6f8f016cc6ec446bba33e7c404569c800f4cef304ea38939",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Walk-Anim.png",
+        "bytes": 14960
+      },
+      {
+        "path": "assets/pokemon/0036/Walk-Offsets.png",
+        "sha256": "3b97ad7a91bcbbd673334e776e09df613544dc731e13ffa85113c509e8083a3b",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Walk-Offsets.png",
+        "bytes": 1136
+      },
+      {
+        "path": "assets/pokemon/0036/Walk-Shadow.png",
+        "sha256": "97eb7083e7d9298767040ec4cad03b05637d70e68f79d7d7a0f95620c7b407a1",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Walk-Shadow.png",
+        "bytes": 1210
+      },
+      {
+        "path": "assets/pokemon/0036/Attack-Anim.png",
+        "sha256": "69f296102e9cb32cfb730a66ffe5b8e080bcdedabdeb82f855e9f2e9810efff0",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Attack-Anim.png",
+        "bytes": 23305
+      },
+      {
+        "path": "assets/pokemon/0036/Attack-Offsets.png",
+        "sha256": "e79ba52452425b433223b173035236a9e59169efadfb1c7d390c44f94af04565",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Attack-Offsets.png",
+        "bytes": 2596
+      },
+      {
+        "path": "assets/pokemon/0036/Attack-Shadow.png",
+        "sha256": "9eb05eacc9d0815972d2dd831da2a8a4184bc395b1c916bcd041b688e4babc85",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Attack-Shadow.png",
+        "bytes": 4932
+      },
+      {
+        "path": "assets/pokemon/0036/Hurt-Anim.png",
+        "sha256": "557cc6403144c47f776eac8cc765543f8627cff0eef5b9047390359b3df76ad6",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Hurt-Anim.png",
+        "bytes": 5750
+      },
+      {
+        "path": "assets/pokemon/0036/Hurt-Offsets.png",
+        "sha256": "7d73024756852a32b9b377de29ad799c1cf906b0b52e198da893b45a100314d1",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Hurt-Offsets.png",
+        "bytes": 438
+      },
+      {
+        "path": "assets/pokemon/0036/Hurt-Shadow.png",
+        "sha256": "df7815c9541ff2a2416b89ee31260fb0bb23e9f9c037457468f59cf976f1d0bb",
+        "source": "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/9d905ec258c39b1846d33629e5ba47cb8e49dfa8/sprite/0036/Hurt-Shadow.png",
+        "bytes": 815
+      }
+    ]
   }
 ]

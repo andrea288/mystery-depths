@@ -1,0 +1,16 @@
+[
+  {
+    mobile: false,
+    orientationFree: true,
+    saveRestored: true,
+    waitConsumesTurn: true,
+    errors: []
+  },
+  {
+    mobile: true,
+    orientationFree: true,
+    saveRestored: true,
+    waitConsumesTurn: true,
+    errors: []
+  }
+]

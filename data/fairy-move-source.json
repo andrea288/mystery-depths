@@ -1,0 +1,8 @@
+{
+  "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/move_names.csv",
+  "sha256": "99e23ee38ea53d1473474d463b87651deac3cd4928750f8186feae66da45c147",
+  "id": 605,
+  "name": "Magibrillio",
+  "source": "PokeAPI Italian localization",
+  "donor": "Swift (EoS), adapted type and room targeting"
+}
