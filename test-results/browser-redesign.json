@@ -1,0 +1,22 @@
+[
+  {
+    "mobile": false,
+    "teamOfThree": true,
+    "bagKeyboardIsolation": true,
+    "orientationFree": true,
+    "noHorizontalOverflow": true,
+    "biomesRendered": 18,
+    "renderDoesNotMutateSave": true,
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "teamOfThree": true,
+    "bagKeyboardIsolation": true,
+    "orientationFree": true,
+    "noHorizontalOverflow": true,
+    "biomesRendered": 18,
+    "renderDoesNotMutateSave": true,
+    "errors": []
+  }
+]

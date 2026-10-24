@@ -65,3 +65,10 @@ URL fissati, hash e mapping adattati in `assets/items/gear/sources.json`.
 Nomi ufficiali italiani EoS in `assets/game/adventure-labels.json`.
 Statistiche di riferimento delle evoluzioni successive a EoS in
 `data/evolution-donors.json`; limiti in `docs/MIGLIORAMENTI-20.md`.
+
+## Restyling tattico
+
+Tessere ambientali, lampade, acqua, scale e simboli delle stanze speciali sono
+grafica procedurale originale del progetto in `src/world-art.mjs`. Non sono
+estrazioni dal mockup generato né asset di Nintendo. Sprite Pokémon, ritratti,
+strumenti ed effetti mantengono le attribuzioni indicate sopra.

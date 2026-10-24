@@ -82,6 +82,7 @@ for (let step = 0; step < 2500; step++) {
     for (const order of orders) {
       await page.locator(`[data-command="${order.uid}"]`).click();
       if (order.item) {
+        await page.locator("#bag-shortcut").click();
         await page.locator(`[data-item="${order.item}"]`).click();
         await page.getByRole("button", { name: /^Charmander ·/ }).click();
       } else if (order.wait) await page.locator("#order-wait").click();
@@ -264,6 +265,7 @@ for (let step = 0; step < 2500; step++) {
     continue;
   }
   if (plan.item) {
+    await page.locator("#bag-shortcut").click();
     await page.locator(`[data-item="${plan.item}"]`).click();
     if (!["apple", "bigApple", "hugeApple", "seed"].includes(plan.item))
       await page.getByRole("button", { name: /^Charmander ·/ }).click();
@@ -273,8 +275,12 @@ for (let step = 0; step < 2500; step++) {
     await page.waitForTimeout(180); // Let the 160ms movement animation settle before aiming.
     const box = await page.locator("#dungeon").boundingBox();
     await page.mouse.click(
-      box.x + box.width / 2 + (plan.target.x - plan.player.x) * 40,
-      box.y + box.height / 2 + (plan.target.y - plan.player.y) * 40,
+      box.x +
+        box.width / 2 +
+        (plan.target.x - plan.player.x) * (box.width >= 700 ? 56 : 40),
+      box.y +
+        box.height / 2 +
+        (plan.target.y - plan.player.y) * (box.width >= 700 ? 56 : 40),
     );
   }
   await page.keyboard.press(plan.key);

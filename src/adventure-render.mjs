@@ -1,3 +1,4 @@
+import { drawTerrain, drawSite } from "./world-art.mjs";
 const previews = new WeakMap();
 export function drawAdventure(ctx, game, point, size, time, options = {}) {
   const r = game.run,
@@ -9,58 +10,39 @@ export function drawAdventure(ctx, game, point, size, time, options = {}) {
     if (!r.seen[tile.y]?.[tile.x]) continue;
     const p = point(tile);
     ctx.globalAlpha = game.visible(tile.x, tile.y) ? 0.75 : 0.25;
-    ctx.fillStyle = {
-      water: "#467fba",
-      ice: "#a3dbea",
-      sand: "#c2a565",
-      grass: "#486c42",
-    }[tile.kind];
-    ctx.fillRect(p.x - size / 2 + 1, p.y - size / 2 + 1, size - 2, size - 2);
-    ctx.fillStyle = "#ffffff35";
-    if (tile.kind === "water")
-      for (let i = 0; i < 3; i++)
-        ctx.fillRect(
-          p.x - size * 0.35,
-          p.y - size * 0.25 + i * size * 0.22,
-          size * 0.6,
-          2,
-        );
-    if (tile.kind === "ice") {
-      ctx.beginPath();
-      ctx.moveTo(p.x - size * 0.3, p.y - size * 0.3);
-      ctx.lineTo(p.x + size * 0.3, p.y + size * 0.3);
-      ctx.strokeStyle = "#efffff";
-      ctx.stroke();
-    }
-    if (tile.kind === "sand")
-      for (let i = 0; i < 4; i++)
-        ctx.fillRect(p.x + (i % 2 ? 5 : -6), p.y + (i > 1 ? 5 : -5), 2, 2);
+    drawTerrain(ctx, tile, p, size, time, options.reducedMotion);
   }
   ctx.globalAlpha = 1;
   for (const s of a.sites) {
     if ((s.used && !s.pending) || !game.visible(s.x, s.y)) continue;
     const p = point(s);
-    ctx.fillStyle = {
-      treasure: "#debb56",
-      rest: "#79d5b2",
-      merchant: "#bc8be2",
-      trial: "#ea9471",
-      rescue: "#e5c0d5",
-    }[s.kind];
-    ctx.fillRect(p.x - size * 0.3, p.y - size * 0.3, size * 0.6, size * 0.6);
-    ctx.strokeStyle = "#1c262d";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(p.x - size * 0.3, p.y - size * 0.3, size * 0.6, size * 0.6);
-    ctx.fillStyle = "#162631";
-    ctx.font = `bold ${Math.max(12, size * 0.48)}px Pixel,monospace`;
-    ctx.textAlign = "center";
-    ctx.fillText(
-      { treasure: "◆", rest: "+", merchant: "¤", trial: "!", rescue: "?" }[
-        s.kind
-      ],
-      p.x,
-      p.y + size * 0.16,
-    );
+    drawSite(ctx, s, p, size, time, options.reducedMotion);
+  }
+  if (r.tactics?.phase === "plan" && options.movement) {
+    const actor =
+      game.active().find((m) => m.uid === options.actor) || r.player;
+    for (let dy = -1; dy <= 1; dy++)
+      for (let dx = -1; dx <= 1; dx++) {
+        const x = actor.x + dx,
+          y = actor.y + dy;
+        if ((!dx && !dy) || !game.canStep(actor, x, y)) continue;
+        const p = point({ x, y });
+        ctx.fillStyle = "#4cbfdd3b";
+        ctx.fillRect(
+          p.x - size / 2 + 1,
+          p.y - size / 2 + 1,
+          size - 2,
+          size - 2,
+        );
+        ctx.strokeStyle = "#81dce3";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(
+          p.x - size / 2 + 1,
+          p.y - size / 2 + 1,
+          size - 2,
+          size - 2,
+        );
+      }
   }
   if (r.tactics) {
     const intent = a.bossIntent;

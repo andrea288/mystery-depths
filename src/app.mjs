@@ -1,9 +1,11 @@
+import { installDexLayout } from "./dex-layout.mjs";
 import { TYPE_NAMES } from "./team.mjs";
 import { Game, DIFFICULTIES, TACTICS, WEATHER, GEAR } from "./adventure.mjs";
 import { ITEMS, BIOMES, itemIcon } from "./game.mjs";
 import { Renderer } from "./render.mjs";
 import { Playback } from "./presentation.mjs";
 import createCore from "../assets/wasm/eos-core.mjs";
+installDexLayout();
 let chosenDifficulty = "normal";
 let playback = null,
   lastVisualEvent = -1;
@@ -86,6 +88,7 @@ function save() {
   }
 }
 function modal(title, body, actions = []) {
+  $("bag-dialog").close();
   $("modal-content").innerHTML =
     `<span class="eyebrow">MYSTERY DEPTHS</span><h2>${esc(title)}</h2>${body}<div class="modal-actions"></div>`;
   for (const [label, fn] of actions) {
@@ -101,6 +104,7 @@ function modal(title, body, actions = []) {
 }
 function camp() {
   if (busy) return;
+  $("bag-dialog").close();
   view = "camp";
   document.body.dataset.screen = "camp";
   $("camp").hidden = false;
@@ -259,6 +263,9 @@ async function expedition() {
 function hud(displayGame = game) {
   const r = displayGame.run,
     p = r.player;
+  document.body.dataset.battle = r.tactics?.phase || "explore";
+  $("dex-message").textContent =
+    r.log[0]?.text || "Esplora il dungeon e trova le scale.";
   if (!r) return;
   $("biome-kicker").textContent =
     displayGame.biome().name + " · " + TYPE_NAMES[displayGame.biome().type];
@@ -278,7 +285,7 @@ function hud(displayGame = game) {
   $("move-bar").innerHTML = Array.from({ length: 4 }, (_, i) => {
     const s = acting.moves[i],
       m = s && D.moves[s.id];
-    return `<button title="${m ? m.name + ": potenza " + m.power + ", precisione " + m.accuracy : "Slot libero"}" data-move="${i}" ${!m || !s.pp ? "disabled" : ""}><kbd>${i + 1}</kbd><strong>${m ? m.name : "—"}</strong><span>${m ? types[m.type] + " · " + s.pp + "/" + m.pp + " PP" : "Mossa da apprendere"}</span><i class="pp-gauge" style="--pp:${m ? (s.pp / m.pp) * 100 : 0}%"></i></button>`;
+    return `<button title="${m ? m.name + ": potenza " + m.power + ", precisione " + m.accuracy : "Slot libero"}" data-type="${m?.type || "normal"}" data-move="${i}" ${!m || !s.pp ? "disabled" : ""}><kbd>${i + 1}</kbd><strong>${m ? m.name : "—"}</strong><span>${m ? types[m.type] + " · " + s.pp + "/" + m.pp + " PP" : "Mossa da apprendere"}</span><i class="pp-gauge" style="--pp:${m ? (s.pp / m.pp) * 100 : 0}%"></i></button>`;
   }).join("");
   $("move-bar")
     .querySelectorAll("button")
@@ -443,11 +450,12 @@ function teamHud(displayGame) {
   const active = displayGame.active();
   const phase = r.tactics?.phase;
   renderer.commandUid = tactical() ? commanded().uid : null;
+  renderer.movementPreview = tactical() && commandMode === "move";
   $("team-strip").innerHTML =
     active
       .map(
         (m) =>
-          `<button data-command="${m.uid}" class="${m.uid === commandUid ? "selected" : ""}"><img src="assets/portraits/${m.species}.png" alt=""><span>${esc(m.name)}${m.uid === 0 ? " ★" : ""}<small>${m.hp}/${m.maxHp} PS · ${esc(orderLabel(r.tactics?.orders[m.uid], m))}</small></span></button>`,
+          `<button data-command="${m.uid}" class="${m.uid === commandUid ? "selected" : ""}"><img src="assets/portraits/${m.species}.png" alt=""><span>${esc(m.name)}${m.uid === 0 ? " ★" : ""}<small>Lv ${m.level} · ${m.hp}/${m.maxHp} PS</small><i class="team-health"><i style="width:${(Math.max(0, m.hp) / m.maxHp) * 100}%"></i></i><small class="team-order">${esc(orderLabel(r.tactics?.orders[m.uid], m))}</small></span></button>`,
       )
       .join("") +
     '<button id="manage-team">Squadra ' +
@@ -531,6 +539,7 @@ function adventureHud(displayGame) {
 }
 function useBagItem(key) {
   if (busy) return;
+  $("bag-dialog").close();
   const consume = (uid) => {
     const go = () => act(() => game.useItemOn(key, uid));
     if (preferences.confirmItems)
@@ -1141,8 +1150,17 @@ $("wait-button").onclick = () => {
   if (tactical()) sendOrder({ type: "wait" });
   else act(() => game.wait());
 };
-$("bag-shortcut").onclick = () =>
-  $("bag").scrollIntoView({ behavior: "smooth" });
+function openBag() {
+  if (view === "expedition" && !$("modal").open && !$("bag-dialog").open)
+    $("bag-dialog").showModal();
+}
+$("bag-shortcut").onclick = openBag;
+$("movement-button").onclick = () => {
+  if (busy) return;
+  if (facingMode) $("face-button").click();
+  commandMode = "move";
+  hud();
+};
 let facingMode = false;
 function orient(dx, dy) {
   if (
@@ -1247,7 +1265,12 @@ $("dungeon").oncontextmenu = (e) => {
   orient(x - p.x, y - p.y);
 };
 window.addEventListener("keydown", (e) => {
-  if (view !== "expedition" || $("modal").open || e.target.matches("input"))
+  if (
+    view !== "expedition" ||
+    $("modal").open ||
+    $("bag-dialog").open ||
+    e.target.matches("input, select, textarea")
+  )
     return;
   const k = e.key.toLowerCase(),
     dirs = {
@@ -1317,7 +1340,7 @@ window.addEventListener("keydown", (e) => {
     return;
   }
   if (k === "b") {
-    $("bag").scrollIntoView({ behavior: "smooth" });
+    openBag();
     return;
   }
   if (k === "tab") {
@@ -1397,7 +1420,10 @@ async function init() {
       const delta = Math.min(80, Math.max(0, t - previousFrame));
       previousFrame = t;
       if (playback) {
-        playback.advance(delta, $("modal").open || document.hidden);
+        playback.advance(
+          delta,
+          $("modal").open || $("bag-dialog").open || document.hidden,
+        );
         renderer.events = playback.events;
         $("action-banner").textContent = playback.current
           ? (playback.current.actor || "") +

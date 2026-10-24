@@ -1,5 +1,6 @@
+import { drawWorld, drawStairs } from "./world-art.mjs";
 import { drawAdventure } from "./adventure-render.mjs";
-import { BIOMES, DIRS, ITEMS, itemIcon } from "./game.mjs";
+import { DIRS, ITEMS, itemIcon } from "./game.mjs";
 import { EFFECTS } from "./presentation.mjs";
 const cache = new Map();
 let effectSheets;
@@ -177,9 +178,10 @@ export class Renderer {
     const r = game.run;
     if (!r) return;
     const size = r.tactics
-        ? Math.min(40, Math.floor(width / 21), Math.floor(height / 15))
-        : 40,
-      b = game.biome?.() || BIOMES[r.biome];
+      ? Math.min(40, Math.floor(width / 21), Math.floor(height / 15))
+      : width >= 700
+        ? 56
+        : 40;
     const step = this.events.findLast(
       (e) =>
         e.type === "step" && e.uid === 0 && time - e.time < (e.duration || 160),
@@ -197,100 +199,28 @@ export class Renderer {
     const ox = Math.round(width / 2 - cameraX * size - size / 2),
       oy = Math.round(height / 2 - cameraY * size - size / 2);
     this.camera = { x: ox, y: oy, size };
-    for (let y = 0; y < r.h; y++)
-      for (let x = 0; x < r.w; x++) {
-        const px = ox + x * size,
-          py = oy + y * size;
-        if (
-          px < -size ||
-          py < -size ||
-          px > width ||
-          py > height ||
-          !r.seen[y][x]
-        )
-          continue;
-        ctx.globalAlpha = game.visible(x, y) ? 1 : 0.3;
-        const wall = r.map[y][x];
-        ctx.fillStyle = wall ? b.wall : b.floor;
-        ctx.fillRect(px, py, size, size);
-        if (r.tactics) {
-          if (!wall) {
-            ctx.fillStyle = (x + y) % 2 ? "#ffffff09" : "#00000010";
-            ctx.fillRect(px, py, size, size);
-            ctx.strokeStyle = "#ffffff20";
-            ctx.strokeRect(px, py, size, size);
-          }
-          continue;
-        }
-        ctx.fillStyle = wall ? b.edge : "#ffffff08";
-        ctx.fillRect(px + 1, py + 1, size - 2, wall ? 8 : 1);
-        const noise = (x * 73 + y * 127 + x * y * 17) >>> 0;
-        if (wall) {
-          ctx.fillStyle = "#00000042";
-          ctx.fillRect(px, py + 25, size, 15);
-          ctx.fillStyle = b.edge;
-          ctx.fillRect(px + 3, py + 4, 14, 8);
-          ctx.fillRect(px + 20, py + 3, 17, 10);
-          ctx.fillStyle = "#ffffff10";
-          ctx.fillRect(px + 4, py + 4, 11, 2);
-          ctx.fillRect(px + 22, py + 3, 12, 2);
-          ctx.fillStyle = "#00000036";
-          ctx.fillRect(px + 17, py + 2, 3, 13);
-          ctx.fillRect(px + 2, py + 15, 36, 2);
-          ctx.fillStyle = b.edge;
-          ctx.fillRect(px + 6, py + 18, 24, 7);
-          if (noise % 3 === 0) {
-            ctx.fillStyle = b.accent;
-            ctx.globalAlpha *= 0.3;
-            ctx.fillRect(px + 5, py + 5, 6, 3);
-            ctx.fillRect(px + 8, py + 8, 3, 5);
-          }
-        } else {
-          ctx.fillStyle = "#ffffff08";
-          ctx.fillRect(px + 2, py + 2, 16, 16);
-          ctx.fillRect(px + 22, py + 22, 15, 15);
-          ctx.fillStyle = "#00000026";
-          ctx.fillRect(px + 2, py + 19, 15, 2);
-          ctx.fillRect(px + 21, py + 37, 16, 2);
-          ctx.fillRect(
-            px + (noise % 28) + 3,
-            py + ((noise >> 3) % 28) + 3,
-            4,
-            2,
-          );
-          if (r.map[y - 1]?.[x]) {
-            ctx.fillStyle = "#00000035";
-            ctx.fillRect(px, py, size, 7);
-          }
-          if (noise % 7 === 0) {
-            ctx.fillStyle = b.accent;
-            ctx.globalAlpha *= 0.25;
-            ctx.fillRect(px + 8, py + 26, 2, 5);
-            ctx.fillRect(px + 5, py + 28, 2, 3);
-          }
-        }
-        if (this.options?.grid) {
-          ctx.strokeStyle = "#ffffff25";
-          ctx.strokeRect(px, py, size, size);
-        }
-      }
-    ctx.globalAlpha = 1;
+    drawWorld(ctx, game, this.camera, width, height, time, {
+      ...this.options,
+      reducedMotion: this.reducedMotion,
+    });
+    const rangeActor =
+      game.active?.().find((m) => m.uid === this.commandUid) || r.player;
     if (this.rangeMove) {
       ctx.fillStyle = "#dfc58724";
       for (
-        let y = Math.max(0, r.player.y - 10);
-        y < Math.min(r.h, r.player.y + 11);
+        let y = Math.max(0, rangeActor.y - 10);
+        y < Math.min(r.h, rangeActor.y + 11);
         y++
       )
         for (
-          let x = Math.max(0, r.player.x - 10);
-          x < Math.min(r.w, r.player.x + 11);
+          let x = Math.max(0, rangeActor.x - 10);
+          x < Math.min(r.w, rangeActor.x + 11);
           x++
         )
           if (
             game.floorTile(x, y) &&
             game.visible(x, y) &&
-            game.validTarget(r.player, { x, y, hp: 1 }, this.rangeMove)
+            game.validTarget(rangeActor, { x, y, hp: 1 }, this.rangeMove)
           )
             ctx.fillRect(
               ox + x * size + 1,
@@ -318,12 +248,11 @@ export class Renderer {
       move: this.rangeMove || this.orderMove,
       actor: this.commandUid ?? 0,
       reducedMotion: this.reducedMotion,
+      movement: this.movementPreview,
     });
     const ex = point(r.exit);
     if (r.seen[r.exit.y][r.exit.x]) {
-      ctx.fillStyle = "#e6c889";
-      for (let i = 0; i < 5; i++)
-        ctx.fillRect(ex.x - 13 + i * 2, ex.y - 12 + i * 5, 26 - i * 4, 3);
+      drawStairs(ctx, ex, size);
     }
     for (const item of r.items)
       if (game.visible(item.x, item.y)) {

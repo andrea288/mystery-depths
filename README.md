@@ -29,6 +29,14 @@ locale. Chiudere con Ctrl+C. Su Windows fare doppio clic su `avvia-windows.bat`;
 su Linux/macOS eseguire `./avvia-linux-mac.sh`. Lo script Windows è predisposto,
 ma non è stato eseguito su una macchina Windows in questa sessione.
 
+## Restyling Pokédex tattico
+
+Interfaccia rossa e avorio, squadra laterale, zaino sovrapposto e dungeon
+ridisegnati in pixel art. Su telefono la squadra passa sopra la mappa.
+[Comandi, dettagli grafici e verifiche](docs/RESTYLING-TATTICO.md).
+
+![Interfaccia tattica del gioco](test-results/dex-boss-desktop.png)
+
 ## Squadra e boss tattici
 
 Recluta una specie sconfitta alla fine di ogni piano: fino a 6 Pokémon nella

@@ -57,6 +57,7 @@ try {
         await page.locator("body.playing-action").waitFor({ state: "hidden" });
       }
     };
+    await page.locator("#bag-shortcut").click();
     await page.locator('[data-item="berry"]').click();
     await page.getByRole("button", { name: /Squirtle ·/ }).click();
     await finish();

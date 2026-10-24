@@ -7,6 +7,13 @@ Guida corrente: `MIGLIORAMENTI-20.md`. Non descrivere le nuove regole adattate
 come riproduzione integrale EoS. Test: `npm test` (74); browser su Chromium
 con `GAME_URL` configurabile. Rigenerare gli archivi dopo ogni modifica runtime.
 
+## Restyling tattico
+
+Interfaccia Pokédex rossa/avorio in `src/dex.css`; riordino DOM in
+`src/dex-layout.mjs`; tessere e decorazioni originali in `src/world-art.mjs`.
+Lo zaino ora è un dialogo: i test UI devono aprirlo prima di usare gli oggetti.
+Guida `RESTYLING-TATTICO.md`. Meccaniche e schema salvataggio restano v7.
+
 ## Note precedenti, conservate come storico
 
 # Stato di ripresa — 23 ottobre 2026
