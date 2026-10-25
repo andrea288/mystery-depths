@@ -31,11 +31,13 @@ ma non è stato eseguito su una macchina Windows in questa sessione.
 
 ## Restyling Pokédex tattico
 
-Interfaccia rossa e avorio, squadra laterale, zaino sovrapposto e dungeon
-ridisegnati in pixel art. Su telefono la squadra passa sopra la mappa.
+Interfaccia rossa e avorio, dungeon pixel art e HUD a piena finestra. Squadra,
+zaino e gestione si aprono in pannelli laterali; mosse a scomparsa e comandi
+touch adatti anche al telefono in orizzontale.
+[Guida al nuovo HUD e ai pannelli](docs/UX-HUD.md).
 [Comandi, dettagli grafici e verifiche](docs/RESTYLING-TATTICO.md).
 
-![Interfaccia tattica del gioco](test-results/dex-boss-desktop.png)
+![Interfaccia tattica del gioco](test-results/ux-boss-1440x900.png)
 
 ## Squadra e boss tattici
 

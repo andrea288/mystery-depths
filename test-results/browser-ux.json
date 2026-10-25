@@ -1,0 +1,46 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "noPageScroll": true,
+    "controlsInsideViewport": true,
+    "menuInputIsolation": true,
+    "sideDrawers": true,
+    "orientationFree": true,
+    "bossOrders": true,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "noPageScroll": true,
+    "controlsInsideViewport": true,
+    "menuInputIsolation": true,
+    "sideDrawers": true,
+    "orientationFree": true,
+    "bossOrders": true,
+    "errors": []
+  },
+  {
+    "width": 360,
+    "height": 740,
+    "noPageScroll": true,
+    "controlsInsideViewport": true,
+    "menuInputIsolation": true,
+    "sideDrawers": true,
+    "orientationFree": true,
+    "bossOrders": true,
+    "errors": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "noPageScroll": true,
+    "controlsInsideViewport": true,
+    "menuInputIsolation": true,
+    "sideDrawers": true,
+    "orientationFree": true,
+    "bossOrders": true,
+    "errors": []
+  }
+]

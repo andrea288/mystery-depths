@@ -46,7 +46,7 @@ try {
     });
     await page.reload();
     await page.locator("#resume-button").click();
-    await page.locator("#adventure-bar").waitFor();
+    await page.locator("#manage-team").waitFor();
     const saved = () =>
       page.evaluate(
         () => JSON.parse(localStorage.getItem("mystery-depths-v3")).run,
@@ -79,6 +79,7 @@ try {
     await page.locator("#member-tactic").waitFor();
     assert.equal((await saved()).player.species, 5);
     await page.getByRole("button", { name: "Chiudi", exact: true }).click();
+    await page.locator("#hud-tools-button").click();
     await page.locator("#challenge-button").click();
     assert.ok((await page.locator("#share-code").inputValue()).includes(":4:"));
     await page.getByRole("button", { name: "Chiudi", exact: true }).click();
@@ -132,6 +133,7 @@ try {
     await finish();
     assert.equal((await saved()).player.x, 11);
     assert.equal((await saved()).companions[0].x, 10);
+    await page.locator("#hud-tools-button").click();
     await page.locator("#discovery-button").click();
     await page
       .getByRole("heading", { name: "Registro delle scoperte" })

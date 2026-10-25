@@ -85,11 +85,12 @@ for (let step = 0; step < 2500; step++) {
         await page.locator("#bag-shortcut").click();
         await page.locator(`[data-item="${order.item}"]`).click();
         await page.getByRole("button", { name: /^Charmander ·/ }).click();
-      } else if (order.wait) await page.locator("#order-wait").click();
+      } else if (order.wait) await page.locator("#wait-button").click();
       else {
-        if (order.slot !== undefined)
+        if (order.slot !== undefined) {
+          await page.locator("#moves-button").click();
           await page.locator(`[data-move="${order.slot}"]`).click();
-        else if (order.attack) await page.locator("#order-attack").click();
+        } else if (order.attack) await page.locator("#attack-button").click();
         await page.keyboard.press(
           {
             "0,1": "ArrowDown",
@@ -120,7 +121,7 @@ for (let step = 0; step < 2500; step++) {
       });
       if (uid === undefined) throw Error("Ordine mancante senza conflitto");
       await page.locator(`[data-command="${uid}"]`).click();
-      await page.locator("#order-wait").click();
+      await page.locator("#wait-button").click();
     }
     await page.locator("#resolve-orders").click();
     continue;

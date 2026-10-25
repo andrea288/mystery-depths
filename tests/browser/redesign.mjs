@@ -120,7 +120,7 @@ try {
     await page.locator("#resume-button").click();
     await page.locator("#begin-boss").click();
     await page.locator('[data-command="0"]').click();
-    await page.locator("#order-wait").click();
+    await page.locator("#wait-button").click();
     await page.screenshot({
       path: `test-results/dex-boss-${mobile ? "mobile" : "desktop"}.png`,
       fullPage: true,

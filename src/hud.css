@@ -1,0 +1,1312 @@
+/* Gameplay viewport: map first, drawers at its edges, a single command deck. */
+body[data-screen="expedition"] {
+  height: 100dvh;
+  overflow: hidden;
+}
+body[data-screen="expedition"] > header {
+  height: 42px;
+  padding: 0 18px;
+}
+body[data-screen="expedition"] main {
+  height: calc(100dvh - 42px);
+  padding: 0 10px 10px;
+  max-width: none;
+}
+body[data-screen="expedition"] .header-tag {
+  display: none;
+}
+#expedition {
+  height: 100%;
+  padding: 4px;
+  border-radius: 15px;
+  border-width: 2px;
+  box-shadow:
+    inset 0 2px #e67578,
+    0 0 0 1px #d66065;
+  overflow: hidden;
+}
+.expedition-title {
+  position: absolute;
+  inset: 5px 5px auto;
+  min-height: 44px;
+  height: 44px;
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 9px 9px 0 0;
+  z-index: 5;
+  box-shadow: 0 2px #142d3c55;
+}
+.expedition-title h2 {
+  font-size: 21px;
+  padding: 4px 8px;
+}
+.expedition-title .eyebrow {
+  font-size: 17px;
+}
+.floor-actions button {
+  min-height: 32px;
+  padding: 3px 10px;
+}
+.game-layout {
+  position: absolute;
+  inset: 49px 5px 5px;
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 0 0 10px 10px;
+  background: #142e3b;
+  overflow: hidden;
+}
+.map-column {
+  display: block;
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+}
+.map-frame {
+  position: absolute;
+  inset: 0 0 142px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+#dungeon,
+body[data-battle="plan"] #dungeon,
+body[data-battle="deploy"] #dungeon {
+  height: 100%;
+  width: 100%;
+}
+.dex-rail {
+  position: absolute;
+  z-index: 3;
+  left: 12px;
+  top: 12px;
+  width: 116px;
+  display: flex;
+  gap: 6px;
+  pointer-events: none;
+}
+.dex-rail button,
+.dex-rail #player-card {
+  pointer-events: auto;
+}
+.rail-label {
+  display: none;
+}
+.team-strip {
+  gap: 6px;
+}
+.team-strip button {
+  flex-direction: row;
+  padding: 6px;
+  gap: 5px;
+  background: #153541eb;
+  border: 1px solid #7caba7;
+  box-shadow: 0 3px 10px #061c2e55;
+  border-radius: 8px;
+  text-align: left;
+}
+.team-strip img {
+  width: 32px;
+  height: 32px;
+  border-width: 1px;
+}
+.team-strip button > span {
+  font-size: 14px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.team-strip small {
+  font-size: 11px;
+}
+.team-health {
+  height: 5px;
+  margin: 3px 0;
+}
+.team-order {
+  font-size: 11px;
+  color: #8cdddf;
+  min-height: 12px;
+}
+.team-strip #manage-team {
+  font-size: 16px;
+  padding: 7px;
+  justify-content: center;
+  min-height: 36px;
+  background: #e7decbf2;
+  border: 1px solid #d1c3a4;
+}
+#player-card {
+  padding: 5px 7px;
+  background: #143442e8;
+  color: #d5e7dc;
+  border: 1px solid #517c82;
+  box-shadow: none;
+}
+.player-heading {
+  gap: 0;
+}
+#player-card .player-heading h3 {
+  font-size: 14px;
+}
+#player-card .player-heading span,
+#player-card > .muted,
+#player-card > .meter-label:nth-of-type(2),
+#player-card > .meter:not(.belly) {
+  display: none;
+}
+#player-card .meter-label {
+  font-size: 13px;
+  gap: 5px;
+  margin: 3px 0;
+}
+#player-card .meter.belly {
+  height: 5px;
+  margin: 2px 0;
+}
+#survival-warning {
+  background: #532a34ed;
+  color: #ffcfac;
+  border-radius: 5px;
+  padding: 4px;
+  font-size: 14px;
+}
+.status-chip {
+  font-size: 12px;
+}
+.adventure-bar {
+  position: absolute;
+  z-index: 5;
+  top: 62px;
+  right: 17px;
+  background: #193b49e8;
+  color: #c8dfd7;
+  border: 1px solid #507f87;
+  border-radius: 7px;
+  padding: 5px 9px;
+  max-width: 280px;
+  display: block;
+  min-height: 0;
+  box-shadow: 0 3px 12px #06162644;
+  pointer-events: none;
+}
+.adventure-bar span {
+  color: #c8dfd7;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.adventure-bar button {
+  display: none;
+}
+.adventure-bar #site-button {
+  display: block;
+  pointer-events: auto;
+  margin-top: 5px;
+  min-height: 36px;
+  width: 100%;
+  background: #f5d68b;
+  color: #4d4935;
+  border-color: #d4b565;
+}
+.tools-open .adventure-bar {
+  pointer-events: auto;
+  max-width: 290px;
+  padding: 12px;
+  background: #eee7d5;
+  border: 2px solid #9f9d87;
+  color: #26424c;
+}
+.tools-open .adventure-bar span {
+  color: #426468;
+  white-space: normal;
+  display: block;
+  margin-bottom: 8px;
+}
+.tools-open .adventure-bar button {
+  display: block;
+  width: 100%;
+  min-height: 42px;
+  margin: 5px 0 0;
+  font-size: 18px;
+}
+.tools-open #hud-tools-button {
+  background: #a5dedd;
+  border-color: #4b939d;
+}
+.map-topline {
+  left: 140px;
+  right: 12px;
+  top: 14px;
+  justify-content: flex-start;
+  gap: 8px;
+  font-size: 14px;
+}
+.map-topline #map-location {
+  display: none;
+}
+.map-topline #turn-label {
+  background: #153440ca;
+  color: #bbd2ca;
+}
+#minimap {
+  width: 105px;
+  height: 76px;
+  top: 54px;
+  right: 12px;
+  border: 1px solid #699ca0;
+  background: #123441c9;
+  border-radius: 7px;
+}
+.target-label {
+  bottom: 9px;
+  font-size: 16px;
+}
+.command-console {
+  position: absolute;
+  inset: auto 0 0;
+  height: 142px;
+  padding: 12px 16px 29px;
+  background: linear-gradient(#183b49ed, #112d3bf7);
+  border-top: 1px solid #507480;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+.touch-controls,
+.orienting .touch-controls {
+  position: static;
+  display: grid;
+  grid-template-columns: repeat(3, 36px);
+  grid-template-rows: repeat(3, 30px);
+  width: auto;
+  max-width: none;
+  gap: 3px;
+  grid-column: auto;
+  grid-row: auto;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  flex: 0 0 auto;
+}
+.touch-controls button,
+.touch-controls #wait-button {
+  min-height: 0;
+  height: 30px;
+  padding: 2px;
+  font-size: 17px !important;
+  border-radius: 6px;
+}
+.touch-controls #wait-button {
+  font-size: 12px !important;
+  background: #365865;
+}
+.primary-actions {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(85px, 120px));
+  gap: 8px;
+  align-items: center;
+}
+.primary-actions button {
+  min-height: 54px;
+  border: 1px solid #879e98;
+  font-size: 21px;
+  padding: 8px 12px;
+  box-shadow:
+    inset 0 2px #fff6db66,
+    0 3px #081d2855;
+}
+.primary-actions #attack-button {
+  background: #ba4653;
+  color: #fff1d9;
+  border-color: #cf7e7c;
+  box-shadow:
+    inset 0 2px #dc7778,
+    0 3px #081d2855;
+}
+.primary-actions #movement-button {
+  min-width: 0;
+  background: #e5ddc8;
+  border-color: #a59d85;
+  box-shadow: inset 0 2px #fff6db66;
+}
+#movement-button[aria-pressed="true"],
+#attack-button[aria-pressed="true"],
+#moves-button[aria-expanded="true"] {
+  background: #87d6df !important;
+  border-color: #c2eeed !important;
+  color: #193f4f !important;
+}
+.primary-actions #face-button[aria-pressed="true"] {
+  background: #87d6df;
+  color: #193f4f;
+  border-color: #bdece9;
+}
+.primary-actions #bag-shortcut {
+  background: #dfd3b3;
+  color: #3c4d4d;
+}
+#face-hint {
+  display: none;
+}
+.orientation-controls {
+  display: none !important;
+}
+.dex-log {
+  position: absolute;
+  bottom: 4px;
+  left: 16px;
+  right: 16px;
+  border: 0;
+  color: #b5cbc4;
+  font-size: 15px;
+  z-index: 2;
+  min-height: 20px;
+  padding: 0;
+}
+.dex-log button {
+  background: none;
+  color: #a6cecf;
+  border: 0;
+  padding: 2px 6px;
+}
+.dex-log .signal-dot {
+  background: #7fc6b0;
+}
+#moves-panel {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  width: min(340px, calc(100% - 28px));
+  z-index: 8;
+  background: #f1e8d3;
+  border: 2px solid #749997;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px #06162399;
+  padding: 12px;
+  max-height: calc(100% - 24px);
+  overflow: auto;
+  color: #2c4650;
+  animation: panel-in 0.14s ease-out;
+}
+.flyout-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.flyout-heading strong {
+  font-size: 23px;
+}
+.flyout-heading button {
+  min-width: 38px;
+  min-height: 38px;
+  font-size: 18px;
+  padding: 4px;
+}
+#moves-panel p {
+  font-size: 16px;
+  color: #67796e;
+  margin: 5px 0 10px;
+}
+#move-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+#move-bar button {
+  min-height: 68px;
+  padding: 9px;
+  font-size: 19px;
+}
+#move-bar strong {
+  font-size: 21px;
+  padding-right: 12px;
+}
+#move-bar button span {
+  font-size: 15px;
+}
+#move-bar kbd {
+  display: block;
+  font-size: 12px;
+}
+#move-bar .pp-gauge {
+  margin-top: 3px;
+}
+.tactics-panel {
+  position: absolute;
+  bottom: 142px;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3px 12px;
+  border: 0;
+  border-top: 1px solid #689398;
+  border-bottom: 1px solid #507480;
+  border-radius: 0;
+  background: #183b49f2;
+  padding: 7px 16px;
+  z-index: 3;
+  margin: 0;
+}
+.tactical-summary {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tactical-summary strong {
+  color: #9ce0dd;
+  font-size: 19px;
+}
+.tactical-summary span {
+  font-size: 16px;
+  color: #d0ded4;
+}
+.tactics-panel #resolve-orders,
+.tactics-panel #begin-boss {
+  grid-column: 2;
+  grid-row: 1/3;
+  margin: 0;
+  min-height: 44px;
+  padding: 7px 18px;
+  font-size: 20px;
+}
+.tactics-panel .boss-intent {
+  grid-column: 1;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+}
+.tactics-panel .danger {
+  grid-column: 1/-1;
+  margin: 0;
+  font-size: 15px;
+  color: #ffce99;
+}
+body[data-battle="plan"] .map-frame,
+body[data-battle="deploy"] .map-frame {
+  bottom: 214px;
+}
+body[data-battle="plan"] .tactics-panel,
+body[data-battle="deploy"] .tactics-panel {
+  height: 72px;
+}
+.action-banner {
+  top: auto;
+  bottom: 50px;
+  font-size: 20px;
+  padding: 7px 12px;
+  max-width: 80%;
+  border-width: 1px;
+}
+#skip-animation {
+  position: absolute;
+  right: 12px;
+  bottom: calc(100% + 8px);
+  font-size: 15px;
+  min-height: 34px;
+  z-index: 9;
+}
+body[data-battle="plan"] #skip-animation,
+body[data-battle="resolve"] #skip-animation {
+  bottom: calc(100% + 80px);
+}
+body[data-screen="expedition"] dialog {
+  position: fixed;
+  top: 8px;
+  bottom: 8px;
+  right: 8px;
+  left: auto;
+  margin: 0;
+  width: min(430px, calc(100vw - 16px));
+  max-height: none;
+  height: calc(100dvh - 16px);
+  border: 3px solid #a74a55;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: -12px 0 50px #071c2a66;
+  overflow: auto;
+  animation: panel-in 0.15s ease-out;
+}
+body[data-screen="expedition"] #modal[data-side="left"] {
+  left: 8px;
+  right: auto;
+  box-shadow: 12px 0 50px #071c2a66;
+}
+body[data-screen="expedition"] dialog::backdrop {
+  background: #061b294d;
+  backdrop-filter: none;
+}
+.panel-close {
+  float: right;
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  width: 42px;
+  min-height: 42px;
+  padding: 4px;
+  margin: 0 0 10px 12px;
+}
+#close-bag {
+  position: sticky;
+  top: 0;
+  min-width: 42px;
+  min-height: 42px;
+}
+.modal-actions {
+  position: sticky;
+  bottom: -20px;
+  padding: 12px 0;
+  background: #f1ead9;
+  z-index: 3;
+  border-top: 1px solid #c8bda5;
+}
+dialog .team-roster,
+dialog .recruit-grid {
+  grid-template-columns: 1fr 1fr;
+}
+#bag-dialog #bag {
+  max-height: none;
+}
+#bag-dialog .bag-panel {
+  padding-bottom: 20px;
+}
+.full-log {
+  max-height: none;
+}
+#modal-content h2 {
+  padding-top: 5px;
+}
+.modal-actions button {
+  min-height: 44px;
+}
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@media (max-width: 800px) {
+  body[data-screen="expedition"] > header {
+    height: 36px;
+    padding: 0 10px;
+  }
+  .brand {
+    font-size: 17px;
+  }
+  .header-actions {
+    gap: 5px;
+  }
+  .header-actions .icon-button {
+    width: 30px;
+    height: 28px;
+  }
+  body[data-screen="expedition"] main {
+    height: calc(100dvh - 36px);
+    padding: 0 4px 4px;
+  }
+  #expedition {
+    border-radius: 10px;
+    padding: 2px;
+  }
+  .expedition-title {
+    inset: 3px 3px auto;
+    height: 46px;
+    padding: 4px 7px;
+    border-radius: 6px 6px 0 0;
+  }
+  .expedition-title > div:first-child {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .expedition-title h2 {
+    font-size: 18px;
+    padding: 1px 6px;
+  }
+  .expedition-title .eyebrow {
+    font-size: 12px;
+    max-width: 170px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .floor-actions {
+    gap: 4px;
+  }
+  .floor-actions button {
+    font-size: 15px;
+    min-height: 34px;
+    padding: 4px 7px;
+  }
+  .floor-actions #pause-button {
+    display: none;
+  }
+  .game-layout {
+    inset: 49px 3px 3px;
+    border-radius: 0 0 6px 6px;
+  }
+  .map-frame {
+    bottom: 172px;
+  }
+  .dex-rail {
+    top: 8px;
+    left: 8px;
+    width: calc(100% - 95px);
+    display: block;
+  }
+  .team-strip {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 4px;
+  }
+  .team-strip button[data-command],
+  .team-strip:has(button:nth-child(4)) button[data-command] {
+    flex: 1;
+    flex-direction: column;
+    text-align: center;
+    padding: 4px 3px;
+    gap: 1px;
+    min-width: 0;
+  }
+  .team-strip img,
+  .team-strip:has(button:nth-child(4)) img {
+    width: 25px;
+    height: 25px;
+  }
+  .team-strip button > span,
+  .team-strip:has(button:nth-child(4)) button > span {
+    font-size: 12px;
+    width: 100%;
+    overflow: hidden;
+  }
+  .team-strip small,
+  .team-strip:has(button:nth-child(4)) small {
+    font-size: 10px;
+  }
+  .team-strip .team-order {
+    display: none !important;
+  }
+  .team-health {
+    height: 4px;
+    margin: 2px 0 !important;
+  }
+  .team-strip #manage-team {
+    position: absolute;
+    right: -79px;
+    top: 0;
+    width: 71px;
+    min-height: 40px;
+    font-size: 13px;
+    padding: 4px;
+    justify-content: center;
+  }
+  .team-strip:has(button:nth-child(3)) #manage-team {
+    font-size: 12px;
+  }
+  #player-card {
+    background: #133642c9;
+    margin: 4px 0 0;
+    padding: 3px 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 0;
+    border-radius: 4px;
+  }
+  #player-card .player-heading {
+    flex: 1;
+  }
+  #player-card .player-heading h3 {
+    font-size: 12px;
+  }
+  #player-card .meter-label {
+    font-size: 11px;
+    margin: 0;
+    gap: 4px;
+  }
+  #player-card .meter.belly {
+    width: 38px;
+    height: 4px;
+    margin: 0;
+  }
+  #status-list {
+    display: block;
+  }
+  #survival-warning {
+    font-size: 12px;
+    padding: 3px;
+    margin-top: 3px;
+  }
+  .adventure-bar {
+    top: 98px;
+    right: 13px;
+    padding: 3px 5px;
+    max-width: 78px;
+    box-shadow: none;
+  }
+  .adventure-bar span {
+    display: none;
+  }
+  .adventure-bar:not(:has(#site-button)):not(body.tools-open .adventure-bar) {
+    display: none;
+  }
+  .tools-open .adventure-bar {
+    display: block;
+    top: 56px;
+    right: 9px;
+    width: 250px;
+    max-width: calc(100% - 18px);
+    padding: 10px;
+    z-index: 10;
+  }
+  .tools-open .adventure-bar span {
+    display: block;
+    font-size: 15px;
+  }
+  .adventure-bar #site-button {
+    font-size: 12px;
+    min-height: 40px;
+    margin: 0;
+  }
+  .map-topline {
+    top: 98px;
+    left: 9px;
+    right: auto;
+    font-size: 12px;
+  }
+  .map-topline #turn-label {
+    padding: 2px 5px;
+  }
+  #minimap {
+    top: 55px;
+    right: 8px;
+    width: 71px;
+    height: 51px;
+  }
+  .target-label {
+    font-size: 13px;
+    max-width: 96%;
+    white-space: normal;
+    text-align: center;
+  }
+  .command-console {
+    height: 172px;
+    padding: 12px 10px 27px;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+  }
+  .touch-controls,
+  .orienting .touch-controls {
+    grid-template-columns: repeat(3, 40px);
+    grid-template-rows: repeat(3, 40px);
+    gap: 3px;
+    flex: 0 0 auto;
+  }
+  .touch-controls button,
+  .touch-controls #wait-button {
+    height: 40px;
+    font-size: 20px !important;
+  }
+  .touch-controls #wait-button {
+    font-size: 13px !important;
+  }
+  .primary-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+    flex: 1;
+    max-width: 270px;
+  }
+  .primary-actions button {
+    min-height: 40px;
+    font-size: 18px;
+    padding: 5px;
+    min-width: 0;
+    border-radius: 7px;
+  }
+  .primary-actions #bag-shortcut {
+    grid-column: 1/-1;
+    min-height: 36px;
+  }
+  .dex-log {
+    font-size: 13px;
+    left: 10px;
+    right: 10px;
+    bottom: 5px;
+  }
+  .dex-log button {
+    font-size: 13px;
+    min-height: 22px;
+  }
+  .tactics-panel {
+    bottom: 172px;
+    padding: 6px 10px;
+    gap: 3px 6px;
+  }
+  .tactical-summary {
+    display: block;
+  }
+  .tactical-summary strong {
+    display: block;
+    font-size: 15px;
+  }
+  .tactical-summary span {
+    font-size: 12px;
+    display: block;
+  }
+  .tactics-panel .boss-intent {
+    font-size: 12px;
+    line-height: 1.1;
+  }
+  .tactics-panel #resolve-orders,
+  .tactics-panel #begin-boss {
+    font-size: 16px;
+    padding: 5px 9px;
+    min-height: 44px;
+  }
+  body[data-battle="plan"] .map-frame,
+  body[data-battle="deploy"] .map-frame {
+    bottom: 252px;
+  }
+  body[data-battle="plan"] .tactics-panel,
+  body[data-battle="deploy"] .tactics-panel {
+    height: 80px;
+  }
+  .action-banner {
+    bottom: 42px;
+    font-size: 16px;
+    max-width: 90%;
+    padding: 5px 8px;
+  }
+  #skip-animation {
+    font-size: 13px;
+    bottom: calc(100% + 6px);
+  }
+  #moves-panel {
+    right: 8px;
+    bottom: 8px;
+    max-height: calc(100% - 16px);
+    width: min(300px, calc(100% - 16px));
+    padding: 10px;
+  }
+  .flyout-heading strong {
+    font-size: 21px;
+  }
+  #moves-panel p {
+    font-size: 14px;
+    margin-bottom: 7px;
+  }
+  #move-bar button {
+    min-height: 64px;
+    padding: 8px;
+  }
+  #move-bar strong {
+    font-size: 19px;
+  }
+  #move-bar button span {
+    font-size: 14px;
+  }
+  body[data-screen="expedition"] dialog {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: min(390px, calc(100vw - 20px));
+    height: 100dvh;
+    border-radius: 12px 0 0 12px;
+    padding: 16px;
+    border-width: 2px;
+  }
+  body[data-screen="expedition"] #modal[data-side="left"] {
+    left: 0;
+    right: auto;
+    border-radius: 0 12px 12px 0;
+  }
+  .modal-actions {
+    bottom: -16px;
+  }
+  dialog .member-moves {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 359px) {
+  .touch-controls,
+  .orienting .touch-controls {
+    grid-template-columns: repeat(3, 36px);
+    grid-template-rows: repeat(3, 38px);
+  }
+  .touch-controls button,
+  .touch-controls #wait-button {
+    height: 38px;
+  }
+  .primary-actions button {
+    font-size: 16px;
+  }
+  .command-console {
+    gap: 7px;
+  }
+  .floor-actions button {
+    padding: 4px 5px;
+    font-size: 14px;
+  }
+  .expedition-title .eyebrow {
+    max-width: 145px;
+  }
+}
+@media (max-height: 540px) and (min-width: 600px) {
+  body[data-screen="expedition"] > header {
+    display: none;
+  }
+  body[data-screen="expedition"] main {
+    height: 100dvh;
+  }
+  .map-frame {
+    bottom: 90px;
+  }
+  .command-console {
+    height: 90px;
+    padding: 8px 12px 22px;
+    gap: 16px;
+  }
+  .touch-controls,
+  .orienting .touch-controls {
+    grid-template-columns: repeat(3, 28px);
+    grid-template-rows: repeat(3, 20px);
+    gap: 2px;
+  }
+  .touch-controls button,
+  .touch-controls #wait-button {
+    height: 20px;
+    font-size: 12px !important;
+  }
+  .primary-actions {
+    display: flex;
+    max-width: none;
+    flex: 0 1 auto;
+  }
+  .primary-actions button {
+    min-height: 42px;
+    font-size: 17px;
+    padding: 6px 10px;
+  }
+  .primary-actions #bag-shortcut {
+    min-height: 42px;
+  }
+  .tactics-panel {
+    bottom: 90px;
+  }
+  body[data-battle="plan"] .map-frame,
+  body[data-battle="deploy"] .map-frame {
+    bottom: 148px;
+  }
+  body[data-battle="plan"] .tactics-panel,
+  body[data-battle="deploy"] .tactics-panel {
+    height: 58px;
+  }
+  .dex-rail {
+    width: 110px;
+    top: 6px;
+  }
+  .team-strip {
+    flex-direction: column;
+  }
+  .team-strip button[data-command],
+  .team-strip:has(button:nth-child(4)) button[data-command] {
+    flex-direction: row;
+  }
+  .team-strip #manage-team {
+    position: static;
+    width: auto;
+    min-height: 28px;
+  }
+  .team-strip img {
+    width: 24px;
+    height: 24px;
+  }
+  .team-strip button > span {
+    font-size: 12px;
+  }
+  .team-strip small {
+    font-size: 10px;
+  }
+  .team-strip .team-order {
+    display: none !important;
+  }
+  #player-card {
+    display: none;
+  }
+  .adventure-bar {
+    top: 57px;
+    max-width: 260px;
+  }
+  .adventure-bar span {
+    display: block;
+    font-size: 12px;
+  }
+  .map-topline {
+    top: 10px;
+    left: 132px;
+  }
+  .expedition-title {
+    height: 38px;
+  }
+  .game-layout {
+    top: 41px;
+  }
+  #minimap {
+    top: 40px;
+    width: 70px;
+    height: 50px;
+  }
+  .tactical-summary {
+    display: flex;
+  }
+  .tactical-summary span {
+    font-size: 12px;
+  }
+  .tactics-panel .boss-intent {
+    font-size: 12px;
+  }
+  .tactics-panel #resolve-orders,
+  .tactics-panel #begin-boss {
+    font-size: 16px;
+    min-height: 38px;
+  }
+  #moves-panel p {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #moves-panel,
+  body[data-screen="expedition"] dialog {
+    animation: none;
+  }
+}
+body[data-screen="expedition"] dialog .reward-grid {
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+body[data-screen="expedition"] dialog .reward-grid button {
+  padding: 12px;
+  text-align: left;
+}
+.panel-close[hidden] {
+  display: none !important;
+}
+/* Touch targets remain at least 44px, including landscape play. */
+@media (max-width: 800px) and (min-height: 541px) {
+  .command-console {
+    height: 194px;
+    padding-top: 10px;
+    padding-bottom: 28px;
+  }
+  .map-frame {
+    bottom: 194px;
+  }
+  .touch-controls,
+  .orienting .touch-controls {
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: repeat(3, 44px);
+  }
+  .touch-controls button,
+  .touch-controls #wait-button {
+    height: 44px;
+  }
+  .primary-actions button,
+  .primary-actions #bag-shortcut {
+    min-height: 44px;
+  }
+  .tactics-panel {
+    bottom: 194px;
+  }
+  body[data-battle="plan"] .map-frame,
+  body[data-battle="deploy"] .map-frame {
+    bottom: 274px;
+  }
+}
+@media (max-height: 540px) and (min-width: 600px) {
+  .map-frame {
+    bottom: 30px;
+  }
+  .command-console {
+    height: 174px;
+    padding: 8px 10px 28px;
+    background: none;
+    border: 0;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  .touch-controls,
+  .orienting .touch-controls {
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: repeat(3, 44px);
+    gap: 3px;
+    pointer-events: auto;
+  }
+  .touch-controls button,
+  .touch-controls #wait-button {
+    height: 44px;
+    font-size: 19px !important;
+  }
+  .touch-controls #wait-button {
+    font-size: 12px !important;
+  }
+  .primary-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 70px);
+    gap: 4px;
+    flex: none;
+    pointer-events: auto;
+  }
+  .primary-actions button,
+  .primary-actions #bag-shortcut {
+    min-height: 44px;
+    font-size: 16px;
+    padding: 4px;
+  }
+  .primary-actions #bag-shortcut {
+    grid-column: 1/-1;
+  }
+  .dex-log {
+    background: #102c3bea;
+    padding: 3px 8px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 28px;
+  }
+  .tactics-panel {
+    left: 160px;
+    right: 160px;
+    bottom: 30px;
+    height: 62px !important;
+    padding: 5px 8px;
+    border: 1px solid #537c82;
+    border-radius: 8px;
+  }
+  body[data-battle="plan"] .map-frame,
+  body[data-battle="deploy"] .map-frame {
+    bottom: 98px;
+  }
+  .tactical-summary {
+    display: block;
+  }
+  .tactics-panel #resolve-orders,
+  .tactics-panel #begin-boss {
+    min-height: 44px;
+  }
+  .team-strip #manage-team {
+    min-height: 36px;
+  }
+  .adventure-bar:not(:has(#site-button)) {
+    display: none;
+  }
+  .tools-open .adventure-bar {
+    display: block;
+  }
+  .tools-open .adventure-bar button {
+    min-height: 44px;
+  }
+  #moves-panel {
+    right: 163px;
+    bottom: 5px;
+    width: 300px;
+    max-height: calc(100% - 10px);
+  }
+  #skip-animation {
+    pointer-events: auto;
+    bottom: calc(100% + 2px);
+  }
+  body[data-battle="plan"] #skip-animation,
+  body[data-battle="resolve"] #skip-animation {
+    bottom: calc(100% + 2px);
+  }
+}
+@media (max-height: 540px) and (min-width: 600px) {
+  .dex-rail {
+    width: 270px;
+    top: 6px;
+  }
+  .team-strip {
+    flex-direction: row;
+    gap: 4px;
+    align-items: stretch;
+  }
+  .team-strip button[data-command],
+  .team-strip:has(button:nth-child(4)) button[data-command] {
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    text-align: center;
+    padding: 3px;
+    gap: 1px;
+  }
+  .team-strip img,
+  .team-strip:has(button:nth-child(4)) img {
+    width: 23px;
+    height: 23px;
+  }
+  .team-strip button > span,
+  .team-strip:has(button:nth-child(4)) button > span {
+    font-size: 11px;
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .team-strip small,
+  .team-strip:has(button:nth-child(4)) small {
+    font-size: 9px;
+  }
+  .team-strip #manage-team {
+    flex: 0 0 50px;
+    position: static;
+    width: 50px;
+    min-height: 44px;
+    font-size: 12px;
+    padding: 3px;
+  }
+  .map-topline {
+    left: 290px;
+  }
+  .team-strip .team-order {
+    display: none !important;
+  }
+}
+.tactics-panel {
+  pointer-events: auto;
+}
+@media (max-width: 800px) {
+  .team-level {
+    display: none;
+  }
+  .team-strip small,
+  .team-strip:has(button:nth-child(4)) small {
+    font-size: 12px;
+  }
+}
+@media (max-height: 540px) and (min-width: 600px) {
+  .team-level {
+    display: none;
+  }
+  .team-strip small,
+  .team-strip:has(button:nth-child(4)) small {
+    font-size: 11px;
+  }
+}
+/* Focus must not scroll the fixed game shell when a corner control is selected. */
+body[data-screen="expedition"] #expedition,
+body[data-screen="expedition"] .game-layout {
+  overflow: clip;
+}

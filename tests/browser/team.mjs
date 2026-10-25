@@ -68,7 +68,7 @@ try {
     assert.equal((await save()).player.x, 14);
     assert.equal((await save()).player.y, 15);
     await page.locator("#begin-boss").click();
-    await page.locator("#order-wait").click();
+    await page.locator("#wait-button").click();
     assert.equal((await save()).turn, turn);
     assert.ok(await page.locator("#resolve-orders").isDisabled());
     for (const m of r.companions.filter((m) => m.active)) {
@@ -77,6 +77,7 @@ try {
         if (mobile) await page.locator('[data-direction="0,1"]').tap();
         else await page.keyboard.press("ArrowDown");
       } else {
+        await page.locator("#moves-button").click();
         await page.locator('[data-move="0"]').click();
         if (mobile) await page.locator('[data-direction="0,-1"]').tap();
         else await page.keyboard.press("ArrowUp");

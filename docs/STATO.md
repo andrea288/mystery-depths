@@ -7,6 +7,15 @@ Guida corrente: `MIGLIORAMENTI-20.md`. Non descrivere le nuove regole adattate
 come riproduzione integrale EoS. Test: `npm test` (74); browser su Chromium
 con `GAME_URL` configurabile. Rigenerare gli archivi dopo ogni modifica runtime.
 
+## HUD ottimizzato — 25 ottobre 2026
+
+Nuovo `src/hud-shell.mjs` e `src/hud.css`: viewport fisso, mosse a scomparsa,
+menu laterali, tasti isolati nei pannelli, controlli touch e layout orizzontale.
+Nei test UI aprire Mosse prima di cliccare uno slot, Esplora prima di Scoperte
+oppure Codice sfida. I vecchi pulsanti order-move/order-attack/order-wait sono
+sostituiti dai comandi principali movement-button/attack-button/wait-button.
+`tests/browser/ux.mjs` copre quattro dimensioni. Guida `UX-HUD.md`.
+
 ## Restyling tattico
 
 Interfaccia Pokédex rossa/avorio in `src/dex.css`; riordino DOM in

@@ -5,7 +5,7 @@ import shutil
 R=Path(__file__).resolve().parents[1]
 archive=R/'downloads/mystery-depths-gioco.zip';archive.parent.mkdir(exist_ok=True)
 roots=['src','assets/game','assets/wasm','assets/pokemon','assets/portraits','assets/items','assets/fonts','assets/credits','assets/effects']
-files=[R/p for p in ['index.html','style.css','package.json','avvia-windows.bat','avvia-linux-mac.sh','scripts/serve.mjs','assets/SOURCES.md','assets/ui-sources.json','assets/spritebot_credits.txt','docs/CONFORMITA.md','docs/SQUADRA-E-GUARDIANI.md','docs/MIGLIORAMENTI-20.md','docs/RESTYLING-TATTICO.md','data/evolution-donors.json','data/assets-extra.json','data/fairy-move-source.json']]
+files=[R/p for p in ['index.html','style.css','package.json','avvia-windows.bat','avvia-linux-mac.sh','scripts/serve.mjs','assets/SOURCES.md','assets/ui-sources.json','assets/spritebot_credits.txt','docs/CONFORMITA.md','docs/SQUADRA-E-GUARDIANI.md','docs/MIGLIORAMENTI-20.md','docs/RESTYLING-TATTICO.md','docs/UX-HUD.md','data/evolution-donors.json','data/assets-extra.json','data/fairy-move-source.json']]
 for directory in roots:
  files += [p for p in (R/directory).rglob('*') if p.is_file()]
 with ZipFile(archive,'w',ZIP_DEFLATED,compresslevel=9) as z:

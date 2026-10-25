@@ -1,3 +1,4 @@
+import { installHudShell } from "./hud-shell.mjs";
 import { installDexLayout } from "./dex-layout.mjs";
 import { TYPE_NAMES } from "./team.mjs";
 import { Game, DIFFICULTIES, TACTICS, WEATHER, GEAR } from "./adventure.mjs";
@@ -6,6 +7,7 @@ import { Renderer } from "./render.mjs";
 import { Playback } from "./presentation.mjs";
 import createCore from "../assets/wasm/eos-core.mjs";
 installDexLayout();
+const hudShell = installHudShell();
 let chosenDifficulty = "normal";
 let playback = null,
   lastVisualEvent = -1;
@@ -88,9 +90,14 @@ function save() {
   }
 }
 function modal(title, body, actions = []) {
+  hudShell.closeMoves();
+  hudShell.setTools(false);
+  $("modal").dataset.side = /squadra|gestione|sostituire|evol/i.test(title)
+    ? "left"
+    : "right";
   $("bag-dialog").close();
   $("modal-content").innerHTML =
-    `<span class="eyebrow">MYSTERY DEPTHS</span><h2>${esc(title)}</h2>${body}<div class="modal-actions"></div>`;
+    `<button id="close-panel" class="panel-close" aria-label="Chiudi pannello">✕</button><span class="eyebrow">MYSTERY DEPTHS</span><h2 id="panel-title">${esc(title)}</h2>${body}<div class="modal-actions"></div>`;
   for (const [label, fn] of actions) {
     const b = document.createElement("button");
     b.textContent = label;
@@ -100,11 +107,19 @@ function modal(title, body, actions = []) {
     };
     $("modal-content").querySelector(".modal-actions").append(b);
   }
+  $("close-panel").hidden =
+    view === "expedition" &&
+    !!game.run &&
+    ["reward", "dead"].includes(game.run.state);
+  $("close-panel").onclick = () => $("modal").close();
+  $("modal").setAttribute("aria-labelledby", "panel-title");
   if (!$("modal").open) $("modal").showModal();
 }
 function camp() {
   if (busy) return;
   $("bag-dialog").close();
+  hudShell.closeMoves();
+  hudShell.setTools(false);
   view = "camp";
   document.body.dataset.screen = "camp";
   $("camp").hidden = false;
@@ -451,14 +466,22 @@ function teamHud(displayGame) {
   const phase = r.tactics?.phase;
   renderer.commandUid = tactical() ? commanded().uid : null;
   renderer.movementPreview = tactical() && commandMode === "move";
+  $("movement-button").setAttribute(
+    "aria-pressed",
+    String(!facingMode && (!tactical() || commandMode === "move")),
+  );
+  $("attack-button").setAttribute(
+    "aria-pressed",
+    String(tactical() && commandMode === "attack"),
+  );
   $("team-strip").innerHTML =
     active
       .map(
         (m) =>
-          `<button data-command="${m.uid}" class="${m.uid === commandUid ? "selected" : ""}"><img src="assets/portraits/${m.species}.png" alt=""><span>${esc(m.name)}${m.uid === 0 ? " ★" : ""}<small>Lv ${m.level} · ${m.hp}/${m.maxHp} PS</small><i class="team-health"><i style="width:${(Math.max(0, m.hp) / m.maxHp) * 100}%"></i></i><small class="team-order">${esc(orderLabel(r.tactics?.orders[m.uid], m))}</small></span></button>`,
+          `<button data-command="${m.uid}" class="${m.uid === commandUid ? "selected" : ""}"><img src="assets/portraits/${m.species}.png" alt=""><span>${esc(m.name)}${m.uid === 0 ? " ★" : ""}<small><span class="team-level">Lv ${m.level} · </span>${m.hp}/${m.maxHp} PS</small><i class="team-health"><i style="width:${(Math.max(0, m.hp) / m.maxHp) * 100}%"></i></i><small class="team-order">${esc(orderLabel(r.tactics?.orders[m.uid], m))}</small></span></button>`,
       )
       .join("") +
-    '<button id="manage-team">Squadra ' +
+    '<button id="manage-team" aria-haspopup="dialog">Squadra ' +
     (1 + r.companions.length) +
     "/6</button>";
   $("team-strip")
@@ -476,10 +499,10 @@ function teamHud(displayGame) {
   $("tactics-panel").hidden = !["deploy", "plan"].includes(phase);
   if (phase === "deploy")
     $("tactics-panel").innerHTML =
-      '<strong>Schieramento</strong><p>Seleziona un alleato e tocca una casella verde nelle tre righe inferiori. Lo starter è obbligatorio.</p><button id="begin-boss">Conferma schieramento</button>';
+      '<div class="tactical-summary"><strong>Schiera la squadra</strong><span>Seleziona un Pokémon e una casella verde.</span></div><button id="begin-boss">Pronti</button>';
   if (phase === "plan")
     $("tactics-panel").innerHTML =
-      `<strong>Ordini per ${esc(commanded().name)}</strong><p>${typeof commandMode === "number" ? "Mossa: " + esc(D.moves[commanded().moves[commandMode].id].name) + " — scegli bersaglio o direzione." : commandMode === "attack" ? "Attacco — scegli bersaglio o direzione." : "Movimento — tocca una casella adiacente o una freccia."} Ogni Pokémon agisce una volta, poi risponde il boss. Puoi correggere gli ordini prima della conferma.</p><button id="order-move">Muovi</button><button id="order-attack">Attacco</button><button id="order-wait">Attendi</button><button id="resolve-orders" ${active.every((m) => r.tactics.orders[m.uid]) ? "" : "disabled"}>Esegui turno (${Object.keys(r.tactics.orders).length}/${active.length})</button>`;
+      `<div class="tactical-summary"><strong>${esc(commanded().name)}</strong><span>${typeof commandMode === "number" ? esc(D.moves[commanded().moves[commandMode].id].name) + ": scegli direzione" : commandMode === "attack" ? "Attacco: scegli direzione" : "Scegli una casella adiacente"}</span></div><button id="resolve-orders" ${active.every((m) => r.tactics.orders[m.uid]) ? "" : "disabled"}>Esegui ${Object.keys(r.tactics.orders).length}/${active.length}</button>`;
   if ($("begin-boss"))
     $("begin-boss").onclick = () => {
       if (!busy && game.beginBoss()) {
@@ -487,18 +510,6 @@ function teamHud(displayGame) {
         hud();
       } else toast("Disponi tutti i Pokémon nelle tre righe verdi.");
     };
-  if ($("order-move"))
-    $("order-move").onclick = () => {
-      commandMode = "move";
-      hud();
-    };
-  if ($("order-attack"))
-    $("order-attack").onclick = () => {
-      commandMode = "attack";
-      hud();
-    };
-  if ($("order-wait"))
-    $("order-wait").onclick = () => sendOrder({ type: "wait" });
   if ($("resolve-orders"))
     $("resolve-orders").onclick = () => act(() => game.resolveOrders());
 }
@@ -573,6 +584,8 @@ function selectMove(slot) {
   const actor = tactical() ? commanded() : game.run.player,
     move = D.moves[actor.moves[slot]?.id];
   if (!move) return;
+  hudShell.closeMoves();
+  renderer.rangeMove = null;
   if (
     move.damageClass === "status" &&
     ["heal", "protect", "atk", "def", "spd"].includes(move.statusEffect)
@@ -1151,6 +1164,8 @@ $("wait-button").onclick = () => {
   else act(() => game.wait());
 };
 function openBag() {
+  hudShell.closeMoves();
+  hudShell.setTools(false);
   if (view === "expedition" && !$("modal").open && !$("bag-dialog").open)
     $("bag-dialog").showModal();
 }
@@ -1178,7 +1193,8 @@ $("face-button").onclick = () => {
   facingMode = !facingMode;
   renderer.facingMode = facingMode;
   $("face-button").setAttribute("aria-pressed", String(facingMode));
-  $("face-button").textContent = facingMode ? "Orienta: attivo" : "Orienta";
+  $("face-button").textContent = "Orienta";
+  $("movement-button").setAttribute("aria-pressed", String(!facingMode));
   document.body.classList.toggle("orienting", facingMode);
   $("face-hint").textContent = facingMode
     ? "Tocca una direzione o la mappa. Nessun turno consumato."
@@ -1296,8 +1312,7 @@ window.addEventListener("keydown", (e) => {
     if (/^[1-4]$/.test(k)) {
       e.preventDefault();
       if (commanded().moves[+k - 1]) {
-        commandMode = +k - 1;
-        hud();
+        selectMove(+k - 1);
       }
       return;
     }
