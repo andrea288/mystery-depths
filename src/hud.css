@@ -1395,3 +1395,246 @@ body[data-screen="expedition"] #modal[data-side="map"] {
   background: #102631;
   border: 2px solid #6b9690;
 }
+
+/* Readable team and map information at gameplay scale. */
+body[data-screen="expedition"] .dex-rail {
+  width: 185px;
+}
+body[data-screen="expedition"] .team-strip {
+  gap: 7px;
+}
+body[data-screen="expedition"] .team-strip button[data-command] {
+  min-height: 53px;
+  padding: 7px;
+  gap: 7px;
+}
+body[data-screen="expedition"] .team-strip img {
+  width: 38px;
+  height: 38px;
+  flex: none;
+}
+body[data-screen="expedition"] .team-strip button > span {
+  font-size: 17px;
+  line-height: 1.25;
+}
+body[data-screen="expedition"] .team-strip small {
+  font-size: 13px;
+  line-height: 1.2;
+}
+body[data-screen="expedition"] .team-strip .team-order {
+  font-size: 13px;
+}
+body[data-screen="expedition"] .team-strip #manage-team {
+  min-height: 42px;
+  font-size: 17px;
+}
+body[data-screen="expedition"] .map-topline {
+  left: 208px;
+  font-size: 18px;
+}
+body[data-screen="expedition"] .map-topline #turn-label {
+  font-size: 18px;
+  padding: 4px 8px;
+}
+body[data-screen="expedition"] #minimap {
+  width: 158px;
+  height: 115px;
+}
+body[data-screen="expedition"] .adventure-bar {
+  right: 180px;
+  max-width: 360px;
+}
+body[data-screen="expedition"] .adventure-bar span {
+  font-size: 16px;
+}
+body[data-screen="expedition"] .map-bottomline {
+  font-size: 15px;
+}
+body[data-screen="expedition"] .target-label,
+body[data-screen="expedition"] .boss-intent,
+body[data-screen="expedition"] .danger {
+  font-size: 16px;
+}
+@media (max-width: 800px) and (min-height: 541px) {
+  body[data-screen="expedition"] .dex-rail {
+    left: 8px;
+    top: 8px;
+    width: calc(100% - 112px);
+  }
+  body[data-screen="expedition"] .team-strip {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    max-width: 100%;
+    padding-bottom: 3px;
+  }
+  body[data-screen="expedition"] .team-strip button[data-command] {
+    flex: 0 0 70px;
+    min-height: 70px;
+    padding: 5px 3px;
+  }
+  body[data-screen="expedition"] .team-strip img {
+    width: 34px;
+    height: 34px;
+  }
+  body[data-screen="expedition"] .team-strip button > span {
+    font-size: 14px;
+  }
+  body[data-screen="expedition"] .team-strip small {
+    font-size: 12px;
+  }
+  body[data-screen="expedition"] .team-strip #manage-team {
+    position: fixed;
+    right: 13px;
+    top: 93px;
+    width: 88px;
+    min-height: 42px;
+    font-size: 15px;
+  }
+  body[data-screen="expedition"] .map-topline {
+    top: 94px;
+    left: 10px;
+    font-size: 16px;
+  }
+  body[data-screen="expedition"] .map-topline #turn-label {
+    font-size: 16px;
+  }
+  body[data-screen="expedition"] #minimap {
+    top: 143px;
+    right: 8px;
+    width: 99px;
+    height: 75px;
+  }
+  body[data-screen="expedition"] .adventure-bar {
+    right: 8px;
+    top: 64px;
+    max-width: 240px;
+  }
+  body[data-screen="expedition"] .adventure-bar span {
+    font-size: 14px;
+  }
+  body[data-screen="expedition"] .map-bottomline {
+    font-size: 12px;
+  }
+}
+@media (max-height: 540px) and (min-width: 600px) {
+  body[data-screen="expedition"] .dex-rail {
+    width: 160px;
+    top: 4px;
+  }
+  body[data-screen="expedition"] .team-strip button[data-command] {
+    min-height: 40px;
+    padding: 3px;
+  }
+  body[data-screen="expedition"] .team-strip img {
+    width: 28px;
+    height: 28px;
+  }
+  body[data-screen="expedition"] .team-strip button > span {
+    font-size: 14px;
+  }
+  body[data-screen="expedition"] .team-strip small {
+    font-size: 12px;
+  }
+  body[data-screen="expedition"] .map-topline {
+    left: 171px;
+    top: 10px;
+    font-size: 15px;
+  }
+  body[data-screen="expedition"] .map-topline #turn-label {
+    font-size: 15px;
+  }
+  body[data-screen="expedition"] #minimap {
+    top: 51px;
+    width: 100px;
+    height: 72px;
+  }
+  body[data-screen="expedition"] .adventure-bar {
+    right: 115px;
+    max-width: 245px;
+  }
+}
+
+/* Final readability pass: preserve map area while enlarging the information rail. */
+@media (min-width: 801px) and (min-height: 541px) {
+  body[data-screen="expedition"] .dex-rail {
+    width: 235px;
+  }
+  body[data-screen="expedition"] .team-strip button[data-command] {
+    min-height: 68px;
+  }
+  body[data-screen="expedition"] .team-strip img {
+    width: 46px;
+    height: 46px;
+  }
+  body[data-screen="expedition"] .team-strip button > span {
+    font-size: 21px;
+  }
+  body[data-screen="expedition"] .team-strip small,
+  body[data-screen="expedition"] .team-strip .team-order {
+    font-size: 16px;
+  }
+  body[data-screen="expedition"] .team-strip #manage-team {
+    font-size: 21px;
+    min-height: 48px;
+  }
+  body[data-screen="expedition"] .map-topline {
+    left: 258px;
+  }
+  body[data-screen="expedition"] .map-topline #turn-label {
+    font-size: 21px;
+  }
+  body[data-screen="expedition"] #minimap {
+    width: 205px;
+    height: 150px;
+  }
+  body[data-screen="expedition"] .adventure-bar {
+    right: 225px;
+    max-width: 440px;
+  }
+  body[data-screen="expedition"] .adventure-bar span {
+    font-size: 20px;
+  }
+  body[data-screen="expedition"] .map-bottomline {
+    font-size: 18px;
+  }
+}
+@media (max-width: 800px) and (min-height: 541px) {
+  body[data-screen="expedition"] .team-strip button[data-command] {
+    flex-basis: 84px;
+    min-height: 79px;
+  }
+  body[data-screen="expedition"] .team-strip button > span {
+    font-size: 16px;
+  }
+  body[data-screen="expedition"] .team-strip small {
+    font-size: 13px;
+  }
+  body[data-screen="expedition"] .map-topline {
+    top: 154px;
+  }
+  body[data-screen="expedition"] #minimap {
+    top: 191px;
+    width: 105px;
+    height: 79px;
+  }
+  body[data-screen="expedition"] .adventure-bar span {
+    font-size: 16px;
+  }
+}
+body[data-screen="expedition"] .expedition-title .eyebrow {
+  font-size: 22px;
+}
+@media (max-width: 800px) and (min-height: 541px) {
+  body[data-screen="expedition"] .expedition-title .eyebrow {
+    font-size: 16px;
+  }
+  body[data-screen="expedition"] .map-topline {
+    top: 150px;
+  }
+  body[data-screen="expedition"] .map-topline #turn-label {
+    font-size: 17px;
+  }
+}

@@ -21,10 +21,10 @@ anche dopo una sconfitta. Il catalogo attuale comprende 53 specie, di cui 29
 starter già disponibili all'inizio. Il reclutamento non riguarda soltanto gli
 starter iniziali: anche i guardiani sconfitti sono candidati.
 
-I compagni KO restano nella squadra, ma non occupano un posto attivo e non
-possono essere schierati finché non recuperano. Tornano a pieni PS al piano
-successivo. **Se lo starter va KO, la spedizione termina subito**, indipendentemente
-dai PS delle riserve e degli alleati. I compagni hanno PS, PP e stati individuali.
+I compagni KO lasciano subito la squadra. Restano sbloccati come possibili
+starter per le prossime spedizioni. **Se lo starter va KO, la spedizione termina
+subito**, indipendentemente dai PS delle riserve e degli alleati. I compagni
+hanno PS, PP e stati individuali.
 
 ## Piani normali: alleati autonomi
 

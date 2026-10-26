@@ -271,3 +271,25 @@ test("Ricompensa: una mossa può essere assegnata al compagno senza sostituire l
   assert.ok(ally.moves.some((m) => m.id === id));
   g.validateRun(g.run);
 });
+
+test("KO: il compagno lascia la squadra e lo sblocco starter rimane", () => {
+  const g = make();
+  g.run.floor = 1;
+  g.run.tactics = null;
+  const ally = g.makeMon(7, 5);
+  Object.assign(ally, {
+    uid: g.run.teamUid++,
+    x: 12,
+    y: 12,
+    active: true,
+    hp: 0,
+  });
+  g.run.companions.push(ally);
+  g.meta.recruited.push(ally.species);
+  g.run.controlUid = ally.uid;
+  g.removeDead();
+  assert.equal(g.run.companions.length, 0);
+  assert.equal(g.run.controlUid, 0);
+  assert.ok(g.starterIds().includes(ally.species));
+  g.validateRun(g.run);
+});

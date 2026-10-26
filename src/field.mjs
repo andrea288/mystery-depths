@@ -164,6 +164,26 @@ export class Game extends Adventure {
       this.buildFloor = originalBuild;
     }
   }
+  removeDead() {
+    super.removeDead();
+    if (!this.run?.companions) return;
+    const fallen = this.run.companions.filter((m) => m.hp <= 0);
+    if (!fallen.length) return;
+    for (const m of fallen) {
+      if (m.held && this.run.adventure?.gear?.[m.held] !== undefined)
+        this.run.adventure.gear[m.held] = Math.min(
+          999,
+          this.run.adventure.gear[m.held] + 1,
+        );
+      this.run.log = this.run.log.filter(
+        (e) =>
+          e.text !== m.name + " è KO: resta in riserva fino al prossimo piano.",
+      );
+      this.log(m.name + " è KO e lascia la squadra.", "danger");
+      if (this.run.controlUid === m.uid) this.run.controlUid = 0;
+    }
+    this.run.companions = this.run.companions.filter((m) => m.hp > 0);
+  }
   recruit(species, replaceUid = null) {
     const ok = super.recruit(species, replaceUid);
     if (ok && replaceUid === this.run.controlUid) this.run.controlUid = 0;

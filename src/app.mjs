@@ -350,7 +350,7 @@ function hud(displayGame = game) {
   $("floor-label").textContent =
     `Piano ${r.floor}${BigInt(r.floor) % 5n === 0n ? " · Il guardiano" : ""}`;
   $("map-location").textContent = p.name;
-  $("turn-label").textContent = `Turno ${r.turn}`;
+
   $("seed-label").textContent = `SEED ${r.seed}`;
   $("kills-label").textContent = `${r.kills} VITTORIE`;
   $("player-card").innerHTML =
@@ -374,6 +374,7 @@ function hud(displayGame = game) {
   quick
     .querySelectorAll("button")
     .forEach((b) => (b.onclick = () => selectMove(+b.dataset.slot)));
+  $("turn-label").textContent = `Turno ${r.turn} · ${acting.name}`;
   teamHud(displayGame);
   adventureHud(displayGame);
   $("move-bar").innerHTML = Array.from({ length: 4 }, (_, i) => {
@@ -559,7 +560,7 @@ function teamHud(displayGame) {
     active
       .map(
         (m) =>
-          `<button data-command="${m.uid}" class="${m.uid === commandUid ? "selected" : ""}"><img src="assets/portraits/${m.species}.png" alt=""><span>${esc(m.name)}${m.uid === 0 ? " ★" : ""}<small><span class="team-level">Lv ${m.level} · </span>${m.hp}/${m.maxHp} PS</small><i class="team-health"><i style="width:${(Math.max(0, m.hp) / m.maxHp) * 100}%"></i></i><small class="team-order">${esc(orderLabel(r.tactics?.orders[m.uid], m))}</small></span></button>`,
+          `<button title="${esc(m.name)} · ${m.hp}/${m.maxHp} PS" aria-label="Controlla ${esc(m.name)}" data-command="${m.uid}" class="${m.uid === commandUid ? "selected" : ""}"><img src="assets/portraits/${m.species}.png" alt=""><span>${esc(m.name)}${m.uid === 0 ? " ★" : ""}<small><span class="team-level">Lv ${m.level} · </span>${m.hp}/${m.maxHp} PS</small><i class="team-health"><i style="width:${(Math.max(0, m.hp) / m.maxHp) * 100}%"></i></i><small class="team-order">${esc(orderLabel(r.tactics?.orders[m.uid], m))}</small></span></button>`,
       )
       .join("") +
     '<button id="manage-team" aria-haspopup="dialog">Squadra ' +
@@ -997,7 +998,7 @@ function teamMenu() {
   const r = game.run;
   modal(
     "La tua squadra",
-    `<p>Massimo 6 Pokémon, 3 in campo. ★ Lo starter non può essere sostituito: se va KO, la spedizione termina. Ogni cambio consuma un turno per tutta la squadra. I compagni KO recuperano al piano successivo.</p><div class="team-roster">${game
+    `<p>Massimo 6 Pokémon, 3 in campo. ★ Lo starter non può essere sostituito: se va KO, la spedizione termina. Ogni cambio consuma un turno per tutta la squadra. Un compagno KO lascia subito la squadra.</p><div class="team-roster">${game
       .members()
       .map(
         (m) =>
