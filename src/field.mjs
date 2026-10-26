@@ -557,9 +557,10 @@ export class Game extends Adventure {
       m.x === x &&
       m.y === y &&
       ["vines", "water", "vortex"].includes(f?.kind)
-    )
+    ) {
       m.slowUntil = this.run.turn + 1;
-    if (m.uid === 0) this.log(FIELD_HINTS[f.kind]);
+      if (m.uid === 0) this.log(FIELD_HINTS[f.kind]);
+    }
     return ok;
   }
   validateRun(r) {
