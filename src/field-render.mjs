@@ -25,7 +25,7 @@ export function drawField(ctx, game, point, size, time, reduced) {
     ctx.globalAlpha = game.visible(f.x, f.y) ? 0.85 : 0.3;
     const phase = reduced ? 0 : Math.floor(time / 240) % 3;
     ctx.fillStyle = "#101e2b";
-    ctx.fillRect(2, 12, 12, 3);
+    if (f.kind !== "vines") ctx.fillRect(2, 12, 12, 3);
     ctx.fillStyle = colors[f.kind];
     if (["water", "ford", "vortex", "cascade"].includes(f.kind)) {
       ctx.fillStyle = "#163e61";
@@ -44,10 +44,31 @@ export function drawField(ctx, game, point, size, time, reduced) {
         for (let i = 2; i < 15; i += 4) ctx.fillRect(i, 6, 3, 4);
       }
     } else if (f.kind === "vines") {
-      for (let i = 3; i < 14; i += 4) {
-        ctx.fillRect(i, 3, 2, 10);
-        ctx.fillRect(i - 2, 5 + (i % 3), 6, 2);
+      // Low, irregular brambles across the ground: no upright fence posts.
+      ctx.fillStyle = "#244e35";
+      ctx.fillRect(1, 10, 14, 4);
+      ctx.fillStyle = "#4a8b4b";
+      for (const [x, y] of [
+        [1, 9],
+        [4, 7],
+        [7, 10],
+        [10, 6],
+        [12, 9],
+      ]) {
+        ctx.fillRect(x, y, 4, 2);
+        ctx.fillRect(x + 1, y - 2, 2, 2);
       }
+      ctx.fillStyle = "#9ccc73";
+      for (const [x, y] of [
+        [3, 7],
+        [6, 10],
+        [9, 8],
+        [13, 6],
+      ])
+        ctx.fillRect(x, y, 2, 1);
+      ctx.fillStyle = "#bd8b9b";
+      ctx.fillRect(5, 8, 1, 1);
+      ctx.fillRect(12, 10, 1, 1);
     } else if (f.kind === "fog") {
       ctx.globalAlpha *= 0.55;
       for (let i = 0; i < 3; i++)

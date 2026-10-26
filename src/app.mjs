@@ -1,4 +1,4 @@
-import { FIELD, FEATURES } from "./field.mjs";
+import { FIELD, FEATURES, FIELD_HINTS } from "./field.mjs";
 import { installHudShell } from "./hud-shell.mjs";
 import { installDexLayout } from "./dex-layout.mjs";
 import { TYPE_NAMES } from "./team.mjs";
@@ -1404,6 +1404,8 @@ $("dungeon").onclick = (e) => {
     Math.max(Math.abs(x - controlled.x), Math.abs(y - controlled.y)) === 1
   ) {
     orient(x - controlled.x, y - controlled.y);
+    const feature = game.featureAt({ x, y });
+    if (feature) toast(FIELD_HINTS[feature.kind]);
     return;
   }
   if (tactical()) {

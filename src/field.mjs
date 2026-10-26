@@ -92,6 +92,18 @@ export const FIELD = {
     desc: "Raggiunge un appiglio entro due caselle, anche oltre una parete, guadagnando copertura nel turno di arrivo.",
   },
 };
+export const FIELD_HINTS = {
+  vines: "Rallentato — Usa Taglio per rompere i rovi.",
+  water: "Rallentato — Usa Surf per creare un guado.",
+  vortex: "Rallentato — Usa Mulinello per disperdere il vortice.",
+  boulder:
+    "Copertura — Usa Forza per spostare il masso o Spaccaroccia per distruggerlo.",
+  rock: "Roccia friabile — Usa Spaccaroccia per romperla.",
+  fog: "Nebbia — Usa Flash o Scacciabruma per liberare la visuale.",
+  cascade: "Cascata — Usa Cascata per risalirla.",
+  ledge: "Appiglio — Usa Scalaroccia per raggiungerlo.",
+  ford: "Guado — Qui l’acqua non rallenta.",
+};
 export const FEATURES = {
   vines: "Rovi",
   water: "Acqua",
@@ -547,6 +559,7 @@ export class Game extends Adventure {
       ["vines", "water", "vortex"].includes(f?.kind)
     )
       m.slowUntil = this.run.turn + 1;
+    if (m.uid === 0) this.log(FIELD_HINTS[f.kind]);
     return ok;
   }
   validateRun(r) {
