@@ -1051,8 +1051,23 @@ export class Game extends TeamGame {
           (x) => x.level <= m.level,
         )) {
           if (!m.knownMoves.includes(x.move)) m.knownMoves.push(x.move);
-          if (m.moves.length < 4 && !m.moves.some((s) => s.id === x.move))
-            m.moves.push({ id: x.move, pp: this.D.moves[x.move].pp });
+          if (!m.moves.some((s) => s.id === x.move)) {
+            if (m.moves.length < 4)
+              m.moves.push({ id: x.move, pp: this.D.moves[x.move].pp });
+            else if (!m.moves.some((s) => s.id === x.move)) {
+              const replace =
+                m.moves.findIndex((s) => this.D.moves[s.id].power === 0) >= 0
+                  ? m.moves.findIndex((s) => this.D.moves[s.id].power === 0)
+                  : 0;
+              m.moves[replace] = { id: x.move, pp: this.D.moves[x.move].pp };
+              this.log(
+                m.name +
+                  " impara " +
+                  this.D.moves[x.move].name +
+                  ". Puoi riorganizzare le mosse dalla squadra.",
+              );
+            }
+          }
         }
       }
     if (xp) r.player.bond = Math.min(9999, r.player.bond + dead.length);

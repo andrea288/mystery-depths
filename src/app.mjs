@@ -340,6 +340,7 @@ async function expedition() {
 function hud(displayGame = game) {
   const r = displayGame.run,
     p = r.player;
+  if (!tactical()) commandUid = displayGame.controlled().uid;
   document.body.dataset.battle = r.tactics?.phase || "explore";
   $("dex-message").textContent =
     r.log[0]?.text || "Esplora il dungeon e trova le scale.";
@@ -356,7 +357,7 @@ function hud(displayGame = game) {
     `<div class="player-heading"><img src="assets/portraits/${p.species}.png" alt=""><div><h3>${p.name}</h3><span>Livello ${p.level}${game.statusNames(p).length ? " · " + game.statusNames(p).join(" · ") : ""}</span></div></div><p class="muted">Esperienza: ${p.level < 100 ? r.xp + "/" + game.xpNeeded() + " PE" : "Livello massimo"}</p><div class="meter-label"><span>PS</span><strong>${Math.max(0, p.hp)} / ${p.maxHp}</strong></div><div class="meter"><i style="width:${(Math.max(0, p.hp) / p.maxHp) * 100}%"></i></div><div class="meter-label"><span>Pancia</span><strong>${Math.floor(r.belly)} / ${r.maxBelly}</strong></div><div class="meter belly"><i style="width:${(r.belly / r.maxBelly) * 100}%"></i></div>`;
   const acting = tactical()
     ? displayGame.active().find((m) => m.uid === commandUid) || p
-    : p;
+    : displayGame.controlled();
   let quick = $("quick-moves");
   if (!quick) {
     quick = document.createElement("div");
@@ -571,6 +572,10 @@ function teamHud(displayGame) {
         (b.onclick = () => {
           if (busy) return;
           commandUid = +b.dataset.command;
+          if (!tactical()) {
+            game.selectLeader(commandUid);
+            save();
+          }
           commandMode = "move";
           hud();
         }),
@@ -734,7 +739,7 @@ function useBagItem(key) {
 }
 function selectMove(slot) {
   if (busy) return;
-  const actor = tactical() ? commanded() : game.run.player,
+  const actor = tactical() ? commanded() : game.controlled(),
     move = D.moves[actor.moves[slot]?.id];
   if (!move) return;
   hudShell.closeMoves();
@@ -1111,14 +1116,22 @@ function stateDialog() {
               save();
               expedition();
             };
-            if (r.reward[n].kind === "move" && r.player.moves.length === 4)
+            if (
+              r.reward[n].kind === "move" &&
+              (
+                game
+                  .members()
+                  .find((m) => m.uid === r.reward[n].recipientUid) || r.player
+              ).moves.length === 4
+            )
               modal(
                 "Sostituisci una mossa",
                 "<p>La mossa sostituita resta disponibile al campo base.</p>",
-                r.player.moves.map((s, i) => [
-                  D.moves[s.id].name,
-                  () => choose(i),
-                ]),
+                (
+                  game
+                    .members()
+                    .find((m) => m.uid === r.reward[n].recipientUid) || r.player
+                ).moves.map((s, i) => [D.moves[s.id].name, () => choose(i)]),
               );
             else choose(0);
           }),
@@ -1296,7 +1309,7 @@ $("home-link").onclick = (e) => {
 $("help-button").onclick = () =>
   modal(
     "Guida alla discesa",
-    "<p>Ogni azione consuma un turno. Muoviti con frecce o WASD; Q, E, Z e C permettono passi diagonali. Tieni premuto Maiusc per orientarti senza muoverti.</p><p>Spazio: interagisci con scale, negozi e forzieri vicini. Numeri 1–4: mosse. Punto: attendi. V: orientamento gratuito. Tab: cambia bersaglio. M: minimappa. F: schermo intero. L: diario. B: zaino. Invio: scendi quando sei sulle scale o accanto. Fai clic su un nemico per selezionarlo.</p><p>Controlla PS, PP e Pancia. Usa gli strumenti dallo zaino. Ogni cinque piani un guardiano custodisce l’uscita. Dopo ogni piano scegli una ricompensa.</p>",
+    "<p>Ogni azione consuma un turno. Muoviti con frecce o WASD; Q, E, Z e C permettono passi diagonali. Tieni premuto Maiusc per orientarti senza muoverti.</p><p>Spazio: interagisci con scale, negozi e forzieri vicini. Numeri 1–4: mosse. Punto: attendi. V: orientamento gratuito. Tab: cambia bersaglio. M: minimappa. F: schermo intero. L: diario. B: zaino. Invio: scendi quando sei sulle scale o accanto. Fai clic su un nemico per selezionarlo.</p><p>Controlla PS, PP e Pancia. Usa gli strumenti dallo zaino. Tocca un ritratto della squadra in alto a sinistra per controllare quel Pokémon nei piani normali; lo starter rimane indispensabile. Ogni cinque piani un guardiano custodisce l’uscita. Dopo ogni piano scegli una ricompensa, che può contenere mosse per i compagni.</p>",
     [["Ho capito", stateDialog]],
   );
 $("credits-button").onclick = () =>
@@ -1362,7 +1375,7 @@ function orient(dx, dy) {
     game.run?.state !== "playing"
   )
     return;
-  game.face(tactical() ? commanded() : game.run.player, dx, dy);
+  game.face(tactical() ? commanded() : game.controlled(), dx, dy);
   save();
   hud();
 }
@@ -1398,7 +1411,7 @@ $("dungeon").onclick = (e) => {
   if (busy) return;
   const { x, y } = mapPoint(e),
     p = game.run.player;
-  const controlled = tactical() ? commanded() : p;
+  const controlled = tactical() ? commanded() : game.controlled();
   if (
     game.run.tactics?.phase !== "deploy" &&
     Math.max(Math.abs(x - controlled.x), Math.abs(y - controlled.y)) === 1

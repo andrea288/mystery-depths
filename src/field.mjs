@@ -118,6 +118,88 @@ export const FEATURES = {
 const distance = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 const same = (a, b) => a.x === b.x && a.y === b.y;
 export class Game extends Adventure {
+  stairs() {
+    const ok = super.stairs();
+    if (!ok || this.run.state !== "reward") return ok;
+    const members = this.members().filter((m) => m.hp > 0);
+    if (members.length > 1) {
+      const candidates = members.flatMap((m) =>
+        this.D.pokemon[m.species].learnset
+          .filter((id) => !this.availableMoves(m).includes(id))
+          .map((id) => ({ m, id })),
+      );
+      const companions = candidates.filter((c) => c.m.uid !== 0);
+      if (companions.length) {
+        const chosen =
+          companions[(this.run.floor + this.run.seed) % companions.length];
+        this.run.reward[2] = {
+          kind: "move",
+          id: chosen.id,
+          name: this.D.moves[chosen.id].name,
+          desc: "Mossa permanente per " + chosen.m.name + ".",
+          recipientUid: chosen.m.uid,
+        };
+        this.sync();
+      }
+    }
+    return ok;
+  }
+  chooseReward(index, replace = 0) {
+    const reward = this.run.reward?.[index],
+      recipient =
+        reward?.recipientUid &&
+        this.members().find((m) => m.uid === reward.recipientUid);
+    if (!recipient) return super.chooseReward(index, replace);
+    const starter = this.run.player,
+      originalBuild = this.buildFloor;
+    this.run.player = recipient;
+    this.buildFloor = function () {
+      this.run.player = starter;
+      return originalBuild.call(this);
+    };
+    try {
+      return super.chooseReward(index, replace);
+    } finally {
+      this.run.player = starter;
+      this.buildFloor = originalBuild;
+    }
+  }
+  recruit(species, replaceUid = null) {
+    const ok = super.recruit(species, replaceUid);
+    if (ok && replaceUid === this.run.controlUid) this.run.controlUid = 0;
+    return ok;
+  }
+  controlled() {
+    return (
+      (!this.run.tactics &&
+        this.active().find((m) => m.uid === this.run.controlUid)) ||
+      this.run.player
+    );
+  }
+  selectLeader(uid) {
+    if (this.run.tactics || this.run.state !== "playing") return false;
+    if (!this.active().some((m) => m.uid === uid)) return false;
+    this.run.controlUid = uid;
+    this.sync();
+    return true;
+  }
+  move(dx, dy) {
+    if (this.controlled().uid === 0) return super.move(dx, dy);
+    if (
+      !Number.isInteger(dx) ||
+      !Number.isInteger(dy) ||
+      Math.max(Math.abs(dx), Math.abs(dy)) !== 1
+    )
+      return false;
+    return this.action({ type: "move", dx, dy });
+  }
+  useMove(slot, target) {
+    const m = this.controlled();
+    if (m.uid === 0) return super.useMove(slot, target);
+    const s = m.moves[slot];
+    if (!s || s.pp <= 0) return false;
+    return this.action({ type: "moveAttack", slot, targetUid: target?.uid });
+  }
   fieldState() {
     return (this.run.field ??= {
       version: 1,
@@ -374,6 +456,18 @@ export class Game extends Adventure {
     return list;
   }
   perform(m, a) {
+    if (
+      !this.run.tactics &&
+      m.uid === 0 &&
+      this.run.controlUid &&
+      !["item", "interact", "openChest"].includes(a.type)
+    ) {
+      const selected = this.active().find((t) => t.uid === this.run.controlUid);
+      if (selected) {
+        this.fieldActor = selected.uid;
+        return super.perform(selected, a);
+      }
+    }
     if (a.type === "openChest") {
       const chest = this.run.items.find(
         (i) => i.type === "chest" && i.x === a.x && i.y === a.y,
@@ -483,7 +577,31 @@ export class Game extends Adventure {
   alliesTurn(fighting) {
     this.fieldFollowing = true;
     try {
-      return super.alliesTurn(fighting);
+      const result = super.alliesTurn(fighting);
+      const leader = this.run.player,
+        controlled = this.controlled();
+      if (controlled.uid !== 0 && leader.hp > 0) {
+        this.regenerate(leader);
+        if (!this.statusBlock(leader)) {
+          const foe =
+            fighting &&
+            this.run.enemies.find(
+              (e) =>
+                e.hp > 0 && distance(e, leader) <= 2 && this.los(leader, e),
+            );
+          if (foe) {
+            const best = this.bestMove(leader, foe);
+            if (best) {
+              best.s.pp--;
+              this.attack(leader, foe, best.m);
+            }
+          } else if (distance(leader, controlled) > 1) {
+            const step = this.pathStep(leader, controlled);
+            if (step) this.walkActor(leader, step.x, step.y);
+          }
+        }
+      }
+      return result;
     } finally {
       this.fieldFollowing = false;
     }
@@ -579,6 +697,11 @@ export class Game extends Adventure {
         candidate.tactics.orders[uid] = { type: "wait" };
       }
     super.validateRun(candidate);
+    if (
+      r.controlUid !== undefined &&
+      ![0, ...(r.companions || []).map((m) => m.uid)].includes(r.controlUid)
+    )
+      throw Error("Pokémon controllato non valido.");
     if (r.field) {
       const s = r.field;
       if (

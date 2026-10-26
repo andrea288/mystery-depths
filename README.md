@@ -146,3 +146,7 @@ Da **Esplora → MN** puoi usare le 11 tecniche ambientali con i Pokémon attivi
 ### Comandi e leggibilità
 
 Spazio interagisce con negozi, tesori e scale vicini; l’attacco normale usa il pulsante **Attacca**. Un clic/tocco su una casella adiacente orienta gratuitamente il Pokémon controllato. Le mosse e i PP restano visibili sulla mappa e sono utilizzabili con 1–4. Frecce/WASD e pulsanti direzionali muovono; nei boss pianificano il movimento. I nuovi piani normali sono più compatti; per vedere la nuova generazione avvia una spedizione o raggiungi il piano successivo. Le decorazioni senza funzione sono state rimosse dal pavimento, mentre restano gli elementi interattivi delle MN.
+
+### Controllo della squadra
+
+Nei piani normali puoi selezionare un Pokémon attivo dal ritratto in alto a sinistra e controllarlo con movimento, attacco e mosse 1–4. Gli altri compagni agiscono autonomamente; quando controlli un compagno, lo starter prova a seguirlo e combattere. Lo starter resta obbligatorio e la run termina se va KO. Nei boss rimane la pianificazione individuale degli ordini. Le ricompense di fine piano possono offrire una mossa per un compagno, indicato per nome; se ha quattro mosse scegli quale sostituire.
