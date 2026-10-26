@@ -116,6 +116,67 @@ function modal(title, body, actions = []) {
   $("modal").setAttribute("aria-labelledby", "panel-title");
   if (!$("modal").open) $("modal").showModal();
 }
+function expandedMap() {
+  if (
+    busy ||
+    view !== "expedition" ||
+    !game.run ||
+    game.run.state !== "playing"
+  )
+    return;
+  const r = game.run;
+  modal(
+    "Mappa · Piano " + r.floor,
+    '<p>Zone esplorate · <span style="color:#baffd9">● Squadra</span> · <span style="color:#ffe1a0">▼ Scale</span> · <span style="color:#9bd9ff">◆ Interazioni</span></p><canvas id="expanded-map" aria-label="Mappa ingrandita delle zone esplorate"></canvas>',
+    [["Torna al gioco"]],
+  );
+  $("modal").dataset.side = "map";
+  const canvas = $("expanded-map"),
+    cell = 18;
+  canvas.width = r.w * cell;
+  canvas.height = r.h * cell;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#102631";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  for (let y = 0; y < r.h; y++)
+    for (let x = 0; x < r.w; x++)
+      if (r.seen[y][x]) {
+        ctx.fillStyle = r.map[y][x] ? "#263e49" : "#6b9690";
+        ctx.fillRect(x * cell + 1, y * cell + 1, cell - 2, cell - 2);
+      }
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = "bold 16px sans-serif";
+  for (const site of r.adventure?.sites || [])
+    if (!site.used && r.seen[site.y]?.[site.x]) {
+      ctx.fillStyle = "#9bd9ff";
+      ctx.fillText("◆", (site.x + 0.5) * cell, (site.y + 0.5) * cell);
+    }
+  if (r.seen[r.exit.y]?.[r.exit.x]) {
+    ctx.fillStyle = "#ffe1a0";
+    ctx.fillText("▼", (r.exit.x + 0.5) * cell, (r.exit.y + 0.5) * cell);
+  }
+  for (const m of game.active()) {
+    ctx.fillStyle = "#baffd9";
+    ctx.fillText(
+      m.uid === 0 ? "★" : "●",
+      (m.x + 0.5) * cell,
+      (m.y + 0.5) * cell,
+    );
+  }
+}
+$("minimap").setAttribute("role", "button");
+$("minimap").tabIndex = 0;
+$("minimap").title = "Clicca per ingrandire la mappa";
+$("minimap").setAttribute("aria-label", "Ingrandisci la mappa");
+$("minimap").onclick = expandedMap;
+$("minimap").onkeydown = (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    e.stopPropagation();
+    expandedMap();
+  }
+};
 function camp() {
   if (busy) return;
   $("bag-dialog").close();

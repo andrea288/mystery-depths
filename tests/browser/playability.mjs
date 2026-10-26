@@ -25,6 +25,13 @@ try {
         () => JSON.parse(localStorage.getItem("mystery-depths-v3")).run,
       );
     const before = await saved();
+    await page.locator("#minimap").click();
+    await page.locator("#expanded-map").waitFor();
+    const large=await page.locator("#expanded-map").boundingBox();
+    const small=await page.locator("#minimap").boundingBox();
+    assert.ok(large.width>small.width*2);
+    await page.getByRole("button",{name:"Torna al gioco",exact:true}).click();
+    assert.equal((await saved()).turn,before.turn);
     await page.keyboard.press("Space");
     const after = await saved();
     assert.equal(after.turn, before.turn);
