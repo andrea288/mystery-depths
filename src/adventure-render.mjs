@@ -1,3 +1,4 @@
+import { drawField } from "./field-render.mjs";
 import { drawTerrain, drawSite } from "./world-art.mjs";
 const previews = new WeakMap();
 export function drawAdventure(ctx, game, point, size, time, options = {}) {
@@ -18,6 +19,7 @@ export function drawAdventure(ctx, game, point, size, time, options = {}) {
     const p = point(s);
     drawSite(ctx, s, p, size, time, options.reducedMotion);
   }
+  drawField(ctx, game, point, size, time, options.reducedMotion);
   if (r.tactics?.phase === "plan" && options.movement) {
     const actor =
       game.active().find((m) => m.uid === options.actor) || r.player;

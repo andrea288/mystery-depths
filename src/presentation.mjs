@@ -66,6 +66,7 @@ export class Playback {
         if (out) out.active = false;
         if (incoming) Object.assign(incoming, e.position, { active: true });
       }
+      if (e.type === "fieldChange") r.field = structuredClone(e.field);
       if (mon && e.type === "step") {
         mon.x = e.to.x;
         mon.y = e.to.y;
@@ -105,6 +106,17 @@ export class Playback {
   }
 }
 export const EFFECTS = {
+  cut: ["Leaf_Blade", "impact"],
+  fly: ["Vine_Whip_2", "beam"],
+  surf: ["Bubbles_Blue", "beam"],
+  strength: ["Rock_Pieces", "impact"],
+  flash: ["Shock_Wave", "room"],
+  whirlpool: ["Bubble_Pop_Blue", "impact"],
+  waterfall: ["Bubbles_Blue", "beam"],
+  "rock-smash": ["Rock_Smash", "impact"],
+  dive: ["Bubble_Pop_Blue", "impact"],
+  defog: ["Magical_Leaf", "room"],
+  rockClimb: ["Rock_Pieces", "beam"],
   "take-down": ["Hit_Neutral", "impact"],
   fissure: ["Rock_Smash", "beam"],
   recover: ["Healing_Wish_Hit", "impact"],

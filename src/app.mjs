@@ -1,7 +1,8 @@
+import { FIELD, FEATURES } from "./field.mjs";
 import { installHudShell } from "./hud-shell.mjs";
 import { installDexLayout } from "./dex-layout.mjs";
 import { TYPE_NAMES } from "./team.mjs";
-import { Game, DIFFICULTIES, TACTICS, WEATHER, GEAR } from "./adventure.mjs";
+import { Game, DIFFICULTIES, TACTICS, WEATHER, GEAR } from "./field.mjs";
 import { ITEMS, BIOMES, itemIcon } from "./game.mjs";
 import { Renderer } from "./render.mjs";
 import { Playback } from "./presentation.mjs";
@@ -432,6 +433,8 @@ function directionCommand(dx, dy) {
   return true;
 }
 function orderLabel(order, m) {
+  if (order?.type === "field")
+    return FIELD[order.key].name + ` → ${order.x},${order.y}`;
   if (!order) return "In campo";
   const direction = order.direction || [order.dx, order.dy];
   const arrow =
@@ -513,6 +516,78 @@ function teamHud(displayGame) {
   if ($("resolve-orders"))
     $("resolve-orders").onclick = () => act(() => game.resolveOrders());
 }
+function fieldMenu() {
+  if (busy || game.run.state !== "playing") return;
+  if (game.run.tactics?.phase === "deploy") {
+    toast("Prima disponi la squadra e avvia lo scontro.");
+    return;
+  }
+  modal(
+    "Tecniche MN",
+    `<p>Energia condivisa: <b>${game.fieldState().energy}/10</b>. +1 ogni 6 turni; ripristino a ogni piano. Le MN non occupano slot mossa.</p><p>${tactical() ? "Scegli chi agirà: la tecnica occupa il suo ordine. L’energia è riservata quando pianifichi." : "Scegli chi agirà: passa un turno per tutta la squadra; gli altri alleati restano autonomi."}</p><p>Rovi, acqua e vortici rallentano; i guadi annullano il rallentamento delle MN. La nebbia nasconde chi è lontano più di due caselle. I massi danno copertura anche ai nemici.</p><p>Kit da esplorazione: tutti possono usare Taglio e Spaccaroccia pagando 2 energia aggiuntiva se non compatibili. Gli effetti ambientali sono adattamenti originali di Mystery Depths.</p>`,
+    game
+      .active()
+      .map((m) => [
+        m.name + (m.uid === 0 ? " ★" : ""),
+        () => fieldSkillsMenu(m.uid),
+      ]),
+  );
+}
+function fieldSkillsMenu(uid) {
+  const m = game.active().find((m) => m.uid === uid);
+  if (!m) return;
+  const keys = Object.keys(FIELD).filter((key) => game.fieldAvailable(m, key));
+  modal(
+    "MN · " + m.name,
+    "<p>Seleziona una tecnica per leggerne l’effetto e scegliere il bersaglio. Coordinate relative al Pokémon, senza consumare turni.</p>",
+    [
+      ...keys.map((key) => [
+        `${FIELD[key].name} · ${game.fieldCost(m, key)} energia${game.fieldTargets(m, key).length ? "" : " · nessun bersaglio"}`,
+        () => fieldTargetMenu(uid, key),
+      ]),
+      ["Indietro", fieldMenu],
+    ],
+  );
+}
+function fieldTargetMenu(uid, key) {
+  const m = game.active().find((m) => m.uid === uid);
+  if (!m) return;
+  const targets = game.fieldTargets(m, key),
+    d = FIELD[key];
+  const label = (p) => {
+    if (p.x === m.x && p.y === m.y) return "Attorno a " + m.name;
+    const dx = p.x - m.x,
+      dy = p.y - m.y;
+    const direction = [
+      dy < 0 ? `${-dy} ↑` : dy > 0 ? `${dy} ↓` : "",
+      dx < 0 ? `${-dx} ←` : dx > 0 ? `${dx} →` : "",
+    ]
+      .filter(Boolean)
+      .join(" · ");
+    const enemy = game.run.enemies.find((e) => e.x === p.x && e.y === p.y);
+    return `${direction} · ${enemy?.name || FEATURES[game.featureAt(p)?.kind] || "Casella libera"}`;
+  };
+  modal(
+    d.name,
+    `<p>${esc(d.desc)}</p><p>Costo: <b>${game.fieldCost(m, key)} energia</b>. ${targets.length ? "Scegli la destinazione relativa al Pokémon:" : "Nessun bersaglio valido: controlla energia, distanza e terreno esplorato."}</p>`,
+    [
+      ...targets.map((p) => [
+        label(p),
+        () =>
+          act(() => {
+            const ok = game.useField(uid, key, p);
+            if (!ok)
+              toast(
+                "Ordine non disponibile: controlla l’energia già riservata.",
+              );
+            return ok;
+          }),
+      ]),
+      ["Indietro", () => fieldSkillsMenu(uid)],
+    ],
+  );
+}
+
 function adventureHud(displayGame) {
   const r = displayGame.run,
     a = r.adventure;
@@ -527,7 +602,8 @@ function adventureHud(displayGame) {
     rescue: "Soccorri " + (near ? D.pokemon[near.species]?.name : ""),
   };
   $("adventure-bar").innerHTML =
-    `<span>${WEATHER[a.weather]} · ${DIFFICULTIES[a.difficulty].name} · <b>${a.coins} monete</b></span><button id="discovery-button">Scoperte</button><button id="challenge-button">Codice sfida</button>${near ? `<button id="site-button">${esc(labels[near.kind])}</button>` : ""}`;
+    `<span>${WEATHER[a.weather]} · ${DIFFICULTIES[a.difficulty].name} · <b>${a.coins} monete</b></span><button id="field-button">MN · ${r.field?.energy ?? 10}/10</button><button id="discovery-button">Scoperte</button><button id="challenge-button">Codice sfida</button>${near ? `<button id="site-button">${esc(labels[near.kind])}</button>` : ""}`;
+  $("field-button").onclick = fieldMenu;
   $("discovery-button").onclick = discoveryMenu;
   $("challenge-button").onclick = challengeMenu;
   if ($("site-button")) $("site-button").onclick = () => siteMenu(idx);
@@ -1396,7 +1472,15 @@ $("modal").addEventListener("cancel", (e) => {
 });
 async function init() {
   try {
-    [D] = await Promise.all([(await fetch("assets/game/data.json")).json()]);
+    const [base, expedition] = await Promise.all(
+      ["assets/game/data.json", "assets/game/expedition-data.json"].map((url) =>
+        fetch(url).then((r) => {
+          if (!r.ok) throw Error("Dati non disponibili");
+          return r.json();
+        }),
+      ),
+    );
+    D = { ...base, expedition };
     const core = await createCore();
     game = new Game(D, core);
     applyPreferences();

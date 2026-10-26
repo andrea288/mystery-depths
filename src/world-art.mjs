@@ -230,6 +230,24 @@ export function drawWorld(
     type = game.biome?.().type || "grass";
   ctx.fillStyle = "#101f29";
   ctx.fillRect(0, 0, width, height);
+  // Atmospheric depth behind the dungeon, independent of unexplored geometry.
+  // Original silhouettes: broad cave ribs and distant suspended lights.
+  for (let layer = 0; layer < 2; layer++) {
+    const span = 115 + layer * 64,
+      offset = (ox * (0.08 + layer * 0.04)) % span;
+    ctx.fillStyle = layer ? "#152833" : "#12232e";
+    for (let i = -1; i < width / span + 1; i++) {
+      const x = Math.floor(i * span + offset),
+        tip = 80 + (((i * 41 + r.seed) >>> 0) % 140);
+      ctx.beginPath();
+      ctx.moveTo(x - 35, 0);
+      ctx.lineTo(x + 32, 0);
+      ctx.lineTo(x + 13, tip);
+      ctx.lineTo(x - 8, tip + 34);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
   for (
     let y = Math.max(0, Math.floor(-oy / size));
     y < Math.min(r.h, Math.ceil((height - oy) / size));
@@ -257,6 +275,23 @@ export function drawWorld(
         size,
         size,
       );
+      if (wall && noise % 11 === 0 && game.visible(x, y)) {
+        const cool = !["fire", "ground", "rock"].includes(type);
+        const light = ctx.createRadialGradient(
+          px + size * 0.5,
+          py + size * 0.3,
+          1,
+          px + size * 0.5,
+          py + size * 0.3,
+          size * 0.8,
+        );
+        light.addColorStop(0, cool ? "#70d5df32" : "#e1a35e32");
+        light.addColorStop(1, "#70d5df00");
+        ctx.fillStyle = light;
+        ctx.fillRect(px - size * 0.3, py - size * 0.5, size * 1.6, size * 1.6);
+        ctx.fillStyle = cool ? "#8fccc5" : "#dca975";
+        ctx.fillRect(px + size * 0.45, py + size * 0.25, 2, 4);
+      }
       if (!wall) {
         if (r.map[y - 1]?.[x]) {
           ctx.fillStyle = "#07162077";

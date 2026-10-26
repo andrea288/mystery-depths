@@ -138,3 +138,7 @@ per scegliere le azioni. I risultati sono in `test-results/`.
 
 Il materiale originale dello ZIP è conservato in `research/handoff/`; le sue
 vecchie formule di danno e reliquie non sono usate dalla simulazione corrente.
+
+### Tecniche MN e terreno tattico
+
+Da **Esplora → MN** puoi usare le 11 tecniche ambientali con i Pokémon attivi: energia condivisa, coperture mobili, guadi, nebbia e riposizionamento. Nei boss ogni tecnica occupa un ordine individuale. [Regole, costi, fonti e limiti](docs/TECNICHE-MN.md).

@@ -1209,7 +1209,7 @@ body[data-screen="expedition"] dialog .reward-grid button {
   .team-strip #manage-team {
     min-height: 36px;
   }
-  .adventure-bar:not(:has(#site-button)) {
+  .adventure-bar:not(:has(#site-button)):not(body.tools-open .adventure-bar) {
     display: none;
   }
   .tools-open .adventure-bar {

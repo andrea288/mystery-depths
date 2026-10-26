@@ -1,0 +1,696 @@
+{
+  "provider": "PokeAPI",
+  "upstream": "https://github.com/PokeAPI/api-data/tree/master/data/api/v2",
+  "cachePolicy": "Raw responses are locally cached and excluded from Git. The compact runtime dataset and response SHA-256 hashes are committed.",
+  "retrieved": "2026-10-25",
+  "files": [
+    {
+      "file": "data/source/expedition/ability-adaptability.json",
+      "sha256": "d3d2b19a655bff6b72889987cc7ae54180536dd1ccfee00c5caf3cbdf343b9cc"
+    },
+    {
+      "file": "data/source/expedition/ability-blaze.json",
+      "sha256": "cd88a36d50ae2781c0a5e8073eede44f295ecfb1a250d8a8d4da569061967c4b"
+    },
+    {
+      "file": "data/source/expedition/ability-compound-eyes.json",
+      "sha256": "7044d7c7f8c0f107607e27b622228b6b157597ac218ac266800cdcab66ae5967"
+    },
+    {
+      "file": "data/source/expedition/ability-cursed-body.json",
+      "sha256": "3917c0a724356480a9e0410e2e5e9af85ae2a02cc4ffa7165e236e41fedc9a3a"
+    },
+    {
+      "file": "data/source/expedition/ability-cute-charm.json",
+      "sha256": "ed7e514c704d1a462825822202ba0396233f890a6363cb4dfad07e5eff705d40"
+    },
+    {
+      "file": "data/source/expedition/ability-defiant.json",
+      "sha256": "ed3a23c9792639da01777608a90a31f862e387ebb5ae8c19a40169829d0f2712"
+    },
+    {
+      "file": "data/source/expedition/ability-flash-fire.json",
+      "sha256": "0d720036197f6134ae654547940fc1c048788c83b49a25655094bc4d25c4bfa5"
+    },
+    {
+      "file": "data/source/expedition/ability-guts.json",
+      "sha256": "930f72e84b83241e102011e3cd7b624d9dd6593707c063744a2e94e301cf9c68"
+    },
+    {
+      "file": "data/source/expedition/ability-hydration.json",
+      "sha256": "d09e4316c204bbd1451f6c5c2a110e24cfbbbc4c02b78418104c65efc5f11c1a"
+    },
+    {
+      "file": "data/source/expedition/ability-illusion.json",
+      "sha256": "1115cca28dd30f71a47768f228aea067befb4487c3fac3ffee276a6c7a8f008c"
+    },
+    {
+      "file": "data/source/expedition/ability-inner-focus.json",
+      "sha256": "3082195c2a9ecabaa537a11ba3a60fbf9b96a7f4589061fda3a4884eb6afffa1"
+    },
+    {
+      "file": "data/source/expedition/ability-intimidate.json",
+      "sha256": "89328e9047f169e563a996a4f60c916bae02b52071cd13a2ddbf94e5cf19f9d6"
+    },
+    {
+      "file": "data/source/expedition/ability-levitate.json",
+      "sha256": "81fa28a500dc6492a1a296fe30d08213d40e6189854626380689d11de1e057ab"
+    },
+    {
+      "file": "data/source/expedition/ability-magic-guard.json",
+      "sha256": "c709df7950494403542f2bfd693b3543b7865b6350be9cf6055c7f6a239f14f4"
+    },
+    {
+      "file": "data/source/expedition/ability-no-guard.json",
+      "sha256": "943cfb24008d0ff2211715c7484ba33f4fab9a2cb7f109ed428f5c60dafaa742"
+    },
+    {
+      "file": "data/source/expedition/ability-overgrow.json",
+      "sha256": "6435f2043a02cde14eafa9846c8c3a35613faecfe82d143a1e99212c13b7e103"
+    },
+    {
+      "file": "data/source/expedition/ability-pressure.json",
+      "sha256": "7f7f908542ebccc5e35b8c61215698285cddaa787408c0c1db6491399f5d5234"
+    },
+    {
+      "file": "data/source/expedition/ability-rock-head.json",
+      "sha256": "3b1ac058016fcf89fb745418581c369dd499e693c7f68c5264c24edf0e096e1b"
+    },
+    {
+      "file": "data/source/expedition/ability-run-away.json",
+      "sha256": "161395379f0aa22696f7871a5dbcc9f68606db094ed666d1bc1e5b13aecff0f5"
+    },
+    {
+      "file": "data/source/expedition/ability-sand-stream.json",
+      "sha256": "bb11ae203bae33d50f00b0cf9bdadf8f3b5c29a88c63572eddf5d95a1870972b"
+    },
+    {
+      "file": "data/source/expedition/ability-sand-veil.json",
+      "sha256": "7a0e3df80953819f03c59cb105b32a806dd10d2d90151c5a64ab6d3b013b724b"
+    },
+    {
+      "file": "data/source/expedition/ability-shed-skin.json",
+      "sha256": "e754a2d59058527a0a0a073b7d090117df1c3665049167c6c8bd858607a807af"
+    },
+    {
+      "file": "data/source/expedition/ability-stance-change.json",
+      "sha256": "c4173b6990a098dc3ae32cdcadff1497db6e27bc46dc25558cf55828cc3cd358"
+    },
+    {
+      "file": "data/source/expedition/ability-static.json",
+      "sha256": "768516ec391883e60d515e5be2c71c8a08fb1217c22c654f69b585928484b636"
+    },
+    {
+      "file": "data/source/expedition/ability-steadfast.json",
+      "sha256": "fe493ed6ebe23695362a6f6215c5a697c91d2e05ddfaf13706d46dacbc258e9b"
+    },
+    {
+      "file": "data/source/expedition/ability-sturdy.json",
+      "sha256": "ea98c9e2c85cd3684cb6230ce7135e45edf5757e30080a18fbfb2f87a319b169"
+    },
+    {
+      "file": "data/source/expedition/ability-super-luck.json",
+      "sha256": "090b9d964390c3e53d0b6d14a129cd4e7d70d23436f614aabb9a360dfb1c3351"
+    },
+    {
+      "file": "data/source/expedition/ability-synchronize.json",
+      "sha256": "5f78821ce1af69802f95b4e2ba0b51e65a50e9b726837a0954a83cc75493a1df"
+    },
+    {
+      "file": "data/source/expedition/ability-thick-fat.json",
+      "sha256": "bbe78d9cc1135960fc74e491f3399354fff942dad5fdceb6c748c27758ec4d54"
+    },
+    {
+      "file": "data/source/expedition/ability-torrent.json",
+      "sha256": "4f904b8ff202c8ba32b236193f337149a69fee36b7cc78d1d10ecdf6f62f417f"
+    },
+    {
+      "file": "data/source/expedition/ability-trace.json",
+      "sha256": "3c3ec03bafc92328200229e70a573258fe5ad1948159219143dd67024dd67206"
+    },
+    {
+      "file": "data/source/expedition/ability-volt-absorb.json",
+      "sha256": "3b2555892771b1b5e2dcb1d9cd113bf5a14c8aa2848fb9b9bd5b026db5ba2d78"
+    },
+    {
+      "file": "data/source/expedition/ability-water-absorb.json",
+      "sha256": "0aa1446d36838be893eda6e1782987f240d1e973cdeb55c816cb8aa99f8bcf2d"
+    },
+    {
+      "file": "data/source/expedition/move-127.json",
+      "sha256": "e58838413fa8cf3fa69e0ef43a2022f1cc511097330ba21e4091bf8547858b63"
+    },
+    {
+      "file": "data/source/expedition/move-148.json",
+      "sha256": "e31313dca872dc3be018594f85bd2cf4f0aa4b17887fb0c6f63c694ca7e255a2"
+    },
+    {
+      "file": "data/source/expedition/move-15.json",
+      "sha256": "1c08177961a41417b8cba813d902e7c546618838b1f9c582b5277a0870bbcd8b"
+    },
+    {
+      "file": "data/source/expedition/move-19.json",
+      "sha256": "3330d137972b0ebd6b84424c3c53de61978ecfefcad4fb9a124d58d1994fee76"
+    },
+    {
+      "file": "data/source/expedition/move-249.json",
+      "sha256": "f60f88be219e90f743f1d470bfc414fe9107d98cdcbfdfac647564e1e9237a1f"
+    },
+    {
+      "file": "data/source/expedition/move-250.json",
+      "sha256": "41eb79f55887ce2573e53700ae5031734e2d633550ef0cee4e579188ddd23971"
+    },
+    {
+      "file": "data/source/expedition/move-291.json",
+      "sha256": "3daf18d4004c9cac28d5590719c7f17c46b7ef31e47f261ea0ccea0e4d46d838"
+    },
+    {
+      "file": "data/source/expedition/move-431.json",
+      "sha256": "5dca727758c1aeacfd88f2009d343b72722ee41a2499c11f3e76b3413b8a9699"
+    },
+    {
+      "file": "data/source/expedition/move-432.json",
+      "sha256": "6785f9a7baba91333f26dbde101773ee9fca7b5de04e30490958acedcd33b73c"
+    },
+    {
+      "file": "data/source/expedition/move-57.json",
+      "sha256": "80dc457e62d7551a7f543a4802daf07296ac3d9f2983a0847b389914aa15cbcb"
+    },
+    {
+      "file": "data/source/expedition/move-70.json",
+      "sha256": "03be800ed050a2be3a73d8bdd9100a2cc2fd8e300070dcbb0bd5175af65417d3"
+    },
+    {
+      "file": "data/source/expedition/pokemon-1.json",
+      "sha256": "d7317f1dd265e3dffb906e17e2e4849da6c3c5ba8813faa9ef2fd20397d9a582"
+    },
+    {
+      "file": "data/source/expedition/pokemon-12.json",
+      "sha256": "6a15268f7649f73cb5a1aed1424c1a7f8eabb30d159e6dcf48e98975ae2ae57f"
+    },
+    {
+      "file": "data/source/expedition/pokemon-133.json",
+      "sha256": "16d0cd379c36300fe562d1f22b483f528f36fc73bc14792c08d0b55ba995afa6"
+    },
+    {
+      "file": "data/source/expedition/pokemon-134.json",
+      "sha256": "fdb60c58f2251f27739a87fe9871f5cefa4c5e8261ee3a81962871b6254388cf"
+    },
+    {
+      "file": "data/source/expedition/pokemon-135.json",
+      "sha256": "16a3335f4107000f1bc486972f200cd409e3abf92a00c07d7792ac71def3506d"
+    },
+    {
+      "file": "data/source/expedition/pokemon-136.json",
+      "sha256": "bdec2b8e8e6167eb40e1b57aa3c7727ca73a469cf0e377edc25ca53ac3fffbc1"
+    },
+    {
+      "file": "data/source/expedition/pokemon-149.json",
+      "sha256": "6799ecf1e1d5dd2feaa47824e18ae24cc49d90aa0d0d9d786676cb8a13bacbec"
+    },
+    {
+      "file": "data/source/expedition/pokemon-152.json",
+      "sha256": "6a3d29bfcfc65772aff99424bff2b1ee122a2ce00f7200f6ebfe4e7ddced6ea3"
+    },
+    {
+      "file": "data/source/expedition/pokemon-153.json",
+      "sha256": "7917f911ad98a0523967fab09edfc9da1dd47e254e16bd58fd6173e5b23f798c"
+    },
+    {
+      "file": "data/source/expedition/pokemon-154.json",
+      "sha256": "24d70b877a7315f0cf3b5812c0451f728ecb2e5d1fc7ca2f1f57ee6fbff041b7"
+    },
+    {
+      "file": "data/source/expedition/pokemon-155.json",
+      "sha256": "8854987cdf18b7e88dfbc27421db14b06eea8101d1cea8d99d8f015b167c16bf"
+    },
+    {
+      "file": "data/source/expedition/pokemon-156.json",
+      "sha256": "5dc303974ba6fdb591c61c06f963e3fcd0101a04a8d7ec565b8cf6c91155f693"
+    },
+    {
+      "file": "data/source/expedition/pokemon-157.json",
+      "sha256": "c55fd3da63d5600ee0f4e081e82db1d1eda378057d86db4c8e6e5b5f98c22aba"
+    },
+    {
+      "file": "data/source/expedition/pokemon-158.json",
+      "sha256": "f65f5acd70c706984752201c845923ec2cb0b8bc156325e2ad611a233b98d8fa"
+    },
+    {
+      "file": "data/source/expedition/pokemon-159.json",
+      "sha256": "d2fb3b03cb5089d236cc1207c13cb14a203485b3b44620f49eaf1f5d73878ae9"
+    },
+    {
+      "file": "data/source/expedition/pokemon-160.json",
+      "sha256": "f26bc8699fb8cd085d2cd3e5ae84a81a14f72cb5b4c03f39aad287367e6b33dc"
+    },
+    {
+      "file": "data/source/expedition/pokemon-169.json",
+      "sha256": "da259dbc05880107a9002371eb73b3e9baa5ec0ec8244379b3c57179a4180935"
+    },
+    {
+      "file": "data/source/expedition/pokemon-19.json",
+      "sha256": "76e76ea7c70d6c3e9a0d1823da2bd6e68d0e311a7083b8dc8ff03074b082a2de"
+    },
+    {
+      "file": "data/source/expedition/pokemon-2.json",
+      "sha256": "53018ca0a95e93b8e1be689387bda6bcf2dd2f69bb2b3966d10c94ae2bd83370"
+    },
+    {
+      "file": "data/source/expedition/pokemon-20.json",
+      "sha256": "ef95ca8fdb4445322d1a818ddbffbed6ea7fdb9a4bc33a91f0a1c5ccb9c68fc3"
+    },
+    {
+      "file": "data/source/expedition/pokemon-208.json",
+      "sha256": "425f254b6c0e9181aa4ca0f3a8fd09709571594e49e52f8f610d8f6c0c103b8e"
+    },
+    {
+      "file": "data/source/expedition/pokemon-246.json",
+      "sha256": "316542b3daa6df84d7ae53d12be88bc4757259bee3c0d6ded1324f9123383a46"
+    },
+    {
+      "file": "data/source/expedition/pokemon-247.json",
+      "sha256": "b3f084e03f86e242b22023becc300c8fb66527f5da952cdae7688ba94f423cc8"
+    },
+    {
+      "file": "data/source/expedition/pokemon-248.json",
+      "sha256": "1045c1c508f251ef57c0c48c88acb7abeff1431d0e38f28d5cfb0cac44ceb8b5"
+    },
+    {
+      "file": "data/source/expedition/pokemon-25.json",
+      "sha256": "fa0a8193811cf5e8835d5fd93e44740d5a4a2488b2180d6611f809179f2d77a6"
+    },
+    {
+      "file": "data/source/expedition/pokemon-252.json",
+      "sha256": "d23321da3241342c96d684082ae01323a6f78d935760906ea96721c0e0e931c6"
+    },
+    {
+      "file": "data/source/expedition/pokemon-253.json",
+      "sha256": "0bf39abedddc222b767db44bf31466a15330285af6b1ff67be887866685aba73"
+    },
+    {
+      "file": "data/source/expedition/pokemon-254.json",
+      "sha256": "6045db79ff4465c9063b7750685652742264610f9cf94ea10cead3de74eb5e40"
+    },
+    {
+      "file": "data/source/expedition/pokemon-255.json",
+      "sha256": "bde9e1513f8cf57df25cfbe1a2a51a074f3e0ad1db93f4fd2394165643ba4cd8"
+    },
+    {
+      "file": "data/source/expedition/pokemon-256.json",
+      "sha256": "dd090750b7d3d5f284d26883c7478685bd8d12ba4ce62dbfa82e169ecd72512c"
+    },
+    {
+      "file": "data/source/expedition/pokemon-257.json",
+      "sha256": "3dd278488aa8acfcde07901bf0a0a0b866a0e5c2f17b30e01db78159006dcf68"
+    },
+    {
+      "file": "data/source/expedition/pokemon-258.json",
+      "sha256": "7561004d40a647caede1a2d01ef7aebb05472c6b4ee0e78310aa04c59bb5503c"
+    },
+    {
+      "file": "data/source/expedition/pokemon-259.json",
+      "sha256": "0a4e026ad9513ad2894e2d3bb13baf99a7494d4de18546542bc334b8647f1382"
+    },
+    {
+      "file": "data/source/expedition/pokemon-26.json",
+      "sha256": "a340f278b70509b709e148eed6e646b4c783eff3db0417c954491b607081f368"
+    },
+    {
+      "file": "data/source/expedition/pokemon-260.json",
+      "sha256": "e52191f5c43c8ce88eb6f64b404e644ca3fdbfb14b503817dbe1aab383d8c179"
+    },
+    {
+      "file": "data/source/expedition/pokemon-280.json",
+      "sha256": "d0e68f5d97bb6aad748359a1d888103398cd84dbef047df5b267a673eca53f92"
+    },
+    {
+      "file": "data/source/expedition/pokemon-281.json",
+      "sha256": "068388e61e1a6dc81d2eb7de1d89ff414f6c6d5fbbb154c4eb4845fb5800b8e5"
+    },
+    {
+      "file": "data/source/expedition/pokemon-282.json",
+      "sha256": "00012c9a5310683aeb97eb15c36100d816c66bd16cabf98ac739b4442e04e459"
+    },
+    {
+      "file": "data/source/expedition/pokemon-3.json",
+      "sha256": "2a376fa680aaf3b59c2530d10c0a0828d38755be08fcf7c0901c34dd764ca9b7"
+    },
+    {
+      "file": "data/source/expedition/pokemon-304.json",
+      "sha256": "c82c28616917ca12fb6bac1d5004ccf853b4d2fd14d235ffa8c6ec1d130713f3"
+    },
+    {
+      "file": "data/source/expedition/pokemon-305.json",
+      "sha256": "8c755d15fea95fdeddab4d779bf7decdca8dc7db1b2bd34457d86f29d4a2df27"
+    },
+    {
+      "file": "data/source/expedition/pokemon-306.json",
+      "sha256": "72b5c938d1373d1d1935533fa6c287117820388645f7d186e79740b2382710f0"
+    },
+    {
+      "file": "data/source/expedition/pokemon-359.json",
+      "sha256": "ba4a0080495d7d7bcfe9ff1dc119f06cbdd33f6ac5d309f19bb7ba47ca9e16e8"
+    },
+    {
+      "file": "data/source/expedition/pokemon-36.json",
+      "sha256": "5c03ac8e283e87c29cbaa64f461c0186daf579098776f34fb4fb5131a423cf29"
+    },
+    {
+      "file": "data/source/expedition/pokemon-373.json",
+      "sha256": "85008142f0ec2407e0d4e64385fad586ae238907aaff06e1de49ef99d8a78435"
+    },
+    {
+      "file": "data/source/expedition/pokemon-387.json",
+      "sha256": "79672dfaafcf276b88b898c2a4f095efc3dd9627747082120c14f862af6c4d5d"
+    },
+    {
+      "file": "data/source/expedition/pokemon-388.json",
+      "sha256": "99ddc0715782cdbc8ce01ecad4e2d12245c33e2817208b5cfe63f82ca223e63e"
+    },
+    {
+      "file": "data/source/expedition/pokemon-389.json",
+      "sha256": "75ef4cdb45b70a18b3478b8c32330c273b45a760a36dad3b7c7d7298da2c7828"
+    },
+    {
+      "file": "data/source/expedition/pokemon-390.json",
+      "sha256": "bc1d04e05a65cc939acb1f0775cc604d3d3623cc84a28adc53ab66bd77110908"
+    },
+    {
+      "file": "data/source/expedition/pokemon-391.json",
+      "sha256": "b68c7f75939ac189797d08997d8fcd0d291986b568ccfe4cb305b5b05c7ea86d"
+    },
+    {
+      "file": "data/source/expedition/pokemon-392.json",
+      "sha256": "9d54f9984e3ee2a41e188835b59966bcc459d680f959821da4e342a65d4df218"
+    },
+    {
+      "file": "data/source/expedition/pokemon-393.json",
+      "sha256": "815a79517f8d020280a8cef9652dd0fcf6dbe4b088b235aa33d33069fa8b6d8a"
+    },
+    {
+      "file": "data/source/expedition/pokemon-394.json",
+      "sha256": "24dabfd1798c53439f02c0244c4451991fc35f63f9355abfe287333f0c3361da"
+    },
+    {
+      "file": "data/source/expedition/pokemon-395.json",
+      "sha256": "ce5d3b8052753366db3f2b1753520a7508f8ed1ac5fae4eac9fa464da05398fc"
+    },
+    {
+      "file": "data/source/expedition/pokemon-4.json",
+      "sha256": "adddfc676bf5f6895bb4bbd94315dd36c7597cd5e657fb5bc3a7231eb1014f2e"
+    },
+    {
+      "file": "data/source/expedition/pokemon-41.json",
+      "sha256": "38d1f0abfbf4fbb1592dcf03c380a7afba3bd691835a52249e0477b178dedfe1"
+    },
+    {
+      "file": "data/source/expedition/pokemon-42.json",
+      "sha256": "d9ea1af66a4b2f85e088ae4f5a06ce01f1bca6b29abc56b77bb0df83acb1d32d"
+    },
+    {
+      "file": "data/source/expedition/pokemon-443.json",
+      "sha256": "3b0576b65d49b89b85380ecef3922a2a831b4e8f87ce1f032880343e1884fc5a"
+    },
+    {
+      "file": "data/source/expedition/pokemon-444.json",
+      "sha256": "cda6e2e85b0dd672ad42dacea29fea27144507b050f8c7f6b7feefbb058bebc0"
+    },
+    {
+      "file": "data/source/expedition/pokemon-445.json",
+      "sha256": "74117d4e52ad95990fb78004a45f55cc3bf00e4433387e67852c42c79c4613b8"
+    },
+    {
+      "file": "data/source/expedition/pokemon-447.json",
+      "sha256": "653552959aa15419b3deb3b11a1a3ca6b630a66eff31c11ee9a92709ed7724ec"
+    },
+    {
+      "file": "data/source/expedition/pokemon-448.json",
+      "sha256": "0b2c504c442b9a78294e74046b2c511f7bd9f07d6256e066f535a7d343f81733"
+    },
+    {
+      "file": "data/source/expedition/pokemon-495.json",
+      "sha256": "02361ebe835610e50e78497b2defed3b4a7718f6da449a3ef7623530f13245a6"
+    },
+    {
+      "file": "data/source/expedition/pokemon-496.json",
+      "sha256": "7e6faedda7d2b1996177820752afbd92261bbeaa774b10bcbc3055b6c48abf3a"
+    },
+    {
+      "file": "data/source/expedition/pokemon-497.json",
+      "sha256": "d390a37cac078aa5a088a93ec907a5b4b2495d9333447c22e5a82c76cf5f5f10"
+    },
+    {
+      "file": "data/source/expedition/pokemon-498.json",
+      "sha256": "0e95be63f200461540f8fe1b38c619c60756e97cf4c7e95c34e35a68328c1aac"
+    },
+    {
+      "file": "data/source/expedition/pokemon-499.json",
+      "sha256": "e7d59ee529366b0f1859fd4e3d871c5ec3fc0110d4ffdfd5a8e1c4e562e3708b"
+    },
+    {
+      "file": "data/source/expedition/pokemon-5.json",
+      "sha256": "d127c91f9856a2ae2664055bcec1bbfa3f280347d2906614100dcc0d0b7c4134"
+    },
+    {
+      "file": "data/source/expedition/pokemon-500.json",
+      "sha256": "0fc96f8ec863a7503c62b61fd25b4de4c3521a29a09f8d2bacf08866de0439f2"
+    },
+    {
+      "file": "data/source/expedition/pokemon-501.json",
+      "sha256": "05c7fb912189fa64e3a5e74f482380bbc397a8f2095918091958ab0d35926ac1"
+    },
+    {
+      "file": "data/source/expedition/pokemon-502.json",
+      "sha256": "663d3ad951e02b0f2d56dbb3be921157e026b15ec0ffb3674ca87d2ff0e72fb3"
+    },
+    {
+      "file": "data/source/expedition/pokemon-503.json",
+      "sha256": "4a401344ceaf90468076c8ee42a39f80dee3cdc2411a642e665b6351ffd2a0a4"
+    },
+    {
+      "file": "data/source/expedition/pokemon-570.json",
+      "sha256": "ccf595f0d02ff4ec0b0161b6fd3b235d7c6ed856ecb659cd80ce115f36e6cd8e"
+    },
+    {
+      "file": "data/source/expedition/pokemon-571.json",
+      "sha256": "a10a6e7f6bc78c6efc81bedbac4f14b2b0478466b3cc0d30e21983141011884d"
+    },
+    {
+      "file": "data/source/expedition/pokemon-6.json",
+      "sha256": "10ace6b10b81512a128c5fc5f910c6cf54476921518abe5cb71c0d8ac8b9f63d"
+    },
+    {
+      "file": "data/source/expedition/pokemon-624.json",
+      "sha256": "8fae484732a62d3ae06b92202708debe8f7fae6523f6dcf89beb43f9094929a4"
+    },
+    {
+      "file": "data/source/expedition/pokemon-625.json",
+      "sha256": "c8a1381aeaa56c7336f906ceded0f9e0dc95dc1ca591025d5cd1f38150886ce3"
+    },
+    {
+      "file": "data/source/expedition/pokemon-635.json",
+      "sha256": "6fb4d65d8fbf036cfa82d69b34bbb851425ed65d7a25961a2b0e4dcd16d177ec"
+    },
+    {
+      "file": "data/source/expedition/pokemon-650.json",
+      "sha256": "f46a25b4e5a1857a6884279c87f540f449de05a7e4aaf2b02ca8e12e3e4f5b28"
+    },
+    {
+      "file": "data/source/expedition/pokemon-651.json",
+      "sha256": "316d714e77d496dd5b63c946fe1fcd59935c6598d72c5b56fa3ed1a5d55a9cec"
+    },
+    {
+      "file": "data/source/expedition/pokemon-652.json",
+      "sha256": "411d9d22d735d181faacc3c5ca50a6d29b94a73efd41d51f4792950a943a848e"
+    },
+    {
+      "file": "data/source/expedition/pokemon-653.json",
+      "sha256": "bf18457d2d2171b5a262ffd9ee559722c09e45de47e1ad4f302c534ab3ea9d63"
+    },
+    {
+      "file": "data/source/expedition/pokemon-654.json",
+      "sha256": "ca972718261a123d6648d45ca73834ac78691787d4449a53eaaadb12621d5e60"
+    },
+    {
+      "file": "data/source/expedition/pokemon-655.json",
+      "sha256": "11311ccdb57ba1d5f71698c5d71402d69a0af97ca07a12251aa7ab11ffb71e6b"
+    },
+    {
+      "file": "data/source/expedition/pokemon-656.json",
+      "sha256": "5263796f5011e72d302b6a603b4e7e4057ea1f63b4bcb3442cfb38b740870562"
+    },
+    {
+      "file": "data/source/expedition/pokemon-657.json",
+      "sha256": "c5fd98f2206c92400ab156c281ed9b1240c1b67a3c327675706c62e5cd4cf1de"
+    },
+    {
+      "file": "data/source/expedition/pokemon-658.json",
+      "sha256": "01fe4e90ba95d246740b5e184814f428f11040663a70d7ae1ffd01fd7be69ce7"
+    },
+    {
+      "file": "data/source/expedition/pokemon-679.json",
+      "sha256": "8d8af3b858f0ff5d53d3005e05d8b9b13b2452347f5c78730ad8c10d40b857b1"
+    },
+    {
+      "file": "data/source/expedition/pokemon-680.json",
+      "sha256": "3b1fa1090e6d72fe33f45b05d8418e7ca1aefde9f337e6c3a4a19e1a52b14049"
+    },
+    {
+      "file": "data/source/expedition/pokemon-681.json",
+      "sha256": "9518b3f475ad0b2744d11c5dadcf7ec8bfb84125a4b7f612d14d1d2de96728d4"
+    },
+    {
+      "file": "data/source/expedition/pokemon-7.json",
+      "sha256": "1361ef4b9e75c0d89462e2680238a8a1092178c99e76517b8d3423c88a1e94d1"
+    },
+    {
+      "file": "data/source/expedition/pokemon-722.json",
+      "sha256": "0b488116128fb4e72ca61d9445a224e4dacbe700ee4ea40df14274a03b322ec3"
+    },
+    {
+      "file": "data/source/expedition/pokemon-723.json",
+      "sha256": "27d0af8ecfca18b4d207cbc185d37775d6fb780f2af8afcd1f344f4bdcf80003"
+    },
+    {
+      "file": "data/source/expedition/pokemon-724.json",
+      "sha256": "52b3268f60900dafda530d2d7e39574dbec21c93c26b011e9621abb080144b1d"
+    },
+    {
+      "file": "data/source/expedition/pokemon-725.json",
+      "sha256": "724fd4a1f8b30d276262f294fd1480fbc17b19264f35db0cf5316fc4b48960c2"
+    },
+    {
+      "file": "data/source/expedition/pokemon-726.json",
+      "sha256": "d206d3d977f850c7a9a2f8d9ff519ad233a4fc9f2a5353500ede109190aac70f"
+    },
+    {
+      "file": "data/source/expedition/pokemon-727.json",
+      "sha256": "5b388a93b28a2d1053f96bbbbe8dcafa8823b986a6965b7bfa4781260d6549ca"
+    },
+    {
+      "file": "data/source/expedition/pokemon-728.json",
+      "sha256": "6d1ad1abfa5536aa706f042a7ecd6909d17b809f42f29199fa5368680de2c94f"
+    },
+    {
+      "file": "data/source/expedition/pokemon-729.json",
+      "sha256": "c775ab0fcc2ec148e62a994847c614829bf7e4a931e2d063e92c0a69a7a418b1"
+    },
+    {
+      "file": "data/source/expedition/pokemon-730.json",
+      "sha256": "be612be9f4c8fbb27972abfb977eccb2ad09da5ca725ed13f4f073c0bd46214f"
+    },
+    {
+      "file": "data/source/expedition/pokemon-74.json",
+      "sha256": "62313d2a6de473a8da1ca184d0497d0c1e58e92af8c77e9d536e62dad30a4556"
+    },
+    {
+      "file": "data/source/expedition/pokemon-75.json",
+      "sha256": "bcaf3e6fcd143a1cbcc63bb8c7ec353fba7fe961073b8cef10bd3802e5d5387f"
+    },
+    {
+      "file": "data/source/expedition/pokemon-76.json",
+      "sha256": "100ea6b2da06c91a0fcee36ceffc27dbb93a780c86ffd70144e6cd57c26c4170"
+    },
+    {
+      "file": "data/source/expedition/pokemon-8.json",
+      "sha256": "3b7dae484efcaa13553ff4ad3608bc67fe96e97eaec6aed6708a84a7ccc11443"
+    },
+    {
+      "file": "data/source/expedition/pokemon-810.json",
+      "sha256": "cdcf6d60aeef2779a1fa709aea2ae6445c75a0f14076a7fa871b046c6547d06f"
+    },
+    {
+      "file": "data/source/expedition/pokemon-811.json",
+      "sha256": "6f09e4d404ec3f1f82cb56cf4f92453440ef1b2b19bee7311355d6cc8b346f38"
+    },
+    {
+      "file": "data/source/expedition/pokemon-812.json",
+      "sha256": "4d95f235e95333a05cbeb3405c1727f09871eeacb172877620d7fa71eeeef01a"
+    },
+    {
+      "file": "data/source/expedition/pokemon-813.json",
+      "sha256": "ea3131f2091502409237ab492d4bff9580c34595b3587867644934fc9f3cc7c4"
+    },
+    {
+      "file": "data/source/expedition/pokemon-814.json",
+      "sha256": "78bad84706d1ece45c24075b70c9a3c4baaa51e49f8003b2e8a3cb9e9d44d7e5"
+    },
+    {
+      "file": "data/source/expedition/pokemon-815.json",
+      "sha256": "947efb2ded98eacdbd6dc20951de31e62387f0bb09e65c32afb93cbd09d15194"
+    },
+    {
+      "file": "data/source/expedition/pokemon-816.json",
+      "sha256": "834a3edea889fd9929f13d3f361d7188450ca6a66e6ae79a93681fb5f07a0549"
+    },
+    {
+      "file": "data/source/expedition/pokemon-817.json",
+      "sha256": "0eb97cd8ae0411ce65241508f75eae2addf8eae5a566bf50ff5c17300cf18cbd"
+    },
+    {
+      "file": "data/source/expedition/pokemon-818.json",
+      "sha256": "1036ee5ca3c709137d1e1e482b91c807a8ca4f7888a0508ab316a7d7ccbc481f"
+    },
+    {
+      "file": "data/source/expedition/pokemon-87.json",
+      "sha256": "ac8749106cdc149bfe9182a2ab8ef9c53d192e62046c912899133896b963b58e"
+    },
+    {
+      "file": "data/source/expedition/pokemon-9.json",
+      "sha256": "4026187c2d340d4711242aaff88bba84ab64405cf84a9e9c6ca1799ae3f0511a"
+    },
+    {
+      "file": "data/source/expedition/pokemon-906.json",
+      "sha256": "426a5ceda50c8dae17b671e887176884bc141a493e9758c8a43d725382809d14"
+    },
+    {
+      "file": "data/source/expedition/pokemon-907.json",
+      "sha256": "1909c64501417a56d54e8efe6c78cded6d6cc8f48c860d6ac24ffc4cd9ede5eb"
+    },
+    {
+      "file": "data/source/expedition/pokemon-908.json",
+      "sha256": "0a19d738736a10db66d3def38be6b8fc61ba8fbcc5ef76d85bd5748ea393ef80"
+    },
+    {
+      "file": "data/source/expedition/pokemon-909.json",
+      "sha256": "3ac78e764d05b0c75ce1be8ccf2620c48b8a769f737f9a7ab4855b05b60caae2"
+    },
+    {
+      "file": "data/source/expedition/pokemon-910.json",
+      "sha256": "131e25e1e45207bca86ba45e692ef45286476e3d6c34e0b80879aa1f34e05ba0"
+    },
+    {
+      "file": "data/source/expedition/pokemon-911.json",
+      "sha256": "641f7df6828829a32e2f5c5c2b352c3530e86bae778a9b7307a2e429234cf8be"
+    },
+    {
+      "file": "data/source/expedition/pokemon-912.json",
+      "sha256": "54bfaf6a5098693333e8d36c74549a0d423aaee43a8636ef396af319819c74ca"
+    },
+    {
+      "file": "data/source/expedition/pokemon-913.json",
+      "sha256": "ee62a4cc2d23a78744e3058255e21c3a219616cd1e1cf29b106046040461e96b"
+    },
+    {
+      "file": "data/source/expedition/pokemon-914.json",
+      "sha256": "f6fe9ce190a3cd0f95d1482f863f8ef0a926073b28e7d8c2ecd83e3bdd9ae594"
+    },
+    {
+      "file": "data/source/expedition/pokemon-92.json",
+      "sha256": "baeb6748bbf380189cfadfb18c9d6f4e6adb4bd7d791e1030aace4de157004be"
+    },
+    {
+      "file": "data/source/expedition/pokemon-93.json",
+      "sha256": "e6c16bfc914928a5609af922dc1d32d95475a3e875c54ae7e5f083d08b82e0ff"
+    },
+    {
+      "file": "data/source/expedition/pokemon-94.json",
+      "sha256": "a7300258119c34c5ddf9bb0593d4924d9aa3977526b4845441aa92c65ccb5d90"
+    },
+    {
+      "file": "data/source/expedition/pokemon-95.json",
+      "sha256": "e16059be0724677081a218ed258037c77527efea4be28cb254dece3177f9829d"
+    }
+  ]
+}

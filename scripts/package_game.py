@@ -8,7 +8,7 @@ roots=['src','assets','data','docs','scripts','tests','research','third_party','
 files=[R/name for name in ['README.md','package.json','package-lock.json','index.html','style.css','requirements-dev.txt','avvia-windows.bat','avvia-linux-mac.sh']]
 for directory in roots:
  for p in (R/directory).rglob('*'):
-  if p.is_file() and not any(s in {'.git','.cache','__pycache__','node_modules','.venv'} for s in p.relative_to(R).parts) and p.suffix!='.pyc':files.append(p)
+  if p.is_file() and 'data/source/expedition' not in str(p.relative_to(R)) and not any(s in {'.git','.cache','__pycache__','node_modules','.venv'} for s in p.relative_to(R).parts) and p.suffix!='.pyc':files.append(p)
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
  for p in sorted(set(files)):z.write(p,'mystery-depths/'+str(p.relative_to(R)))
 with zipfile.ZipFile(archive) as z:

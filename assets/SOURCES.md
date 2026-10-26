@@ -72,3 +72,9 @@ Tessere ambientali, lampade, acqua, scale e simboli delle stanze speciali sono
 grafica procedurale originale del progetto in `src/world-art.mjs`. Non sono
 estrazioni dal mockup generato né asset di Nintendo. Sprite Pokémon, ritratti,
 strumenti ed effetti mantengono le attribuzioni indicate sopra.
+
+## Tecniche MN e ambienti
+
+I nomi italiani e la compatibilità delle 11 MN per le 128 specie provengono da PokeAPI tramite il mirror pubblico [PokeAPI/api-data](https://github.com/PokeAPI/api-data). Generatore e hash: `scripts/fetch_expedition_data.py`, `data/expedition-sources.json`. Non sono necessarie connessioni a servizi esterni durante il gioco. Gli effetti ambientali sono adattamenti originali; dettagli in `docs/TECNICHE-MN.md`.
+
+I motivi pixel di terreno e le sagome atmosferiche in `src/field-render.mjs` e `src/world-art.mjs` sono grafica originale procedurale. Nessun asset di Team Cherry è incluso. Le animazioni delle tecniche riutilizzano esclusivamente gli effetti già accreditati nel manifest degli effetti.
