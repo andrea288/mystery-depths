@@ -154,7 +154,7 @@ function renderCamp() {
     .filter((id) => region === "Tutte" || D.pokemon[id].region === region)
     .map(
       (id) =>
-        `<button class="starter-card ${id === selected ? "selected" : ""}" data-starter="${id}" aria-pressed="${id === selected}"><span class="starter-number">#${String(id).padStart(3, "0")}</span><img src="assets/portraits/${id}.png" alt=""><strong>${D.pokemon[id].name}</strong><span>${D.pokemon[id].types.map((t) => types[t]).join(" / ")}</span></button>`,
+        `<button title="${esc(D.pokemon[id].name)}" aria-label="${esc(D.pokemon[id].name)}" class="starter-card ${id === selected ? "selected" : ""}" data-starter="${id}" aria-pressed="${id === selected}"><span class="starter-number">#${String(id).padStart(3, "0")}</span><img src="assets/portraits/${id}.png" alt=""><strong>${D.pokemon[id].name}</strong><span>${D.pokemon[id].types.map((t) => types[t]).join(" / ")}</span></button>`,
     )
     .join("");
   $("starter-grid")
@@ -296,6 +296,22 @@ function hud(displayGame = game) {
   const acting = tactical()
     ? displayGame.active().find((m) => m.uid === commandUid) || p
     : p;
+  let quick = $("quick-moves");
+  if (!quick) {
+    quick = document.createElement("div");
+    quick.id = "quick-moves";
+    quick.setAttribute("aria-label", "Mosse del Pokémon selezionato");
+    document.querySelector(".map-frame").append(quick);
+  }
+  quick.innerHTML = acting.moves
+    .map(
+      (slot, i) =>
+        `<button data-slot="${i}" ${slot.pp ? "" : "disabled"}><kbd>${i + 1}</kbd> ${esc(D.moves[slot.id].name)} <small>${slot.pp} PP</small></button>`,
+    )
+    .join("");
+  quick
+    .querySelectorAll("button")
+    .forEach((b) => (b.onclick = () => selectMove(+b.dataset.slot)));
   teamHud(displayGame);
   adventureHud(displayGame);
   $("move-bar").innerHTML = Array.from({ length: 4 }, (_, i) => {
@@ -1219,7 +1235,7 @@ $("home-link").onclick = (e) => {
 $("help-button").onclick = () =>
   modal(
     "Guida alla discesa",
-    "<p>Ogni azione consuma un turno. Muoviti con frecce o WASD; Q, E, Z e C permettono passi diagonali. Tieni premuto Maiusc per orientarti senza muoverti.</p><p>Spazio: attacco normale. Numeri 1–4: mosse. Punto: attendi. V: orientamento gratuito. Tab: cambia bersaglio. M: minimappa. F: schermo intero. L: diario. B: zaino. Invio: scendi quando sei sulle scale. Fai clic su un nemico per selezionarlo.</p><p>Controlla PS, PP e Pancia. Usa gli strumenti dallo zaino. Ogni cinque piani un guardiano custodisce l’uscita. Dopo ogni piano scegli una ricompensa.</p>",
+    "<p>Ogni azione consuma un turno. Muoviti con frecce o WASD; Q, E, Z e C permettono passi diagonali. Tieni premuto Maiusc per orientarti senza muoverti.</p><p>Spazio: interagisci con scale, negozi e forzieri vicini. Numeri 1–4: mosse. Punto: attendi. V: orientamento gratuito. Tab: cambia bersaglio. M: minimappa. F: schermo intero. L: diario. B: zaino. Invio: scendi quando sei sulle scale o accanto. Fai clic su un nemico per selezionarlo.</p><p>Controlla PS, PP e Pancia. Usa gli strumenti dallo zaino. Ogni cinque piani un guardiano custodisce l’uscita. Dopo ogni piano scegli una ricompensa.</p>",
     [["Ho capito", stateDialog]],
   );
 $("credits-button").onclick = () =>
@@ -1228,6 +1244,30 @@ $("credits-button").onclick = () =>
     "<p>Progetto personale non ufficiale. Pokémon appartiene ai rispettivi titolari. Sprite e ritratti: collaboratori di SpriteCollab; attribuzioni complete nei file assets/spritebot_credits.txt e assets/tracker.json.</p><p>Icone degli strumenti: PokeAPI/sprites e PMDCollab/RawAsset. Effetti delle mosse: 25 fogli PMDCollab/RawAsset, con abbinamenti e tempi adattati per questo progetto; fonti in assets/effects/manifest.json. Semedormita, forziere e dettagli del dungeon: grafica originale del progetto. Carattere VT323: Peter Hull, licenza SIL OFL.</p><p>Testi ufficiali italiani estratti da Esploratori del Cielo. Calcolo dei danni: damage-eos. Mappe e progressione roguelite sono originali di questo progetto.</p><p>La riproduzione completa delle regole EoS è ancora in lavorazione: effetti secondari, recupero naturale, esperienza e gestione dei turni richiedono ulteriori verifiche. Le specie successive a EoS usano adattamenti dichiarati.</p>",
     [["Chiudi"]],
   );
+function interactNearby() {
+  if (busy) return;
+  const r = game.run,
+    p = r.player;
+  const site = game.siteNearby();
+  if (site) {
+    siteMenu(r.adventure.sites.indexOf(site));
+    return;
+  }
+  if (Math.max(Math.abs(p.x - r.exit.x), Math.abs(p.y - r.exit.y)) <= 1) {
+    act(() => game.stairs());
+    return;
+  }
+  const chest = r.items.find(
+    (i) =>
+      i.type === "chest" &&
+      Math.max(Math.abs(p.x - i.x), Math.abs(p.y - i.y)) <= 1,
+  );
+  if (chest) {
+    act(() => game.action({ type: "openChest", x: chest.x, y: chest.y }));
+    return;
+  }
+  toast("Nessun elemento con cui interagire nelle vicinanze.");
+}
 $("stairs-button").onclick = () => act(() => game.stairs());
 $("attack-button").onclick = () => {
   if (tactical()) {
@@ -1261,7 +1301,7 @@ function orient(dx, dy) {
     game.run?.state !== "playing"
   )
     return;
-  game.face(game.run.player, dx, dy);
+  game.face(tactical() ? commanded() : game.run.player, dx, dy);
   save();
   hud();
 }
@@ -1297,6 +1337,14 @@ $("dungeon").onclick = (e) => {
   if (busy) return;
   const { x, y } = mapPoint(e),
     p = game.run.player;
+  const controlled = tactical() ? commanded() : p;
+  if (
+    game.run.tactics?.phase !== "deploy" &&
+    Math.max(Math.abs(x - controlled.x), Math.abs(y - controlled.y)) === 1
+  ) {
+    orient(x - controlled.x, y - controlled.y);
+    return;
+  }
   if (tactical()) {
     const ally = game.active().find((m) => m.x === x && m.y === y);
     if (ally) {
@@ -1394,8 +1442,7 @@ window.addEventListener("keydown", (e) => {
     }
     if (k === " ") {
       e.preventDefault();
-      commandMode = "attack";
-      hud();
+      interactNearby();
       return;
     }
     if (k === ".") {
@@ -1452,7 +1499,7 @@ window.addEventListener("keydown", (e) => {
     selectMove(+k - 1);
   } else if (k === " ") {
     e.preventDefault();
-    act(() => game.regularAttack());
+    interactNearby();
   } else if (k === ".") act(() => game.wait());
   else if (k === "enter") {
     e.preventDefault();

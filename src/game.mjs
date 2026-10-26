@@ -162,6 +162,13 @@ export class Game extends Base {
   buildFloor() {
     super.buildFloor();
     const r = this.run;
+    if (r.floor % 5 !== 0)
+      for (const type of ["berry", "ether", "apple"]) {
+        if (!r.items.some((i) => i.type === type)) {
+          const pos = this.freeSpot(r.rooms.at(-1));
+          if (pos) r.items.push({ ...pos, type });
+        }
+      }
     if (r.rooms.length > 1) {
       const pos = this.freeSpot(r.rooms[2] || r.rooms[1]);
       if (pos)
@@ -737,7 +744,12 @@ export class Game extends Base {
   stairs() {
     const r = this.run;
     if (!r || r.state !== "playing") return false;
-    if (r.player.x !== r.exit.x || r.player.y !== r.exit.y) {
+    if (
+      Math.max(
+        Math.abs(r.player.x - r.exit.x),
+        Math.abs(r.player.y - r.exit.y),
+      ) > 1
+    ) {
       this.log("Raggiungi le scale per scendere.");
       return false;
     }

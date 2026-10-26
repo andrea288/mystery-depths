@@ -35,7 +35,7 @@ const events = [
 test("Animazioni: PS al momento dell’impatto, risposta successiva e simulazione immutata", () => {
   const original = structuredClone(game.run);
   const p = new Playback(game, before, events);
-  p.advance(699);
+  p.advance(p.schedule.find(e=>e.type==="hit").time-1);
   assert.equal(p.game.run.enemies[0].hp, 20);
   p.advance(1);
   assert.equal(p.game.run.enemies[0].hp, 13);
@@ -80,4 +80,10 @@ test("Multi-colpo: impatti distinti e sequenza completa prima del nemico", () =>
     p.schedule.find((e) => e.type === "attack" && e.uid === 1).time >
       hits[2].time,
   );
+});
+
+test('Esplorazione: passi simultanei e brevi, boss con ritmo separato',()=>{
+ const steps=[0,1].map(uid=>({type:'step',uid,from:{x:1,y:1},to:{x:2,y:1}}));
+ const quick=new Playback(game,before,steps),boss=new Playback(game,{...before,tactics:{phase:'plan'}},steps);
+ assert.equal(quick.schedule[0].time,quick.schedule[1].time);assert.ok(quick.duration<=150);assert.ok(boss.duration>quick.duration);
 });

@@ -8,6 +8,7 @@ export function drawAdventure(ctx, game, point, size, time, options = {}) {
   ctx.save();
   ctx.imageSmoothingEnabled = false;
   for (const tile of a.terrain) {
+    if (tile.kind === "grass") continue;
     if (!r.seen[tile.y]?.[tile.x]) continue;
     const p = point(tile);
     ctx.globalAlpha = game.visible(tile.x, tile.y) ? 0.75 : 0.25;

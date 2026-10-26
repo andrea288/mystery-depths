@@ -268,8 +268,8 @@
         depth = BigInt(r.floor),
         boss = depth % 5n === 0n;
       r.uid = 1;
-      r.w = boss ? 25 : 43;
-      r.h = boss ? 19 : 31;
+      r.w = boss ? 25 : 33;
+      r.h = boss ? 19 : 25;
       r.map = Array.from({ length: r.h }, () => Array(r.w).fill(1));
       r.rooms = [];
       r.enemies = [];
@@ -305,7 +305,7 @@
         r.enemies.push(e);
         this.log("Un guardiano custodisce le scale.", "danger");
       } else {
-        for (let n = 0; n < 100 && r.rooms.length < 8; n++) {
+        for (let n = 0; n < 100 && r.rooms.length < 5; n++) {
           let w = this.rng.int(5, 9),
             h = this.rng.int(4, 7),
             x = this.rng.int(2, r.w - w - 2),

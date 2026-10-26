@@ -171,13 +171,6 @@ function tile(type, wall, variant, boss = false) {
         y = Math.floor(rnd() * 40);
       rect(x, y, 2, 1, n % 3 ? p[1] : p[3]);
     }
-    for (let n = 0; n < 7; n++) {
-      const x = Math.floor(rnd() * 40),
-        y = Math.floor(rnd() * 40);
-      rect(x, y, 3, 2, p[4]);
-      rect(x + 1, y - 2, 1, 3, p[5]);
-      if (variant % 4 === 0) rect(x + 2, y - 1, 1, 2, p[6]);
-    }
   } else {
     // Raised ruin masonry under a dense canopy of pixel foliage/crystal.
     for (let row = 0; row < 3; row++)
@@ -275,23 +268,7 @@ export function drawWorld(
         size,
         size,
       );
-      if (wall && noise % 11 === 0 && game.visible(x, y)) {
-        const cool = !["fire", "ground", "rock"].includes(type);
-        const light = ctx.createRadialGradient(
-          px + size * 0.5,
-          py + size * 0.3,
-          1,
-          px + size * 0.5,
-          py + size * 0.3,
-          size * 0.8,
-        );
-        light.addColorStop(0, cool ? "#70d5df32" : "#e1a35e32");
-        light.addColorStop(1, "#70d5df00");
-        ctx.fillStyle = light;
-        ctx.fillRect(px - size * 0.3, py - size * 0.5, size * 1.6, size * 1.6);
-        ctx.fillStyle = cool ? "#8fccc5" : "#dca975";
-        ctx.fillRect(px + size * 0.45, py + size * 0.25, 2, 4);
-      }
+
       if (!wall) {
         if (r.map[y - 1]?.[x]) {
           ctx.fillStyle = "#07162077";
@@ -301,42 +278,33 @@ export function drawWorld(
           ctx.fillStyle = "#07162033";
           ctx.fillRect(px, py, size * 0.12, size);
         }
-        if (noise % 23 === 0) {
-          ctx.fillStyle = themeFor(type)[5];
-          ctx.fillRect(px + size * 0.7, py + size * 0.65, 2, size * 0.15);
-          ctx.fillStyle = type === "fire" ? "#f6c678" : "#e0c999";
-          ctx.fillRect(px + size * 0.65, py + size * 0.6, 5, 3);
-        }
+
         if (r.tactics || options.grid) {
           ctx.strokeStyle = r.tactics ? "#9ad5cd28" : "#ced9c21a";
           ctx.lineWidth = 1;
           ctx.strokeRect(px + 0.5, py + 0.5, size - 1, size - 1);
         }
-      } else if (r.map[y + 1]?.[x] === 0 && noise % 29 === 0) {
-        // Wall-mounted lamp is decorative and never changes walkability.
-        const cx = px + size * 0.5,
-          cy = py + size * 0.7,
-          glow = ctx.createRadialGradient(cx, cy, 1, cx, cy, size * 1.2);
-        glow.addColorStop(0, "#ffc25d50");
-        glow.addColorStop(1, "#ffc25d00");
-        ctx.fillStyle = glow;
-        ctx.fillRect(cx - size, cy - size, size * 2, size * 2);
-        ctx.fillStyle = "#16262c";
-        ctx.fillRect(cx - 3, cy - 1, 6, 11);
-        ctx.fillStyle = "#b58543";
-        ctx.fillRect(cx - 4, cy + 2, 8, 3);
-        const flicker = options.reducedMotion
-          ? 0
-          : Math.floor(time / 150 + noise) % 3;
-        ctx.fillStyle = "#e99a3d";
-        ctx.fillRect(cx - 3, cy - 8 - flicker, 6, 9);
-        ctx.fillStyle = "#ffec9c";
-        ctx.fillRect(cx - 1, cy - 6 - flicker, 3, 7);
       }
     }
   ctx.globalAlpha = 1;
 }
 export function drawStairs(ctx, p, size) {
+  ctx.save();
+  ctx.strokeStyle = "#ffe181";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(
+    p.x - size * 0.48,
+    p.y - size * 0.48,
+    size * 0.96,
+    size * 0.96,
+  );
+  ctx.fillStyle = "#102b35";
+  ctx.fillRect(p.x - 27, p.y - size * 0.5 - 19, 54, 17);
+  ctx.fillStyle = "#ffe181";
+  ctx.font = "bold 12px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("SCALE ↓", p.x, p.y - size * 0.5 - 6);
+  ctx.restore();
   ctx.fillStyle = "#172934";
   ctx.fillRect(p.x - size * 0.43, p.y - size * 0.43, size * 0.86, size * 0.86);
   ctx.fillStyle = "#b9bda1";

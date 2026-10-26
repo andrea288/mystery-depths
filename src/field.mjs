@@ -362,6 +362,21 @@ export class Game extends Adventure {
     return list;
   }
   perform(m, a) {
+    if (a.type === "openChest") {
+      const chest = this.run.items.find(
+        (i) => i.type === "chest" && i.x === a.x && i.y === a.y,
+      );
+      if (chest && distance(m, chest) <= 1) {
+        const pos = { x: m.x, y: m.y };
+        try {
+          Object.assign(m, { x: chest.x, y: chest.y });
+          this.pickup();
+        } finally {
+          Object.assign(m, pos);
+        }
+      }
+      return;
+    }
     if (a.type !== "field") return super.perform(m, a);
     const actor = this.run.tactics
       ? m

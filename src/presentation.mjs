@@ -41,6 +41,25 @@ export class Playback {
       }
       this.schedule.push({ ...e, time: at * unit, duration: duration * unit });
     }
+    if (!before.tactics) {
+      let fastCursor = 0,
+        stepsAt = null;
+      for (const e of this.schedule) {
+        if (e.type === "step") {
+          stepsAt ??= fastCursor;
+          e.time = stepsAt;
+          e.duration = 100 * unit;
+          fastCursor = Math.max(fastCursor, e.time + e.duration);
+        } else {
+          stepsAt = null;
+          e.time = fastCursor;
+          e.duration =
+            Math.min(e.duration, e.type === "attack" ? 340 : 160) * unit;
+          fastCursor += e.duration;
+        }
+      }
+      cursor = fastCursor / unit;
+    }
     this.schedule.sort((a, b) => a.time - b.time);
     this.duration = Math.max(120, cursor * unit);
   }

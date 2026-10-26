@@ -889,9 +889,7 @@ export class Game extends TeamGame {
           if (pos) this.walkActor(a, pos.x, pos.y);
         }
       } else if (dist(a, p) > 1) {
-        const pos =
-          this.pathStep(a, p) ||
-          enemies.map((e) => this.pathStep(a, e)).find(Boolean);
+        const pos = this.pathStep(a, p);
         if (pos) this.walkActor(a, pos.x, pos.y);
       }
       this.removeDead();

@@ -142,3 +142,7 @@ vecchie formule di danno e reliquie non sono usate dalla simulazione corrente.
 ### Tecniche MN e terreno tattico
 
 Da **Esplora → MN** puoi usare le 11 tecniche ambientali con i Pokémon attivi: energia condivisa, coperture mobili, guadi, nebbia e riposizionamento. Nei boss ogni tecnica occupa un ordine individuale. [Regole, costi, fonti e limiti](docs/TECNICHE-MN.md).
+
+### Comandi e leggibilità
+
+Spazio interagisce con negozi, tesori e scale vicini; l’attacco normale usa il pulsante **Attacca**. Un clic/tocco su una casella adiacente orienta gratuitamente il Pokémon controllato. Le mosse e i PP restano visibili sulla mappa e sono utilizzabili con 1–4. Frecce/WASD e pulsanti direzionali muovono; nei boss pianificano il movimento. I nuovi piani normali sono più compatti; per vedere la nuova generazione avvia una spedizione o raggiungi il piano successivo. Le decorazioni senza funzione sono state rimosse dal pavimento, mentre restano gli elementi interattivi delle MN.

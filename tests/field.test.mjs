@@ -219,3 +219,11 @@ test("MN: tutti i 18 biomi e le fasi dei boss mantengono salvataggi validi", () 
     }
   }
 });
+
+test('Compagni: un percorso bloccato verso lo starter non provoca una fuga verso nemici lontani',()=>{
+ const g=make();g.run.tactics=null;
+ const ally=g.makeMon(1,5);Object.assign(ally,{uid:g.run.teamUid++,active:true,x:14,y:12});g.run.companions.push(ally);
+ const enemy=g.makeMon(7,5);Object.assign(enemy,{uid:80,x:18,y:12});g.run.enemies=[enemy];
+ g.pathStep=(a,target)=>target===g.run.player?null:{x:15,y:12};
+ g.alliesTurn(false);assert.equal(ally.x,14);assert.equal(ally.y,12);
+});

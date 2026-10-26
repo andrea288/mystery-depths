@@ -1310,3 +1310,62 @@ body[data-screen="expedition"] #expedition,
 body[data-screen="expedition"] .game-layout {
   overflow: clip;
 }
+
+/* Always visible compact move shortcuts. */
+#quick-moves {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3px;
+  width: min(360px, 70%);
+  pointer-events: auto;
+}
+#quick-moves button {
+  min-height: 28px;
+  padding: 3px 6px;
+  font-size: 13px;
+  background: #173642ee;
+  color: #eef0d9;
+  border: 1px solid #6b9393;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#quick-moves small {
+  font-size: 10px;
+  color: #b9d2c8;
+}
+.starter-grid .starter-card {
+  width: 58px !important;
+  min-height: 58px !important;
+  height: 58px !important;
+  padding: 5px !important;
+}
+.starter-grid {
+  grid-template-columns: repeat(auto-fill, 58px) !important;
+  gap: 6px !important;
+}
+.starter-card strong,
+.starter-card span {
+  display: none !important;
+}
+.starter-card img {
+  width: 40px !important;
+  height: 40px !important;
+  image-rendering: pixelated;
+}
+@media (max-height: 500px) {
+  #quick-moves {
+    bottom: 3px;
+    width: 300px;
+  }
+  #quick-moves button {
+    min-height: 23px;
+    font-size: 11px;
+    padding: 2px;
+  }
+}
