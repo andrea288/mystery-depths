@@ -182,20 +182,22 @@ export class Renderer {
       : width >= 700
         ? 56
         : 40;
+    const focus = !r.tactics && game.controlled ? game.controlled() : r.player;
     const step = this.events.findLast(
       (e) =>
-        e.type === "step" && e.uid === 0 && time - e.time < (e.duration || 160),
+        e.type === "step" &&
+        e.uid === focus.uid &&
+        time - e.time < (e.duration || 160),
     );
     const follow =
       step && !this.reducedMotion && !r.tactics
         ? 1 - (time - step.time) / (step.duration || 160)
         : 0;
     const cameraX =
-      (r.tactics ? 12 : r.player.x) +
+      (r.tactics ? 12 : focus.x) +
       (step ? step.from.x - step.to.x : 0) * follow;
     const cameraY =
-      (r.tactics ? 9 : r.player.y) +
-      (step ? step.from.y - step.to.y : 0) * follow;
+      (r.tactics ? 9 : focus.y) + (step ? step.from.y - step.to.y : 0) * follow;
     const ox = Math.round(width / 2 - cameraX * size - size / 2),
       oy = Math.round(height / 2 - cameraY * size - size / 2);
     this.camera = { x: ox, y: oy, size };
@@ -234,8 +236,8 @@ export class Renderer {
       y: oy + o.y * size + size / 2,
     });
     if (this.facingMode) {
-      const [dx, dy] = DIRS[r.player.facing];
-      const mark = point({ x: r.player.x + dx, y: r.player.y + dy });
+      const [dx, dy] = DIRS[focus.facing];
+      const mark = point({ x: focus.x + dx, y: focus.y + dy });
       ctx.fillStyle = "#ffdf7b30";
       ctx.fillRect(mark.x - 18, mark.y - 18, 36, 36);
       ctx.strokeStyle = "#ffe198";
@@ -434,6 +436,10 @@ export class Renderer {
         mc.fillRect(r.exit.x * s, r.exit.y * s, s + 1, s + 1);
       mc.fillStyle = "#baffd9";
       mc.fillRect(r.player.x * s, r.player.y * s, s + 1, s + 1);
+      if (focus.uid !== 0) {
+        mc.fillStyle = "#ffcb74";
+        mc.fillRect(focus.x * s - 1, focus.y * s - 1, s + 3, s + 3);
+      }
     }
   }
 }

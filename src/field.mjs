@@ -200,6 +200,7 @@ export class Game extends Adventure {
     if (this.run.tactics || this.run.state !== "playing") return false;
     if (!this.active().some((m) => m.uid === uid)) return false;
     this.run.controlUid = uid;
+    this.reveal();
     this.sync();
     return true;
   }
@@ -678,14 +679,21 @@ export class Game extends Adventure {
     );
   }
   visible(x, y) {
-    if (!super.visible(x, y)) return false;
-    const p = this.run.player;
+    const p = this.controlled();
+    if (distance(p, { x, y }) > 8 || !this.los(p, { x, y })) return false;
     return (
       distance(p, { x, y }) <= 2 ||
       !this.run.field?.features.some(
         (f) => f.kind === "fog" && distance(f, { x, y }) <= 1,
       )
     );
+  }
+  reveal() {
+    const p = this.controlled(),
+      r = this.run;
+    for (let y = Math.max(0, p.y - 8); y < Math.min(r.h, p.y + 9); y++)
+      for (let x = Math.max(0, p.x - 8); x < Math.min(r.w, p.x + 9); x++)
+        if (this.visible(x, y)) r.seen[y][x] = true;
   }
   walkActor(m, x, y) {
     if (m.slowUntil >= this.run.turn) return false;
