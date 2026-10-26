@@ -231,8 +231,31 @@ export class Game extends Adventure {
   }
   buildFloor() {
     super.buildFloor();
-    const r = this.run,
-      previous = r.field;
+    const r = this.run;
+    if (r.tactics) {
+      r.w = 13;
+      r.h = 11;
+      r.map = Array.from({ length: r.h }, (_, y) =>
+        Array.from({ length: r.w }, (_, x) =>
+          x >= 1 && x <= 11 && y >= 1 && y <= 9 ? 0 : 1,
+        ),
+      );
+      r.rooms = [{ x: 1, y: 1, w: 11, h: 9, cx: 6, cy: 5 }];
+      r.seen = Array.from({ length: r.h }, () => Array(r.w).fill(true));
+      Object.assign(r.player, { x: 6, y: 8 });
+      r.exit = { x: 6, y: 2 };
+      const places = [
+        { x: 4, y: 8 },
+        { x: 8, y: 8 },
+        { x: 3, y: 9 },
+        { x: 9, y: 9 },
+        { x: 5, y: 9 },
+      ];
+      r.companions.forEach((m, i) => Object.assign(m, places[i]));
+      for (const boss of r.enemies) Object.assign(boss, { x: 6, y: 3 });
+      this.prepareIntent();
+    }
+    const previous = r.field;
     r.field = {
       version: 1,
       energy: 10,

@@ -150,3 +150,7 @@ Spazio interagisce con negozi, tesori e scale vicini; l’attacco normale usa il
 ### Controllo della squadra
 
 Nei piani normali puoi selezionare un Pokémon attivo dal ritratto in alto a sinistra e controllarlo con movimento, attacco e mosse 1–4. Gli altri compagni agiscono autonomamente; quando controlli un compagno, lo starter prova a seguirlo e combattere. Lo starter resta obbligatorio e la run termina se va KO. Nei boss rimane la pianificazione individuale degli ordini. Le ricompense di fine piano possono offrire una mossa per un compagno, indicato per nome; se ha quattro mosse scegli quale sostituire.
+
+### Boss: arena compatta e ordini guidati
+
+Le nuove arene dei boss misurano 13×11 caselle. Dopo lo schieramento scegli un’azione per il Pokémon indicato, poi premi **Prosegui**. **Torna indietro** permette di cambiare la scelta precedente. Sul terzo Pokémon il pulsante diventa **Conferma**: il turno si avvia soltanto quando tutti gli ordini sono pronti. Con uno o due Pokémon il flusso si adatta alla squadra. I salvataggi già dentro un vecchio boss mantengono l’arena esistente fino al prossimo boss.

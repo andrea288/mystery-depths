@@ -70,8 +70,10 @@ try {
     await page.locator("#begin-boss").click();
     await page.locator("#wait-button").click();
     assert.equal((await save()).turn, turn);
-    assert.ok(await page.locator("#resolve-orders").isDisabled());
-    for (const m of r.companions.filter((m) => m.active)) {
+    assert.ok(await page.locator("#resolve-orders").isEnabled());
+    await page.locator("#resolve-orders").click();
+    const activeAllies = r.companions.filter((m) => m.active);
+    for (const [i, m] of activeAllies.entries()) {
       await page.locator(`[data-command="${m.uid}"]`).click();
       if (m.species === 7) {
         if (mobile) await page.locator('[data-direction="0,1"]').tap();
@@ -82,6 +84,8 @@ try {
         if (mobile) await page.locator('[data-direction="0,-1"]').tap();
         else await page.keyboard.press("ArrowUp");
       }
+      if (i < activeAllies.length - 1)
+        await page.locator("#resolve-orders").click();
     }
     assert.ok(await page.locator("#resolve-orders").isEnabled());
     await page.screenshot({

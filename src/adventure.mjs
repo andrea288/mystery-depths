@@ -1095,9 +1095,10 @@ export class Game extends TeamGame {
     if (phase !== a.bossPhase) {
       a.bossPhase = phase;
       this.log("Il guardiano entra nella fase " + phase + "!", "danger");
-      for (const x of [8, 16]) {
-        if (phase === 2 && !this.occupied(x, 9)) r.map[9][x] = 1;
-        else if (phase === 3) r.map[9][x] = 0;
+      const cy = r.rooms[0].cy;
+      for (const x of [r.rooms[0].cx - 4, r.rooms[0].cx + 4]) {
+        if (phase === 2 && !this.occupied(x, cy)) r.map[cy][x] = 1;
+        else if (phase === 3) r.map[cy][x] = 0;
       }
     }
     const target = this.active().sort(

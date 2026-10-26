@@ -17,6 +17,17 @@ function make() {
   g.run.floor = 5;
   g.buildFloor();
   g.beginBoss();
+  // Legacy movement fixture for isolated field-skill tests; arena size has its own test.
+  g.run.w = 25;
+  g.run.h = 19;
+  g.run.map = Array.from({ length: 19 }, (_, y) =>
+    Array.from({ length: 25 }, (_, x) =>
+      x >= 3 && x <= 21 && y >= 3 && y <= 15 ? 0 : 1,
+    ),
+  );
+  g.run.seen = Array.from({ length: 19 }, () => Array(25).fill(true));
+  g.run.rooms = [{ x: 3, y: 3, w: 19, h: 13, cx: 12, cy: 9 }];
+  g.run.exit = { x: 12, y: 4 };
   g.run.enemies = [];
   g.run.adventure.terrain = [];
   g.run.adventure.weather = "clear";
@@ -291,5 +302,25 @@ test("KO: il compagno lascia la squadra e lo sblocco starter rimane", () => {
   assert.equal(g.run.companions.length, 0);
   assert.equal(g.run.controlUid, 0);
   assert.ok(g.starterIds().includes(ally.species));
+  g.validateRun(g.run);
+});
+
+test("Boss: arena compatta, tre righe di schieramento e fasi nei confini", () => {
+  const g = new Game(D, core);
+  g.start(4, 42);
+  g.run.floor = 5;
+  g.buildFloor();
+  assert.equal(g.run.w, 13);
+  assert.equal(g.run.h, 11);
+  assert.deepEqual(g.run.exit, { x: 6, y: 2 });
+  assert.deepEqual(g.run.player.x, 6);
+  assert.ok(g.deploymentCells().every((p) => p.y >= 7 && p.y <= 9));
+  g.beginBoss();
+  const boss = g.run.enemies[0];
+  boss.hp = Math.floor(boss.maxHp * 0.5);
+  g.prepareIntent();
+  assert.equal(g.run.adventure.bossPhase, 2);
+  assert.equal(g.run.map[5][2], 1);
+  assert.equal(g.run.map[5][10], 1);
   g.validateRun(g.run);
 });

@@ -478,6 +478,7 @@ function act(fn) {
   }
 }
 let commandUid = 0,
+  bossStep = 0,
   commandMode = "move";
 function tactical() {
   return ["deploy", "plan"].includes(game.run?.tactics?.phase);
@@ -546,6 +547,11 @@ function teamHud(displayGame) {
   if (!r.companions) return;
   const active = displayGame.active();
   const phase = r.tactics?.phase;
+  if (phase === "plan") {
+    if (!Object.keys(r.tactics.orders).length) bossStep = 0;
+    bossStep = Math.min(bossStep, active.length - 1);
+    commandUid = active[bossStep].uid;
+  }
   renderer.commandUid = tactical() ? commanded().uid : null;
   renderer.movementPreview = tactical() && commandMode === "move";
   $("movement-button").setAttribute(
@@ -573,6 +579,11 @@ function teamHud(displayGame) {
         (b.onclick = () => {
           if (busy) return;
           commandUid = +b.dataset.command;
+          if (phase === "plan")
+            bossStep = Math.max(
+              0,
+              active.findIndex((m) => m.uid === commandUid),
+            );
           if (!tactical()) {
             game.selectLeader(commandUid);
             save();
@@ -586,18 +597,40 @@ function teamHud(displayGame) {
   if (phase === "deploy")
     $("tactics-panel").innerHTML =
       '<div class="tactical-summary"><strong>Schiera la squadra</strong><span>Seleziona un Pokémon e una casella verde.</span></div><button id="begin-boss">Pronti</button>';
-  if (phase === "plan")
+  if (phase === "plan") {
+    if (!Object.keys(r.tactics.orders).length) bossStep = 0;
+    bossStep = Math.min(bossStep, active.length - 1);
+    commandUid = active[bossStep].uid;
+    const planned = !!r.tactics.orders[commandUid];
+    const last = bossStep === active.length - 1;
     $("tactics-panel").innerHTML =
-      `<div class="tactical-summary"><strong>${esc(commanded().name)}</strong><span>${typeof commandMode === "number" ? esc(D.moves[commanded().moves[commandMode].id].name) + ": scegli direzione" : commandMode === "attack" ? "Attacco: scegli direzione" : "Scegli una casella adiacente"}</span></div><button id="resolve-orders" ${active.every((m) => r.tactics.orders[m.uid]) ? "" : "disabled"}>Esegui ${Object.keys(r.tactics.orders).length}/${active.length}</button>`;
+      `<div class="tactical-summary" aria-live="polite"><strong>${bossStep + 1}/${active.length} · ${esc(commanded().name)}</strong><span>${planned ? "Azione pronta · " + esc(orderLabel(r.tactics.orders[commandUid], commanded())) : typeof commandMode === "number" ? esc(D.moves[commanded().moves[commandMode].id].name) + ": scegli direzione" : commandMode === "attack" ? "Attacco: scegli direzione" : "Scegli mossa, movimento o Attendi"}</span></div><button id="boss-back" ${bossStep === 0 ? "disabled" : ""}>Torna indietro</button><button id="resolve-orders" ${planned && (!last || active.every((m) => r.tactics.orders[m.uid])) ? "" : "disabled"}>${last ? "Conferma" : "Prosegui"}</button>`;
+    $("boss-back").onclick = () => {
+      bossStep--;
+      commandUid = active[bossStep].uid;
+      commandMode = "move";
+      hud();
+    };
+  }
   if ($("begin-boss"))
     $("begin-boss").onclick = () => {
       if (!busy && game.beginBoss()) {
+        bossStep = 0;
+        commandUid = game.active()[0].uid;
+        commandMode = "move";
         save();
         hud();
       } else toast("Disponi tutti i Pokémon nelle tre righe verdi.");
     };
   if ($("resolve-orders"))
-    $("resolve-orders").onclick = () => act(() => game.resolveOrders());
+    $("resolve-orders").onclick = () => {
+      if (bossStep < active.length - 1) {
+        bossStep++;
+        commandUid = active[bossStep].uid;
+        commandMode = "move";
+        hud();
+      } else act(() => game.resolveOrders());
+    };
 }
 function fieldMenu() {
   if (busy || game.run.state !== "playing") return;
@@ -1532,7 +1565,7 @@ window.addEventListener("keydown", (e) => {
         game.beginBoss();
         save();
         hud();
-      } else act(() => game.resolveOrders());
+      } else $("resolve-orders")?.click();
       return;
     }
   }

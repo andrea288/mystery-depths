@@ -169,9 +169,9 @@ try {
     assert.equal(layout.scrollX, false);
     const confirm = await page.locator("#resolve-orders").boundingBox();
     assert.ok(confirm.y + confirm.height <= height);
-    for (const uid of [0, 1000000, 1000001]) {
-      await page.locator(`[data-command="${uid}"]`).click();
+    for (let i = 0; i < 3; i++) {
       await page.locator("#wait-button").click();
+      if (i < 2) await page.locator("#resolve-orders").click();
     }
     assert.ok(await page.locator("#resolve-orders").isEnabled());
     assert.ok(

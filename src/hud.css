@@ -1638,3 +1638,56 @@ body[data-screen="expedition"] .expedition-title .eyebrow {
     font-size: 17px;
   }
 }
+
+/* Boss turn wizard: one order at a time, with a separate back action. */
+body[data-screen="expedition"] .tactics-panel:has(#boss-back) {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+}
+body[data-screen="expedition"]
+  .tactics-panel:has(#boss-back)
+  .tactical-summary {
+  grid-column: 1;
+  min-width: 0;
+}
+body[data-screen="expedition"] .tactics-panel #boss-back {
+  grid-column: 2;
+  grid-row: 1/3;
+  min-height: 44px;
+  padding: 6px 12px;
+  font-size: 17px;
+  background: #d8c9a8;
+  color: #273b42;
+}
+body[data-screen="expedition"] .tactics-panel:has(#boss-back) #resolve-orders {
+  grid-column: 3;
+  grid-row: 1/3;
+}
+@media (max-width: 800px) {
+  body[data-screen="expedition"] .tactics-panel:has(#boss-back) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 4px;
+    padding: 5px;
+  }
+  body[data-screen="expedition"] .tactics-panel #boss-back,
+  body[data-screen="expedition"]
+    .tactics-panel:has(#boss-back)
+    #resolve-orders {
+    font-size: 14px;
+    padding: 5px 7px;
+    min-height: 42px;
+  }
+  body[data-screen="expedition"]
+    .tactics-panel:has(#boss-back)
+    .tactical-summary
+    span {
+    font-size: 11px;
+  }
+}
+
+/* The compact boss board fits on screen; the minimap would cover playable cells. */
+body[data-screen="expedition"][data-battle="plan"] #minimap,
+body[data-screen="expedition"][data-battle="deploy"] #minimap {
+  display: none;
+}

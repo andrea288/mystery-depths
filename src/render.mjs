@@ -178,7 +178,9 @@ export class Renderer {
     const r = game.run;
     if (!r) return;
     const size = r.tactics
-      ? Math.min(40, Math.floor(width / 21), Math.floor(height / 15))
+      ? r.w <= 13
+        ? Math.min(56, Math.floor(width / 15), Math.floor(height / 13))
+        : Math.min(40, Math.floor(width / 21), Math.floor(height / 15))
       : width >= 700
         ? 56
         : 40;
@@ -194,10 +196,11 @@ export class Renderer {
         ? 1 - (time - step.time) / (step.duration || 160)
         : 0;
     const cameraX =
-      (r.tactics ? 12 : focus.x) +
+      (r.tactics ? r.rooms[0].cx : focus.x) +
       (step ? step.from.x - step.to.x : 0) * follow;
     const cameraY =
-      (r.tactics ? 9 : focus.y) + (step ? step.from.y - step.to.y : 0) * follow;
+      (r.tactics ? r.rooms[0].cy : focus.y) +
+      (step ? step.from.y - step.to.y : 0) * follow;
     const ox = Math.round(width / 2 - cameraX * size - size / 2),
       oy = Math.round(height / 2 - cameraY * size - size / 2);
     this.camera = { x: ox, y: oy, size };
