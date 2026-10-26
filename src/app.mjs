@@ -604,10 +604,20 @@ function teamHud(displayGame) {
     const planned = !!r.tactics.orders[commandUid];
     const last = bossStep === active.length - 1;
     $("tactics-panel").innerHTML =
-      `<div class="tactical-summary" aria-live="polite"><strong>${bossStep + 1}/${active.length} · ${esc(commanded().name)}</strong><span>${planned ? "Azione pronta · " + esc(orderLabel(r.tactics.orders[commandUid], commanded())) : typeof commandMode === "number" ? esc(D.moves[commanded().moves[commandMode].id].name) + ": scegli direzione" : commandMode === "attack" ? "Attacco: scegli direzione" : "Scegli mossa, movimento o Attendi"}</span></div><button id="boss-back" ${bossStep === 0 ? "disabled" : ""}>Torna indietro</button><button id="resolve-orders" ${planned && (!last || active.every((m) => r.tactics.orders[m.uid])) ? "" : "disabled"}>${last ? "Conferma" : "Prosegui"}</button>`;
+      `<div class="tactical-summary" aria-live="polite"><strong>${bossStep + 1}/${active.length} · ${esc(commanded().name)}</strong><span>${planned ? "Azione pronta · " + esc(orderLabel(r.tactics.orders[commandUid], commanded())) : typeof commandMode === "number" ? esc(D.moves[commanded().moves[commandMode].id].name) + ": scegli direzione" : commandMode === "attack" ? "Attacco: scegli direzione" : "Scegli mossa, movimento o Attendi"}</span></div><button id="boss-back" ${bossStep === 0 ? "disabled" : ""}>Torna indietro</button><button id="boss-wait">Attendi</button><button id="resolve-orders" ${planned && (!last || active.every((m) => r.tactics.orders[m.uid])) ? "" : "disabled"}>${last ? "Conferma" : "Prosegui"}</button>`;
     $("boss-back").onclick = () => {
       bossStep--;
       commandUid = active[bossStep].uid;
+      commandMode = "move";
+      hud();
+    };
+    $("boss-wait").onclick = () => {
+      if (busy || !game.plan(commandUid, { type: "wait" })) return;
+      save();
+      if (!last) {
+        bossStep++;
+        commandUid = active[bossStep].uid;
+      }
       commandMode = "move";
       hud();
     };
